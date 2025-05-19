@@ -38,3 +38,22 @@ type OIDCProviderMetadata = {
   pushed_authorization_request_endpoint: string;
   jwks_uri: string;
 };
+
+type JWK = {
+  kty: string;       // Key Type (e.g., "RSA")
+  kid: string;       // Key ID
+  use: string;       // Public Key Use (e.g., "sig" for signature)
+  alg: string;       // Algorithm (e.g., "RS256")
+  n: string;         // Modulus (base64url-encoded)
+  e: string;         // Exponent (base64url-encoded)
+};
+
+type JWKS = {
+  keys: JWK[];
+};
+
+type Endpoints = {
+    authorizationEndpoint: string;
+    tokenEndpoint: string;
+    revokeEndpoint: string;
+}

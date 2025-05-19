@@ -2,5 +2,6 @@ import { SearchSchools } from '../src/';
 
 (async () => {
     const schools = await SearchSchools("Paris");
-    console.log(schools);
+    const OIDC = await schools[0].initializeLogin();
+    console.log(OIDC);
 })();
