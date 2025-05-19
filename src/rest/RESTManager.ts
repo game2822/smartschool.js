@@ -1,5 +1,5 @@
 /** @module RESTManager */
-import { RequestOptions } from "../types/request-handler";
+import { RequestOptions } from "../types/RequestHandler";
 
 export class RestManager {
   private readonly baseURL: string;
@@ -18,7 +18,7 @@ export class RestManager {
       headers: {
         "Content-Type": "application/json",
         ...headers,
-        "User-Agent": "@raphckrman/turboself-api"
+        "User-Agent": "@raphckrman/skolengo.js"
       }
     });
 
