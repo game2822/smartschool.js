@@ -1,6 +1,6 @@
 import { Endpoints, JWKS } from "../types/OIDC";
 import { ChallengeMethod, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET } from "../util/Constants";
-import crypto from "react-native-quick-crypto";
+import { createHash } from "node:crypto";
 
 export class AuthFlow {
     private verifier = crypto.randomUUID();
@@ -16,7 +16,7 @@ export class AuthFlow {
         public jwks: JWKS
     ){
         this.challenge = this.challengeMethod === ChallengeMethod.S256
-            ? crypto.createHash("sha256").update(this.verifier).digest("base64url")
+            ? createHash("sha256").update(this.verifier).digest("base64url")
             : this.verifier;
 
         const params = new URLSearchParams({

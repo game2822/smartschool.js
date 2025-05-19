@@ -62,8 +62,6 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
-    "react-native-quick-crypto": "^0.7.13",
-    "typescript-eslint": "^8.32.1",
-    "uuid": "^11.1.0"
+    "typescript-eslint": "^8.32.1"
   }
 }
