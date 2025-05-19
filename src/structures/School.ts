@@ -16,7 +16,7 @@ export class School {
         public homepage: string
     ){}
 
-    public async initializeLogin(challengeMethod = ChallengeMethod.S256, redirectURL = "skoapp-prod://sign-in-callback"): Promise<AuthFlow> {
+    public async initializeLogin(challengeMethod = ChallengeMethod.S256): Promise<AuthFlow> {
         const metadata = await GetOIDCWellKnown(this.OIDCWellKnown);
         const jwks = await GetOIDCJWKS(metadata.jwks_uri);
         return new AuthFlow(
@@ -26,7 +26,7 @@ export class School {
                 tokenEndpoint: metadata.token_endpoint,
                 revokeEndpoint: metadata.revocation_endpoint
             },
-            redirectURL,
+            "skoapp-prod://sign-in-callback",
             this.id,
             jwks
         );
