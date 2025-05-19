@@ -62,6 +62,8 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
+    "@noble/hashes": "^1.8.0",
+    "@scure/base": "^1.2.5",
     "typescript-eslint": "^8.32.1"
   }
 }

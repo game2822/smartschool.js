@@ -1,6 +1,7 @@
 import { Endpoints, JWKS } from "../types/OIDC";
 import { ChallengeMethod, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET } from "../util/Constants";
-import { createHash } from "node:crypto";
+import { base64url } from "@scure/base";
+import { sha256 } from '@noble/hashes/sha2.js';
 
 export class AuthFlow {
     private verifier = crypto.randomUUID();
@@ -16,7 +17,7 @@ export class AuthFlow {
         public jwks: JWKS
     ){
         this.challenge = this.challengeMethod === ChallengeMethod.S256
-            ? createHash("sha256").update(this.verifier).digest("base64url")
+            ? base64url.encode(sha256.create().update(this.verifier).digest())
             : this.verifier;
 
         const params = new URLSearchParams({
