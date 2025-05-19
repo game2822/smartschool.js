@@ -3,10 +3,10 @@ export interface RawSchoolSearchResponse {
     links: {
         first: string;
         last: string;
-    },
+    };
     meta: {
         totalResourceCount: number;
-    }
+    };
 }
 
 interface RawSchool {
@@ -23,10 +23,10 @@ interface RawSchool {
         emsOIDCWellKnownUrl: string;
         name: string;
         zipCode: string;
-    }
+    };
 }
 
-interface Location {
+export interface Location {
     city: string;
     country: string;
     addressLine: string | null;

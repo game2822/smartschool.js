@@ -5,20 +5,28 @@ import { RawSchoolSearchResponse } from "../types/School";
 
 const manager = new RestManager(BASE_URL());
 
-export const SearchSchools = async (query: string, limit = 10, offset = 0): Promise<School[]> => {
+export const SearchSchools = async (query: string, limit = 10, offset = 0): Promise<Array<School>> => {
     const response = await manager.get<RawSchoolSearchResponse>(SEARCH_SCHOOLS(), {
         "filter[text]": query,
-        "page[limit]": limit,
+        "page[limit]":  limit,
         "page[offset]": offset
-    })
-
-    return response.data.map((school) => {
-        return new School(
-            school.id,
-            school.attributes.name,
-            school.type,
-            school.attributes.emsOIDCWellKnownUrl,
-            school.attributes.homePageUrl
-        );
     });
+
+    return response.data.map(school => new School(
+        school.id,
+        school.attributes.name,
+        school.type,
+        school.attributes.emsOIDCWellKnownUrl,
+        school.attributes.homePageUrl,
+        {
+            city:        school.attributes.city,
+            country:     school.attributes.country,
+            addressLine: [
+                school.attributes.addressLine1,
+                school.attributes.addressLine2,
+                school.attributes.addressLine3
+            ].filter(line => line !== null).join(", "),
+            zipCode: school.attributes.zipCode
+        }
+    ));
 };

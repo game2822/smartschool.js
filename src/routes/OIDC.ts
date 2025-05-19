@@ -1,4 +1,5 @@
-import { RestManager } from "../rest/RESTManager"
+import { RestManager } from "../rest/RESTManager";
+import { JWKS, OIDCProviderMetadata } from "../types/OIDC";
 import { extractBaseUrl } from "../util/URL";
 
 export const GetOIDCWellKnown = async (url: string): Promise<OIDCProviderMetadata> => {
