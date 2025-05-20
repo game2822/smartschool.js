@@ -1,11 +1,11 @@
+import { Skolengo } from "./Skolengo";
 import { Endpoints, JWKS } from "../types/OIDC";
 import { ChallengeMethod, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, REDIRECT_URI } from "../util/Constants";
-import { base64url } from "@scure/base";
-import { sha256 } from '@noble/hashes/sha2.js';
 import { GetOIDCAccessTokens } from "../routes/OIDC";
 import { generateRandomCode } from "../util/Verifier";
 import { GetUserInfo } from "../routes/User";
-import { Skolengo } from "./Skolengo";
+import { sha256 } from "@noble/hashes/sha2.js";
+import { base64url } from "@scure/base";
 
 export class AuthFlow {
     private verifier = generateRandomCode();
@@ -38,7 +38,7 @@ export class AuthFlow {
         this.loginURL = `${this.endpoints.authorizationEndpoint}?${params.toString()}`;
     }
 
-    public async finalizeLogin(code: string, state: string): Promise<Skolengo> {
+    async finalizeLogin(code: string, state: string): Promise<Skolengo> {
         if (decodeURIComponent(state) !== this.state) {
             throw new Error("The state does not match the one we generated");
         }

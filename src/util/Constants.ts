@@ -10,11 +10,11 @@ export enum Permissions {
 }
 
 export enum Services {
-    MSG = "MSG",
+    MESSAGES = "MSG",
     TIMETABLE = "CDT",
     APP = "SKOAPP",
     ABSENCES = "ABS",
-    ART = "ART",
+    ARTICLES = "ART",
     HOMEWORK = "TAF",
     EVALUATIONS = "EVAL",
     COMMUNICATION = "COMC"

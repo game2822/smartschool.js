@@ -1,5 +1,5 @@
-import { Kind, Permissions } from "../util/Constants";
 import { School } from "./School";
+import { Kind, Permissions } from "../util/Constants";
 
 export class Skolengo {
     constructor(
@@ -13,7 +13,7 @@ export class Skolengo {
         public dateOfBirth: Date,
         public regime: string,
         public kind: Kind,
-        public permissions: Permissions[],
+        public permissions: Array<Permissions>,
         public school: School
     ){}
 }

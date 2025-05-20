@@ -1,7 +1,7 @@
 import { AuthFlow } from "./OIDC";
 import { GetOIDCJWKS, GetOIDCWellKnown } from "../routes/OIDC";
 import { Location } from "../types/School";
-import { ChallengeMethod } from "../util/Constants";
+import { ChallengeMethod, Services } from "../util/Constants";
 
 export class School {
     constructor(
@@ -17,7 +17,7 @@ export class School {
         public location: Location,
         public homepage?: string,
         public UAI?: string,
-        public subscribedServices?: string[]
+        public subscribedServices?: Array<Services>
     ){}
 
     async initializeLogin(challengeMethod = ChallengeMethod.S256): Promise<AuthFlow> {

@@ -30,3 +30,8 @@ export const SearchSchools = async (query: string, limit = 10, offset = 0): Prom
         school.attributes.homePageUrl
     ));
 };
+
+export const GetSchoolActualities = async (): Promise<Array<string>> => {
+    console.log("Not implemented yet");
+    return [];
+};

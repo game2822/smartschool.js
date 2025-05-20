@@ -35,14 +35,14 @@ export const GetOIDCAccessTokens = async (url: string, code: string, verifier: s
     const [base, path] = extractBaseUrl(url);
     const manager = new RestManager(base);
     const params = new URLSearchParams({
-        client_id: OIDC_CLIENT_ID,
+        client_id:     OIDC_CLIENT_ID,
         client_secret: OIDC_CLIENT_SECRET,
         code,
         code_verifier: verifier,
-        grant_type: "authorization_code",
-        redirect_uri: REDIRECT_URI
+        grant_type:    "authorization_code",
+        redirect_uri:  REDIRECT_URI
     });
 
     const response = await manager.get<OIDCAccessToken>(path, params);
     return response;
-}
+};
