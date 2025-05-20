@@ -1,13 +1,15 @@
-import { Endpoints, JWKS, OIDCAccessToken } from "../types/OIDC";
+import { Endpoints, JWKS } from "../types/OIDC";
 import { ChallengeMethod, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, REDIRECT_URI } from "../util/Constants";
 import { base64url } from "@scure/base";
 import { sha256 } from '@noble/hashes/sha2.js';
 import { GetOIDCAccessTokens } from "../routes/OIDC";
-import { generateCodeVerifier } from "../util/Verifier";
+import { generateRandomCode } from "../util/Verifier";
+import { GetUserInfo } from "../routes/User";
+import { Skolengo } from "./Skolengo";
 
 export class AuthFlow {
-    private verifier = generateCodeVerifier();
-    private state = generateCodeVerifier();
+    private verifier = generateRandomCode();
+    private state = generateRandomCode();
     private challenge: string;
     loginURL: string;
 
@@ -36,7 +38,11 @@ export class AuthFlow {
         this.loginURL = `${this.endpoints.authorizationEndpoint}?${params.toString()}`;
     }
 
-    public async finalizeLogin(code: string): Promise<OIDCAccessToken> {
-        return GetOIDCAccessTokens(this.endpoints.tokenEndpoint, code, this.verifier);
+    public async finalizeLogin(code: string, state: string): Promise<Skolengo> {
+        if (decodeURIComponent(state) !== this.state) {
+            throw new Error("The state does not match the one we generated");
+        }
+        const tokens = await GetOIDCAccessTokens(this.endpoints.tokenEndpoint, code, this.verifier);
+        return GetUserInfo(tokens.access_token, tokens.refresh_token, this.endpoints.wellKnown);
     }
 }

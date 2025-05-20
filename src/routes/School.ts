@@ -17,7 +17,6 @@ export const SearchSchools = async (query: string, limit = 10, offset = 0): Prom
         school.attributes.name,
         school.type,
         school.attributes.emsOIDCWellKnownUrl,
-        school.attributes.homePageUrl,
         {
             city:        school.attributes.city,
             country:     school.attributes.country,
@@ -27,6 +26,7 @@ export const SearchSchools = async (query: string, limit = 10, offset = 0): Prom
                 school.attributes.addressLine3
             ].filter(line => line !== null).join(", "),
             zipCode: school.attributes.zipCode
-        }
+        },
+        school.attributes.homePageUrl
     ));
 };

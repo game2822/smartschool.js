@@ -14,8 +14,10 @@ export class School {
         /** URL to the school's OIDC well-known endpoint */
         public OIDCWellKnown: string,
         /** URL to the school's CAS homepage, don't use it to init login */
-        public homepage: string,
-        public location: Location
+        public location: Location,
+        public homepage?: string,
+        public UAI?: string,
+        public subscribedServices?: string[]
     ){}
 
     async initializeLogin(challengeMethod = ChallengeMethod.S256): Promise<AuthFlow> {
@@ -24,6 +26,7 @@ export class School {
         return new AuthFlow(
             challengeMethod,
             {
+                wellKnown:             this.OIDCWellKnown,
                 authorizationEndpoint: metadata.authorization_endpoint,
                 tokenEndpoint:         metadata.token_endpoint,
                 revokeEndpoint:        metadata.revocation_endpoint

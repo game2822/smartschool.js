@@ -53,6 +53,7 @@ export interface JWKS {
 }
 
 export interface Endpoints {
+    wellKnown: string;
     authorizationEndpoint: string;
     tokenEndpoint: string;
     revokeEndpoint: string;
@@ -65,4 +66,17 @@ export interface OIDCAccessToken {
     token_type: string;
     expires_in: number;
     scope: string;
+}
+
+export interface JWTPayload {
+    aud: string;
+    sub: string;
+    profile: "Eleve" | string;
+    iss: string;
+    given_name: string;
+    exp: number;
+    iat: number;
+    family_name: string;
+    jti: string;
+    email: string;
 }
