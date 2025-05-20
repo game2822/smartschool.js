@@ -28,7 +28,6 @@ export class School {
                 tokenEndpoint:         metadata.token_endpoint,
                 revokeEndpoint:        metadata.revocation_endpoint
             },
-            "skoapp-prod://sign-in-callback",
             this.id,
             jwks
         );

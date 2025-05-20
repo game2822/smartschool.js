@@ -1,5 +1,6 @@
 import { RestManager } from "../rest/RESTManager";
-import { JWKS, OIDCProviderMetadata } from "../types/OIDC";
+import { JWKS, OIDCAccessToken, OIDCProviderMetadata } from "../types/OIDC";
+import { OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, REDIRECT_URI } from "../util/Constants";
 import { extractBaseUrl } from "../util/URL";
 
 export const GetOIDCWellKnown = async (url: string): Promise<OIDCProviderMetadata> => {
@@ -29,3 +30,19 @@ export const GetOIDCJWKS = async (url: string): Promise<JWKS> => {
 
     throw new Error("Invalid JWK");
 };
+
+export const GetOIDCAccessTokens = async (url: string, code: string, verifier: string): Promise<OIDCAccessToken> => {
+    const [base, path] = extractBaseUrl(url);
+    const manager = new RestManager(base);
+    const params = new URLSearchParams({
+        client_id: OIDC_CLIENT_ID,
+        client_secret: OIDC_CLIENT_SECRET,
+        code,
+        code_verifier: verifier,
+        grant_type: "authorization_code",
+        redirect_uri: REDIRECT_URI
+    });
+
+    const response = await manager.get<OIDCAccessToken>(path, params);
+    return response;
+}

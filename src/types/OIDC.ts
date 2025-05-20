@@ -57,3 +57,12 @@ export interface Endpoints {
     tokenEndpoint: string;
     revokeEndpoint: string;
 }
+
+export interface OIDCAccessToken {
+    access_token: string;
+    id_token: string;
+    refresh_token: string;
+    token_type: string;
+    expires_in: number;
+    scope: string;
+}
