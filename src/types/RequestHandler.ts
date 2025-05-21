@@ -1,4 +1,7 @@
 import { Permissions, Services } from "../util/Constants";
+import { NewsResponseData, schoolInfoAuthorIncluded, schoolInfoTechnicalUser } from "./News";
+import { schoolIncluded, SchoolResponseData } from "./School";
+import { UserResponseData } from "./User";
 
 export interface RequestOptions {
     method?: "GET" | "POST" | "PUT" | "DELETE";
@@ -12,79 +15,9 @@ export interface BaseResponse {
     included: Array<nonTeachingStaffIncluded | schoolIncluded | fileIncluded | schoolInfoAuthorIncluded | schoolInfoTechnicalUser>;
 }
 
-export interface UserResponseData {
-    id: string;
-    relationships: Relationships;
-    type: "studentUserInfo";
-    attributes: UserAttributes;
-}
-
-export interface NewsResponseData {
-    id: string;
-    relationships: Relationships;
-    type: "news";
-    attributes: NewsAttributes;
-}
-
-export interface SchoolResponseData {
-    id: string;
-    type: "school";
-    attributes: SchoolAttributes;
-}
-
-export interface SchoolAttributes {
-    homePageUrl: string;
-    city: string;
-    country: string;
-    addressLine1: string | null;
-    addressLine2: string | null;
-    addressLine3: string | null;
-    emsCode: string;
-    emsOIDCWellKnownUrl: string;
-    name: string;
-    zipCode: string;
-}
-
-export interface UserAttributes {
-    regime: string;
-    audienceId: string;
-    firstName: string;
-    lastName: string;
-    className: string;
-    dateOfBirth: string;
-    externalMail: string;
-    photoUrl: string | null;
-    mobilePhone: string;
-    permissions: Array<Permission>;
-}
-
-export interface Permission {
-    service: string;
-    schoolId: string;
-    permittedOperations: Array<Permissions>;
-}
-
 export interface Included {
     id: string;
     type: "nonTeachingStaff" | "school" | "schoolInfoFile" | "schoolInfoAuthor" | "schoolInfoTechnicalUser";
-}
-
-export interface schoolInfoTechnicalUser extends Included {
-    attributes: {
-        label: string;
-        logoUrl: string;
-    };
-}
-
-export interface schoolInfoAuthorIncluded extends Included {
-    relationships: {
-        technicalUser: {
-            data: {
-                id: string;
-                type: "schoolInfoTechnicalUser";
-            };
-        };
-    };
 }
 
 export interface nonTeachingStaffIncluded extends Included {
@@ -96,36 +29,11 @@ export interface nonTeachingStaffIncluded extends Included {
     };
 }
 
-export interface schoolIncluded extends Included {
-    attributes: {
-        name: string;
-        city?: string;
-        timeZone: string;
-        subscribedServices: Array<Services>;
-        administrativeId: string;
-        schoolAudience: SchoolAudience;
-    };
-}
-
-export interface SchoolAudience {
-    enabled: boolean;
-    audienceId: string;
-    projectId: string;
-}
-
 export interface fileIncluded extends Included {
     attributes: {
         url: string;
         alternativeText: string;
     };
-}
-
-export interface NewsAttributes {
-    title: string;
-    publicationDateTime: string;
-    shortContent: string;
-    content: string;
-    linkedWebSiteUrl: string | null;
 }
 
 export interface Relationships {

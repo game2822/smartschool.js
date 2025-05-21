@@ -2,13 +2,9 @@ import { BASE_URL, SCHOOL_NEWS, SEARCH_SCHOOLS } from "../rest/Endpoints";
 import { RestManager } from "../rest/RESTManager";
 import { News } from "../structures/News";
 import { School } from "../structures/School";
-import {
-    BaseResponse,
-    fileIncluded,
-    NewsResponseData,
-    schoolIncluded,
-    SchoolResponseData
-} from "../types/RequestHandler";
+import { NewsResponseData } from "../types/News";
+import { BaseResponse, fileIncluded } from "../types/RequestHandler";
+import { schoolIncluded, SchoolResponseData } from "../types/School";
 
 const manager = new RestManager(BASE_URL());
 

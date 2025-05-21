@@ -1,11 +1,12 @@
 import { School } from "../structures/School";
-import { BASE_URL, USER_INFO } from "../rest/Endpoints";
+import { BASE_URL, USER_ASSIGNMENTS, USER_INFO } from "../rest/Endpoints";
 import { RestManager } from "../rest/RESTManager";
 import { Skolengo } from "../structures/Skolengo";
 import { DecodePayload } from "../util/JWT";
 import { JWTPayload } from "../types/OIDC";
 import { Kind, Services } from "../util/Constants";
-import { BaseResponse, schoolIncluded } from "../types/RequestHandler";
+import { BaseResponse } from "../types/RequestHandler";
+import { schoolIncluded } from "../types/School";
 
 const manager = new RestManager(BASE_URL());
 
@@ -87,3 +88,26 @@ export const GetUserInfo = async (
     schoolInstance
   );
 };
+
+export const GetAssignments = async (
+  userId: string,
+  accessToken: string,
+  emsCode: string,
+  periodStart = new Date(),
+  periodEnd = new Date(new Date().setMonth(new Date().getMonth() + 1))
+): Promise<string> => {
+  const formatDate = (date: Date) =>
+    date.toISOString().slice(0, 10);
+
+  const response = await manager.get<BaseResponse>(USER_ASSIGNMENTS(), {
+    "filter[student.id]": userId,
+    "filter[dueDate][GE]": formatDate(periodStart),
+    "filter[dueDate][LE]": formatDate(periodEnd),
+    "include": "subject,teacher,individualCorrectedWork,individualCorrectedWork.attachments,individualCorrectedWork.audio,commonCorrectedWork.attachments,commonCorrectedWork.audio,commonCorrectedWork.pedagogicContent",
+    "fields[homework]": "title,html,deliverWorkOnline,onlineDeliveryUrl,done,dueDateTime",
+    "fields[subject]": "label,color"
+  });
+
+  return `${formatDate(periodStart)} to ${formatDate(periodEnd)}`;
+};
+
