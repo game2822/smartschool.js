@@ -1,4 +1,5 @@
 import { Skolengo } from "./Skolengo";
+import { School } from "./School";
 import { Endpoints, JWKS } from "../types/OIDC";
 import { ChallengeMethod, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, REDIRECT_URI } from "../util/Constants";
 import { GetOIDCAccessTokens } from "../routes/OIDC";
@@ -17,7 +18,8 @@ export class AuthFlow {
         public challengeMethod: ChallengeMethod,
         public endpoints: Endpoints,
         public schoolId: string,
-        public jwks: JWKS
+        public jwks: JWKS,
+        public school: School
     ){
         this.challenge = this.challengeMethod === ChallengeMethod.S256
             ? base64url.encode(sha256.create().update(this.verifier).digest()).slice(0, -1)
@@ -43,6 +45,6 @@ export class AuthFlow {
             throw new Error("The state does not match the one we generated");
         }
         const tokens = await GetOIDCAccessTokens(this.endpoints.tokenEndpoint, code, this.verifier);
-        return GetUserInfo(tokens.access_token, tokens.refresh_token, this.endpoints.wellKnown);
+        return GetUserInfo(tokens.access_token, tokens.refresh_token, this.endpoints.wellKnown, this.school.emsCode);
     }
 }

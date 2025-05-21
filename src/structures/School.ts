@@ -11,6 +11,8 @@ export class School {
         public name: string,
         /** Type of the school, usually "school" */
         public type: "school" | string,
+        /** EMS Code */
+        public emsCode: string,
         /** URL to the school's OIDC well-known endpoint */
         public OIDCWellKnown: string,
         /** URL to the school's CAS homepage, don't use it to init login */
@@ -32,7 +34,8 @@ export class School {
                 revokeEndpoint:        metadata.revocation_endpoint
             },
             this.id,
-            jwks
+            jwks,
+            this
         );
     }
 }

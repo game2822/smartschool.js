@@ -5,22 +5,21 @@ import { Skolengo } from "../structures/Skolengo";
 import { DecodePayload } from "../util/JWT";
 import { JWTPayload } from "../types/OIDC";
 import { Kind, Services } from "../util/Constants";
-import { BaseResponse } from "../types/RequestHandler";
+import { BaseResponse, schoolIncluded } from "../types/RequestHandler";
 
 const manager = new RestManager(BASE_URL());
 
 export const GetUserInfo = async (
   accessToken: string,
   refreshToken: string,
-  wellKnownURL: string
+  wellKnownURL: string,
+  emsCode: string
 ): Promise<Skolengo> => {
   const payload = DecodePayload(accessToken) as unknown as JWTPayload;
 
   const headers = {
-    "x-skolengo-ems-code": "rra",
     Authorization: `Bearer ${accessToken}`,
-    "content-type": "application/vnd.api+json",
-    "x-skolengo-date-format": "utc",
+    "x-skolengo-ems-code": emsCode,
   };
 
   const query = {
@@ -52,20 +51,14 @@ export const GetUserInfo = async (
 
   const school = response.included.find(
     (item) => item.id === schoolId
-  );
-  const schoolAttr = school?.attributes as
-    | {
-        name?: string;
-        city?: string;
-        administrativeId?: string;
-        subscribedServices?: Services[];
-      }
-    | undefined;
+  ) as schoolIncluded;
+  const schoolAttr = school?.attributes;
 
   const schoolInstance = new School(
     school?.id ?? "",
     schoolAttr?.name ?? "",
     school?.type ?? "",
+    emsCode,
     wellKnownURL,
     { city: schoolAttr?.city ?? "" },
     undefined,

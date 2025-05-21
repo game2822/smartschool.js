@@ -8,8 +8,8 @@ export interface RequestOptions {
 }
 
 export interface BaseResponse {
-    data: Array<NewsResponseData> | UserResponseData;
-    included: Array<nonTeachingStaffIncluded | schoolIncluded | fileIncluded>;
+    data: Array<NewsResponseData | SchoolResponseData> | UserResponseData;
+    included: Array<nonTeachingStaffIncluded | schoolIncluded | fileIncluded | schoolInfoAuthorIncluded | schoolInfoTechnicalUser>;
 }
 
 export interface UserResponseData {
@@ -24,6 +24,25 @@ export interface NewsResponseData {
     relationships: Relationships;
     type: "news";
     attributes: NewsAttributes;
+}
+
+export interface SchoolResponseData {
+    id: string;
+    type: "school";
+    attributes: SchoolAttributes;
+}
+
+export interface SchoolAttributes {
+    homePageUrl: string;
+    city: string;
+    country: string;
+    addressLine1: string | null;
+    addressLine2: string | null;
+    addressLine3: string | null;
+    emsCode: string;
+    emsOIDCWellKnownUrl: string;
+    name: string;
+    zipCode: string;
 }
 
 export interface UserAttributes {
@@ -47,7 +66,25 @@ export interface Permission {
 
 export interface Included {
     id: string;
-    type: "nonTeachingStaff";
+    type: "nonTeachingStaff" | "school" | "schoolInfoFile" | "schoolInfoAuthor" | "schoolInfoTechnicalUser";
+}
+
+export interface schoolInfoTechnicalUser extends Included {
+    attributes: {
+        label: string;
+        logoUrl: string;
+    };
+}
+
+export interface schoolInfoAuthorIncluded extends Included {
+    relationships: {
+        technicalUser: {
+            data: {
+                id: string;
+                type: "schoolInfoTechnicalUser";
+            };
+        };
+    };
 }
 
 export interface nonTeachingStaffIncluded extends Included {
@@ -87,6 +124,8 @@ export interface NewsAttributes {
     title: string;
     publicationDateTime: string;
     shortContent: string;
+    content: string;
+    linkedWebSiteUrl: string | null;
 }
 
 export interface Relationships {

@@ -19,7 +19,8 @@ export class RestManager {
             headers: {
                 "Content-Type": "application/json",
                 ...headers,
-                "User-Agent":   "@raphckrman/skolengo.js"
+                "User-Agent":   "@raphckrman/skolengo.js",
+                "x-skolengo-ems-code": "rra"
             }
         });
 
