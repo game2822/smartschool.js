@@ -6,8 +6,7 @@ import {
     BaseResponse,
     fileIncluded,
     NewsResponseData,
-    schoolInfoAuthorIncluded,
-    schoolInfoTechnicalUser,
+    schoolIncluded,
     SchoolResponseData
 } from "../types/RequestHandler";
 
@@ -69,20 +68,14 @@ export const GetSchoolNews = async (accessToken: string, emsCode: string): Promi
             const { relationships, attributes } = news;
 
             const illustrationId = relationships.illustration?.data?.id;
-            const authorData = relationships.author?.data;
+            const authorData = relationships.school?.data;
 
             const illustration = illustrationId
                 ? includedMap.get(`schoolInfoFile:${illustrationId}`) as fileIncluded
                 : null;
 
             const author = authorData
-                ? includedMap.get(`${authorData.type}:${authorData.id}`) as schoolInfoAuthorIncluded
-                : null;
-
-            const technicalUserId = author?.relationships.technicalUser?.data?.id;
-
-            const technicalAuthor = technicalUserId
-                ? includedMap.get(`schoolInfoTechnicalUser:${technicalUserId}`) as schoolInfoTechnicalUser
+                ? includedMap.get(`${authorData.type}:${authorData.id}`) as schoolIncluded
                 : null;
 
             return new News(
@@ -94,8 +87,8 @@ export const GetSchoolNews = async (accessToken: string, emsCode: string): Promi
                 illustration?.attributes.url ?? null,
                 attributes.linkedWebSiteUrl,
                 {
-                    id:   technicalAuthor?.id ?? "",
-                    name: technicalAuthor?.attributes.label ?? ""
+                    id:   authorData?.id ?? "",
+                    name: author?.attributes.name ?? ""
                 }
             );
         });
