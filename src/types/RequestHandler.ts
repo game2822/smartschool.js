@@ -1,4 +1,4 @@
-import { Permissions, Services } from "../util/Constants";
+import { AssignementsResponseData } from "./Assignment";
 import { NewsResponseData, schoolInfoAuthorIncluded, schoolInfoTechnicalUser } from "./News";
 import { schoolIncluded, SchoolResponseData } from "./School";
 import { UserResponseData } from "./User";
@@ -11,48 +11,45 @@ export interface RequestOptions {
 }
 
 export interface BaseResponse {
-    data: Array<NewsResponseData | SchoolResponseData> | UserResponseData;
+    data: Array<NewsResponseData | SchoolResponseData | AssignementsResponseData> | UserResponseData;
     included: Array<nonTeachingStaffIncluded | schoolIncluded | fileIncluded | schoolInfoAuthorIncluded | schoolInfoTechnicalUser>;
 }
 
-export interface Included {
+export interface BaseIncluded<
+    T extends string,
+    A = unknown,
+    R = unknown
+> {
     id: string;
-    type: "nonTeachingStaff" | "school" | "schoolInfoFile" | "schoolInfoAuthor" | "schoolInfoTechnicalUser";
+    type: T;
+    attributes?: A;
+    relationships?: R;
 }
 
-export interface nonTeachingStaffIncluded extends Included {
-    attributes: {
-        firstName: string;
-        lastName: string;
-        title: string;
-        photoUrl: string | null;
-    };
-}
 
-export interface fileIncluded extends Included {
-    attributes: {
-        url: string;
-        alternativeText: string;
+export type nonTeachingStaffIncluded = BaseIncluded<"nonTeachingStaff", {
+    firstName: string;
+    lastName: string;
+    title: string;
+    photoUrl: string | null;
+}>;
+
+export type fileIncluded = BaseIncluded<"schoolInfoFile", {
+    url: string;
+    alternativeText: string;
+}>;
+
+interface RelationshipData<T extends string> {
+    data: {
+        id: string;
+        type: T;
     };
 }
 
 export interface Relationships {
-    school?: {
-        data: {
-            id: string;
-            type: "school";
-        };
-    };
-    author?: {
-        data: {
-            id: string;
-            type: string;
-        };
-    };
-    illustration?: {
-        data: {
-            id: string;
-            type: string;
-        };
-    };
+    school?: RelationshipData<"school">;
+    author?: RelationshipData<"schoolInfoAuthor">;
+    illustration?: RelationshipData<"schoolInfoFile">;
+    teacher?: RelationshipData<"teacher">;
+    subject?: RelationshipData<"subject">;
 }

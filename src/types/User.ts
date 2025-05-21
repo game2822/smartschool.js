@@ -1,5 +1,5 @@
-import { Permissions } from "../util/Constants";
 import { Relationships } from "./RequestHandler";
+import { Permissions } from "../util/Constants";
 
 export interface UserResponseData {
     id: string;

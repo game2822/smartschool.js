@@ -1,7 +1,9 @@
 import { School } from "./School";
-import { Kind, Permissions } from "../util/Constants";
 import { News } from "./News";
+import { Assignment } from "./Assignment";
+import { Kind, Permissions } from "../util/Constants";
 import { GetSchoolNews } from "../routes/School";
+import { GetAssignments } from "../routes/User";
 
 export class Skolengo {
     constructor(
@@ -19,7 +21,13 @@ export class Skolengo {
         public school: School
     ){}
 
-    public async getNews(): Promise<News[]> {
-        return await GetSchoolNews(this.accessToken, this.school.emsCode)
+    async GetAssignments(): Promise<Array<Assignment>> {
+        return GetAssignments(this.userId, this.accessToken, this.school.emsCode, this.school.id);
     }
+
+    async GetNews(): Promise<Array<News>> {
+        return GetSchoolNews(this.accessToken, this.school.emsCode);
+    }
+
+
 }

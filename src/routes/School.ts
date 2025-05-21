@@ -80,11 +80,11 @@ export const GetSchoolNews = async (accessToken: string, emsCode: string): Promi
                 attributes.title,
                 attributes.shortContent,
                 attributes.content,
-                illustration?.attributes.url ?? null,
+                illustration?.attributes?.url ?? null,
                 attributes.linkedWebSiteUrl,
                 {
                     id:   authorData?.id ?? "",
-                    name: author?.attributes.name ?? ""
+                    name: author?.attributes?.name ?? ""
                 }
             );
         });

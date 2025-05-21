@@ -1,5 +1,5 @@
+import { BaseIncluded } from "./RequestHandler";
 import { Services } from "../util/Constants";
-import { Included } from "./RequestHandler";
 
 export interface Location {
     city: string;
@@ -27,16 +27,15 @@ export interface SchoolAttributes {
     zipCode: string;
 }
 
-export interface schoolIncluded extends Included {
-    attributes: {
-        name: string;
-        city?: string;
-        timeZone: string;
-        subscribedServices: Array<Services>;
-        administrativeId: string;
-        schoolAudience: SchoolAudience;
-    };
-}
+export type schoolIncluded = BaseIncluded<"school", {
+    name: string;
+    city?: string;
+    timeZone: string;
+    subscribedServices: Array<Services>;
+    administrativeId: string;
+    schoolAudience: SchoolAudience;
+}>;
+
 
 export interface SchoolAudience {
     enabled: boolean;
