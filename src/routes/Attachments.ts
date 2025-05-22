@@ -1,16 +1,17 @@
-import { RestManager } from "../rest/RESTManager";
-import { extractBaseUrl } from "skolengojs";
-
 export const downloadAttachment = async(url: string, accessToken: string): Promise<Buffer> => {
-    const [base, path] = extractBaseUrl(url);
-    const manager = new RestManager(base);
-    const response = await manager.get<Buffer>(path, {}, {
-        Authorization: `Bearer ${accessToken}`
+    const response = await fetch(url, {
+        method:  "GET",
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
     });
 
-    if (!response) {
-        throw new Error("Failed to download attachment: Empty response.");
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    return response;
+    const arrayBuffer = await response.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
+    return buffer;
 };
