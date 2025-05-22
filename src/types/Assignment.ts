@@ -28,6 +28,15 @@ export type subjectIncluded = BaseIncluded<"subject", {
     color: string;
 }>;
 
+export type attachmentInclude = BaseIncluded<"attachment", {
+    name: string;
+    mimeType: string;
+    mimeTypeLabel: string;
+    size: number;
+    /** You can't access it directly, you need to be authenticated */
+    url: string;
+}>;
+
 export interface Teacher {
     id: string;
     title: string;
