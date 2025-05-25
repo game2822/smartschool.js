@@ -1,9 +1,7 @@
-export const downloadAttachment = async(url: string, accessToken: string): Promise<Buffer> => {
+export const downloadAttachment = async(url: string, accessToken?: string): Promise<Buffer> => {
     const response = await fetch(url, {
         method:  "GET",
-        headers: {
-            Authorization: `Bearer ${accessToken}`
-        }
+        headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {}
     });
 
     if (!response.ok) {
