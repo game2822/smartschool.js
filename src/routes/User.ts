@@ -7,6 +7,7 @@ import { JWTPayload } from "../types/OIDC";
 import { Kind } from "../util/Constants";
 import { BaseResponse } from "../types/RequestHandler";
 import { schoolIncluded } from "../types/School";
+import { UserAttributes } from "../types/User";
 
 const manager = new RestManager(BASE_URL());
 
@@ -47,7 +48,7 @@ export const GetUserInfo = async (
     }
 
     const userInfo = response.data;
-    const attributes = userInfo.attributes;
+    const attributes = userInfo.attributes as UserAttributes;
     const schoolId = userInfo.relationships.school?.data.id;
 
     const school = response.included.find(
