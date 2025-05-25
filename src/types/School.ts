@@ -1,10 +1,17 @@
 import { BaseIncluded } from "./RequestHandler";
 import { Services } from "../util/Constants";
 
+/**
+ * Represents the physical location details of a school.
+ */
 export interface Location {
+    /** City where the school is located. (e.g., 'Paris')*/
     city: string;
+    /** Country where the school is located (e.g., 'France'). */
     country?: string;
+    /** Full address line (e.g., '123 Avenue de la République'). */
     addressLine?: string | null;
+    /** Postal or ZIP code. */
     zipCode?: string;
 }
 

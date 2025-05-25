@@ -3,28 +3,42 @@ import { GetOIDCJWKS, GetOIDCWellKnown } from "../routes/OIDC";
 import { Location } from "../types/School";
 import { ChallengeMethod, Services } from "../util/Constants";
 
+/**
+ * Represents a school entity with identity, location, and authentication details.
+ */
 export class School {
+    /**
+     * @param id - Unique ID for each school, starting with "SKO-E-".
+     * @param name - Display name of the school.
+     * @param type - Entity type, usually "school".
+     * @param emsCode - EMS code used for internal identification.
+     * @param OIDCWellKnown - URL to the school's OIDC `.well-known` configuration.
+     * @param location - Geographical and postal location of the school.
+     * @param homepage - Optional CAS homepage (not for login initiation).
+     * @param UAI - Administrative identifier (Unité Administrative Immatriculée).
+     * @param subscribedServices - List of services the school is subscribed to.
+     */
     constructor(
-        /** Unique ID for each school, starting by "SKO-E-" */
         public id: string,
-        /** Name of the school */
         public name: string,
-        /** Type of the school, usually "school" */
         public type: "school" | string,
-        /** EMS Code */
         public emsCode: string,
-        /** URL to the school's OIDC well-known endpoint */
         public OIDCWellKnown: string,
-        /** URL to the school's CAS homepage, don't use it to init login */
         public location: Location,
         public homepage?: string,
         public UAI?: string,
         public subscribedServices?: Array<Services>
-    ){}
+    ) {}
 
-    async initializeLogin(challengeMethod = ChallengeMethod.S256): Promise<AuthFlow> {
+    /**
+     * Initializes the OIDC authentication flow for this school.
+     * @param challengeMethod - PKCE challenge method to use (default: S256).
+     * @returns An initialized AuthFlow ready to start the login process.
+     */
+    async initializeLogin(challengeMethod: ChallengeMethod = ChallengeMethod.S256): Promise<AuthFlow> {
         const metadata = await GetOIDCWellKnown(this.OIDCWellKnown);
         const jwks = await GetOIDCJWKS(metadata.jwks_uri);
+
         return new AuthFlow(
             challengeMethod,
             {
