@@ -11,7 +11,7 @@ export interface RequestOptions {
 }
 
 export interface BaseResponse {
-    data: Array<NewsResponseData | SchoolResponseData | AssignementsResponseData> | UserResponseData;
+    data: Array<NewsResponseData | SchoolResponseData | AssignementsResponseData> | UserResponseData | AssignementsResponseData;
     included: Array<nonTeachingStaffIncluded | schoolIncluded | fileIncluded | schoolInfoAuthorIncluded | schoolInfoTechnicalUser>;
 }
 

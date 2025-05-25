@@ -103,3 +103,63 @@ export const GetAssignmentAttachments = async (assignmentId: string, userId: str
             );
         });
 };
+
+export const SetAssignmentCompletion = async (
+    assignmentId: string,
+    userId: string,
+    completed: boolean,
+    schoolId: string,
+    accessToken: string,
+    emsCode: string
+): Promise<Assignment> => {
+    const response = await manager.patch<BaseResponse>(
+        USER_ASSIGNMENT(assignmentId),
+        { data: { type: "homework",id: assignmentId,attributes: { done: completed } } },
+        {
+            "filter[student.id]": userId,
+            "include":            "attachments",
+            "fields[attachment]": "name,mimeType,mimeTypeLabel,size,url"
+        },
+        {
+            headers: {
+                "Authorization":        `Bearer ${accessToken}`,
+                "x-skolengo-ems-code":  emsCode,
+                "x-skolengo-school-id": schoolId
+            }
+        }
+    );
+
+    const includedMap = new Map<string, unknown>();
+    for (const item of response.included ?? []) {
+        includedMap.set(`${item.type}:${item.id}`, item);
+    }
+    const data = response.data as AssignementsResponseData;
+    const subject = data.relationships.subject?.data.id ? includedMap.get("subject:" + data.relationships.subject?.data.id) as subjectIncluded : null;
+    const teacher = data.relationships.teacher?.data.id ? includedMap.get("teacher:" + data.relationships.teacher?.data.id) as teacherIncluded : null;
+
+    return new Assignment(
+        accessToken,
+        userId,
+        schoolId,
+        emsCode,
+        assignmentId,
+        completed,
+        data.attributes.title,
+        data.attributes.html,
+        new Date(data.attributes?.dueDateTime),
+        data.attributes.deliverWorkOnline,
+        data.attributes.onlineDeliverUrl,
+        {
+            id:        teacher?.id                    ?? "",
+            title:     teacher?.attributes?.title     ?? "",
+            firstName: teacher?.attributes?.firstName ?? "",
+            lastName:  teacher?.attributes?.lastName  ?? "",
+            photoUrl:  teacher?.attributes?.photoUrl  ?? ""
+        },
+        {
+            id:    subject?.id                ?? "",
+            label: subject?.attributes?.label ?? "",
+            color: subject?.attributes?.color ?? ""
+        }
+    );
+};

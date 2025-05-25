@@ -69,10 +69,12 @@ export class RestManager {
         });
     }
 
-    async patch<T>(path: string, body: any, options?: RequestOptions): Promise<T> {
+    async patch<T>(path: string, body: any, params?: Record<string, any>, options?: RequestOptions): Promise<T> {
+        const urlParams = new URLSearchParams(params).toString();
+        const urlPath = urlParams ? `${path}?${urlParams}` : path;
         return this.sendRequest<T>({
             method:  "PATCH",
-            path,
+            path: urlPath,
             body,
             headers: options?.headers
         });

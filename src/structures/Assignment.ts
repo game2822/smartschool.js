@@ -1,6 +1,6 @@
 import { Attachment } from "./Attachment";
 import { Subject, Teacher } from "../types/Assignment";
-import { GetAssignmentAttachments } from "../routes/Assignments";
+import { GetAssignmentAttachments, SetAssignmentCompletion } from "../routes/Assignments";
 
 export class Assignment {
     constructor(
@@ -21,5 +21,9 @@ export class Assignment {
 
     getAttachments(): Promise<Array<Attachment>> {
         return GetAssignmentAttachments(this.id, this.userId, this.schoolId, this.accessToken, this.emsCode);
+    }
+
+    setCompletion(completed?: boolean): Promise<Assignment> {
+        return SetAssignmentCompletion(this.id, this.userId, completed ?? !this.done, this.schoolId, this.accessToken, this.emsCode);
     }
 }
