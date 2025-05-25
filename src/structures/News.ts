@@ -26,6 +26,10 @@ export class News {
         public linkedWebSiteUrl?: string
     ) {}
 
+    /**
+     * Downloads the attachment and returns its raw binary content.
+     * @returns Raw binary content.
+     */
     fetchIllustrationBuffer(): Promise<Buffer> {
         if (!this.illustrationURL) {
             throw new Error("This news doesn't have an illustration.");
