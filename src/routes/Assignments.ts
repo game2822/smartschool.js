@@ -95,11 +95,11 @@ export const GetAssignmentAttachments = async (assignmentId: string, userId: str
             return new Attachment(
                 accessToken,
                 attachment.id,
+                attachment.attributes?.url ?? "",
                 attachment.attributes?.name ?? "",
                 attachment.attributes?.mimeType ?? "",
                 attachment.attributes?.mimeTypeLabel ?? "",
-                attachment.attributes?.size ?? 0,
-                attachment.attributes?.url ?? ""
+                attachment.attributes?.size ?? 0
             );
         });
 };

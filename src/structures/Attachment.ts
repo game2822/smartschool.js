@@ -17,11 +17,11 @@ export class Attachment {
     constructor(
         protected accessToken: string,
         public id: string,
-        public fileName: string,
-        public type: string,
-        public typeLabel: string,
-        public size: number,
-        public url: string
+        public url: string,
+        public fileName?: string,
+        public type?: string,
+        public typeLabel?: string,
+        public size?: number
     ){}
 
     /**

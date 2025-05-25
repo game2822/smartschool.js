@@ -1,5 +1,6 @@
 import { BASE_URL, SCHOOL_NEWS, SEARCH_SCHOOLS } from "../rest/Endpoints";
 import { RestManager } from "../rest/RESTManager";
+import { Attachment } from "../structures/Attachment";
 import { News } from "../structures/News";
 import { School } from "../structures/School";
 import { NewsResponseData } from "../types/News";
@@ -80,12 +81,12 @@ export const GetSchoolNews = async (accessToken: string, emsCode: string): Promi
                 attributes.title,
                 attributes.shortContent,
                 attributes.content,
-                illustration?.attributes?.url ?? null,
-                attributes.linkedWebSiteUrl,
                 {
                     id:   authorData?.id ?? "",
                     name: author?.attributes?.name ?? ""
-                }
+                },
+                attributes.linkedWebSiteUrl,
+                new Attachment(accessToken, illustration?.id ?? "", illustration?.attributes?.url ?? "")
             );
         });
 };

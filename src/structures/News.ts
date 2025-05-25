@@ -1,4 +1,4 @@
-import { downloadAttachment } from "../routes/Attachments";
+import { Attachment } from "./Attachment";
 import { Author } from "../types/News";
 
 /**
@@ -22,18 +22,7 @@ export class News {
         public shortContent: string,
         public content: string,
         public author: Author,
-        public illustrationURL?: string,
-        public linkedWebSiteUrl?: string
+        public linkedWebSiteUrl: string | null,
+        public illustration: Attachment
     ) {}
-
-    /**
-     * Downloads the attachment and returns its raw binary content.
-     * @returns Raw binary content.
-     */
-    fetchIllustrationBuffer(): Promise<Buffer> {
-        if (!this.illustrationURL) {
-            throw new Error("This news doesn't have an illustration.");
-        }
-        return downloadAttachment(this.illustrationURL);
-    }
 }
