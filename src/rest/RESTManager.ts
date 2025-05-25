@@ -69,5 +69,12 @@ export class RestManager {
         });
     }
 
-
+    async patch<T>(path: string, body: any, options?: RequestOptions): Promise<T> {
+        return this.sendRequest<T>({
+            method:  "PATCH",
+            path,
+            body,
+            headers: options?.headers
+        });
+    }
 }
