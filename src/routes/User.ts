@@ -59,7 +59,6 @@ export const GetUserInfo = async (
     const schoolInstance = new School(
         school?.id ?? "",
         schoolAttr?.name ?? "",
-        school?.type ?? "",
         emsCode,
         wellKnownURL,
         { city: schoolAttr?.city ?? "" },

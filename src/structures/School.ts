@@ -10,7 +10,6 @@ export class School {
     /**
      * @param id - Unique ID for each school, starting with "SKO-E-".
      * @param name - Display name of the school.
-     * @param type - Entity type, usually "school".
      * @param emsCode - EMS code used for internal identification.
      * @param OIDCWellKnown - URL to the school's OIDC `.well-known` configuration.
      * @param location - Geographical and postal location of the school.
@@ -21,7 +20,6 @@ export class School {
     constructor(
         public id: string,
         public name: string,
-        public type: "school" | string,
         public emsCode: string,
         public OIDCWellKnown: string,
         public location: Location,

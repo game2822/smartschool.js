@@ -21,7 +21,6 @@ export const SearchSchools = async (query: string, limit = 10, offset = 0): Prom
         .map(school => new School(
             school.id,
             school.attributes.name,
-            school.type,
             school.attributes.emsCode,
             school.attributes.emsOIDCWellKnownUrl,
             {
