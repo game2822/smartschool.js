@@ -1,11 +1,4 @@
-import { BaseIncluded, Relationships } from "./RequestHandler";
-
-export interface AssignementsResponseData {
-    id: string;
-    relationships: Relationships;
-    type: "homework";
-    attributes: HomeworkAttributes;
-}
+import { BaseIncluded } from "./RequestHandler";
 
 export interface HomeworkAttributes {
     done: boolean;

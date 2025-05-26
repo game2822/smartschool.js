@@ -1,7 +1,8 @@
-import { AssignementsResponseData } from "./Assignment";
-import { NewsResponseData, schoolInfoAuthorIncluded, schoolInfoTechnicalUser } from "./News";
-import { schoolIncluded, SchoolResponseData } from "./School";
-import { UserResponseData } from "./User";
+import { HomeworkAttributes } from "./Assignment";
+import { absenceFileStateIncluded } from "./Attendance";
+import { NewsAttributes, schoolInfoAuthorIncluded, schoolInfoTechnicalUser } from "./News";
+import { SchoolAttributes, schoolIncluded } from "./School";
+import { UserAttributes } from "./User";
 
 export interface RequestOptions {
     method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
@@ -11,8 +12,26 @@ export interface RequestOptions {
 }
 
 export interface BaseResponse {
-    data: Array<NewsResponseData | SchoolResponseData | AssignementsResponseData> | UserResponseData | AssignementsResponseData;
-    included: Array<nonTeachingStaffIncluded | schoolIncluded | fileIncluded | schoolInfoAuthorIncluded | schoolInfoTechnicalUser>;
+    data:
+    | Array<
+    | BaseDataResponse<"news", NewsAttributes>
+    | BaseDataResponse<"school", SchoolAttributes>
+    | BaseDataResponse<"homework", HomeworkAttributes>
+    | BaseDataResponse<"absenceFile">
+    >
+    | BaseDataResponse<"studentUserInfo", UserAttributes>
+    | BaseDataResponse<"homework", HomeworkAttributes>;
+    included: Array<nonTeachingStaffIncluded | schoolIncluded | fileIncluded | schoolInfoAuthorIncluded | schoolInfoTechnicalUser | absenceFileStateIncluded>;
+}
+
+export interface BaseDataResponse<
+    T extends string,
+    A = unknown
+> {
+    id: string;
+    type: T;
+    relationships: Relationships;
+    attributes?: A;
 }
 
 export interface BaseIncluded<
@@ -39,7 +58,7 @@ export type fileIncluded = BaseIncluded<"schoolInfoFile", {
     alternativeText: string;
 }>;
 
-interface RelationshipData<T extends string> {
+export interface RelationshipData<T extends string> {
     data: {
         id: string;
         type: T;
@@ -52,4 +71,5 @@ export interface Relationships {
     illustration?: RelationshipData<"schoolInfoFile">;
     teacher?: RelationshipData<"teacher">;
     subject?: RelationshipData<"subject">;
+    currentState?: RelationshipData<"absenceFileState">;
 }

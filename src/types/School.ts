@@ -15,12 +15,6 @@ export interface Location {
     zipCode?: string;
 }
 
-export interface SchoolResponseData {
-    id: string;
-    type: "school";
-    attributes: SchoolAttributes;
-}
-
 export interface SchoolAttributes {
     homePageUrl: string;
     city: string;

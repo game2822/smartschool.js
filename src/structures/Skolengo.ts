@@ -1,9 +1,11 @@
 import { School } from "./School";
 import { News } from "./News";
 import { Assignment } from "./Assignment";
+import { AttendanceItem } from "./AttendanceItem";
 import { Kind, Permissions } from "../util/Constants";
 import { GetSchoolNews } from "../routes/School";
 import { GetAssignments } from "../routes/Assignments";
+import { GetAttendanceItems } from "../routes/Attendance";
 
 export class Skolengo {
     constructor(
@@ -25,7 +27,12 @@ export class Skolengo {
         return GetAssignments(this.userId, this.accessToken, this.school.emsCode, this.school.id, periodStart, periodEnd);
     }
 
+    async GetAttendanceItems(): Promise<Array<AttendanceItem>> {
+        return GetAttendanceItems(this.userId, this.school.id, this.school.emsCode, this.accessToken);
+    }
     async GetNews(): Promise<Array<News>> {
         return GetSchoolNews(this.accessToken, this.school.emsCode);
     }
+
+
 }

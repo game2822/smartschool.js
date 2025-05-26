@@ -1,4 +1,4 @@
-import { BaseIncluded, Relationships } from "./RequestHandler";
+import { BaseIncluded } from "./RequestHandler";
 
 export interface Author {
     id: string;
@@ -22,14 +22,6 @@ undefined,
     };
 }
 >;
-
-
-export interface NewsResponseData {
-    id: string;
-    relationships: Relationships;
-    type: "news";
-    attributes: NewsAttributes;
-}
 
 export interface NewsAttributes {
     title: string;

@@ -1,8 +1,8 @@
 import { BASE_URL, USER_ASSIGNMENT, USER_ASSIGNMENTS } from "../rest/Endpoints";
-import { BaseResponse } from "../types/RequestHandler";
+import { BaseDataResponse, BaseResponse } from "../types/RequestHandler";
 import { Assignment } from "../structures/Assignment";
 import { RestManager } from "../rest/RESTManager";
-import { AssignementsResponseData, attachmentInclude, subjectIncluded, teacherIncluded } from "../types/Assignment";
+import { attachmentInclude, HomeworkAttributes, subjectIncluded, teacherIncluded } from "../types/Assignment";
 import { Attachment } from "../structures/Attachment";
 
 const manager = new RestManager(BASE_URL());
@@ -37,7 +37,7 @@ export const GetAssignments = async (
     }
 
     return (Array.isArray(response.data) ? response.data : [])
-        .filter((item): item is AssignementsResponseData => item.type === "homework")
+        .filter((item): item is BaseDataResponse<"homework", HomeworkAttributes> => item.type === "homework")
         .map(assignment => {
             const teacherId = assignment.relationships.teacher?.data.id;
             const teacher = teacherId ? includedMap.get(`teacher:${teacherId}`) as teacherIncluded : null;
@@ -50,12 +50,12 @@ export const GetAssignments = async (
                 schoolId,
                 emsCode,
                 assignment.id,
-                assignment.attributes.done,
-                assignment.attributes.title,
-                assignment.attributes.html,
-                new Date(assignment.attributes.dueDateTime),
-                assignment.attributes.deliverWorkOnline,
-                assignment.attributes.onlineDeliverUrl,
+                assignment.attributes?.done ?? false,
+                assignment.attributes?.title ?? "",
+                assignment.attributes?.html ?? "",
+                new Date(assignment.attributes?.dueDateTime ?? ""),
+                assignment.attributes?.deliverWorkOnline ?? false,
+                assignment.attributes?.onlineDeliverUrl ?? "",
                 {
                     id:        teacherId                      ?? "",
                     title:     teacher?.attributes?.title     ?? "",
@@ -133,7 +133,7 @@ export const SetAssignmentCompletion = async (
     for (const item of response.included ?? []) {
         includedMap.set(`${item.type}:${item.id}`, item);
     }
-    const data = response.data as AssignementsResponseData;
+    const data = response.data as BaseDataResponse<"homework", HomeworkAttributes>;
     const subject = data.relationships.subject?.data.id ? includedMap.get("subject:" + data.relationships.subject?.data.id) as subjectIncluded : null;
     const teacher = data.relationships.teacher?.data.id ? includedMap.get("teacher:" + data.relationships.teacher?.data.id) as teacherIncluded : null;
 
@@ -144,11 +144,11 @@ export const SetAssignmentCompletion = async (
         emsCode,
         assignmentId,
         completed,
-        data.attributes.title,
-        data.attributes.html,
-        new Date(data.attributes?.dueDateTime),
-        data.attributes.deliverWorkOnline,
-        data.attributes.onlineDeliverUrl,
+        data.attributes?.title ?? "",
+        data.attributes?.html ?? "",
+        new Date(data.attributes?.dueDateTime ?? ""),
+        data.attributes?.deliverWorkOnline ?? false,
+        data.attributes?.onlineDeliverUrl ?? "",
         {
             id:        teacher?.id                    ?? "",
             title:     teacher?.attributes?.title     ?? "",

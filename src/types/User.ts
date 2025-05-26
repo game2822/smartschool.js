@@ -1,12 +1,4 @@
-import { Relationships } from "./RequestHandler";
 import { Permissions } from "../util/Constants";
-
-export interface UserResponseData {
-    id: string;
-    relationships: Relationships;
-    type: "studentUserInfo";
-    attributes: UserAttributes;
-}
 
 export interface UserAttributes {
     regime: string;

@@ -28,3 +28,13 @@ export enum ChallengeMethod {
 export enum Kind {
     STUDENT = "Eleve"
 }
+
+export enum AttendanceItemType {
+    LATENESS = "LATENESS",
+    ABSENCE = "ABSENCE"
+}
+
+export enum AttendanceItemState {
+    LOCKED = "LOCKED",
+    OPEN = "OPEN"
+}

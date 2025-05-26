@@ -3,9 +3,9 @@ import { RestManager } from "../rest/RESTManager";
 import { Attachment } from "../structures/Attachment";
 import { News } from "../structures/News";
 import { School } from "../structures/School";
-import { NewsResponseData } from "../types/News";
-import { BaseResponse, fileIncluded } from "../types/RequestHandler";
-import { schoolIncluded, SchoolResponseData } from "../types/School";
+import { NewsAttributes } from "../types/News";
+import { BaseDataResponse, BaseResponse, fileIncluded } from "../types/RequestHandler";
+import { SchoolAttributes, schoolIncluded } from "../types/School";
 
 const manager = new RestManager(BASE_URL());
 
@@ -17,23 +17,23 @@ export const SearchSchools = async (query: string, limit = 10, offset = 0): Prom
     });
 
     return (Array.isArray(response.data) ? response.data : [])
-        .filter((item): item is SchoolResponseData => item.type === "school")
+        .filter((item): item is BaseDataResponse<"school", SchoolAttributes>  => item.type === "school")
         .map(school => new School(
             school.id,
-            school.attributes.name,
-            school.attributes.emsCode,
-            school.attributes.emsOIDCWellKnownUrl,
+            school.attributes?.name ?? "",
+            school.attributes?.emsCode ?? "",
+            school.attributes?.emsOIDCWellKnownUrl ?? "",
             {
-                city:        school.attributes.city,
-                country:     school.attributes.country,
+                city:        school.attributes?.city ?? "",
+                country:     school.attributes?.country ?? "",
                 addressLine: [
-                    school.attributes.addressLine1,
-                    school.attributes.addressLine2,
-                    school.attributes.addressLine3
+                    school.attributes?.addressLine1 ?? "",
+                    school.attributes?.addressLine2 ?? "",
+                    school.attributes?.addressLine3 ?? ""
                 ].filter((line): line is string => line !== null).join(", "),
-                zipCode: school.attributes.zipCode
+                zipCode: school.attributes?.zipCode ?? ""
             },
-            school.attributes.homePageUrl
+            school.attributes?.homePageUrl ?? ""
         ));
 };
 
@@ -59,7 +59,7 @@ export const GetSchoolNews = async (accessToken: string, emsCode: string): Promi
     }
 
     return (Array.isArray(response.data) ? response.data : [])
-        .filter((item): item is NewsResponseData => item.type === "news")
+        .filter((item): item is BaseDataResponse<"news", NewsAttributes> => item.type === "news")
         .map(news => {
             const { relationships, attributes } = news;
 
@@ -76,15 +76,15 @@ export const GetSchoolNews = async (accessToken: string, emsCode: string): Promi
 
             return new News(
                 news.id,
-                new Date(attributes.publicationDateTime),
-                attributes.title,
-                attributes.shortContent,
-                attributes.content,
+                new Date(attributes?.publicationDateTime ?? ""),
+                attributes?.title ?? "",
+                attributes?.shortContent ?? "",
+                attributes?.content ?? "",
                 {
                     id:   authorData?.id ?? "",
                     name: author?.attributes?.name ?? ""
                 },
-                attributes.linkedWebSiteUrl,
+                attributes?.linkedWebSiteUrl ?? "",
                 new Attachment(accessToken, illustration?.id ?? "", illustration?.attributes?.url ?? "")
             );
         });
