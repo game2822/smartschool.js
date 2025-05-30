@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "module": "CommonJS",
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "inlineSourceMap": false,
+    "sourceMap": true,
+    "importHelpers": true,
+    "newLine": "LF",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "allowUnusedLabels": false,
+    "allowUnreachableCode": false,
+    "checkJs": false,
+    "strictPropertyInitialization": true,
+    "strictBindCallApply": true,
+    "declaration": true,
+    "noEmitOnError": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "pretty": true,
+    "allowJs": true,
+    "useDefineForClassFields": false
+  },
+  "include": [ "src/**/*" ]
+}
