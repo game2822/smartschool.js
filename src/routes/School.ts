@@ -6,6 +6,7 @@ import { School } from "../structures/School";
 import { NewsAttributes } from "../types/News";
 import { BaseDataResponse, BaseResponse, fileIncluded } from "../types/RequestHandler";
 import { SchoolAttributes, schoolIncluded } from "../types/School";
+import { getSingleRelation } from "../util/Relations";
 
 const manager = new RestManager(BASE_URL());
 
@@ -63,8 +64,8 @@ export const GetSchoolNews = async (accessToken: string, emsCode: string): Promi
         .map(news => {
             const { relationships, attributes } = news;
 
-            const illustrationId = relationships.illustration?.data?.id;
-            const authorData = relationships.school?.data;
+            const illustrationId = getSingleRelation(relationships.illustration)?.id;
+            const authorData = getSingleRelation(relationships.school);
 
             const illustration = illustrationId
                 ? includedMap.get(`schoolInfoFile:${illustrationId}`) as fileIncluded

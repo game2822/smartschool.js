@@ -1,4 +1,5 @@
-import { HomeworkAttributes } from "./Assignment";
+import { AgendaAttributes } from "./Agenda";
+import { HomeworkAttributes, homeworkIncluded } from "./Assignment";
 import { absenceFileStateIncluded } from "./Attendance";
 import { NewsAttributes, schoolInfoAuthorIncluded, schoolInfoTechnicalUser } from "./News";
 import { SchoolAttributes, schoolIncluded } from "./School";
@@ -18,10 +19,11 @@ export interface BaseResponse {
     | BaseDataResponse<"school", SchoolAttributes>
     | BaseDataResponse<"homework", HomeworkAttributes>
     | BaseDataResponse<"absenceFile">
+    | BaseDataResponse<"agenda", AgendaAttributes>
     >
     | BaseDataResponse<"studentUserInfo", UserAttributes>
     | BaseDataResponse<"homework", HomeworkAttributes>;
-    included: Array<nonTeachingStaffIncluded | schoolIncluded | fileIncluded | schoolInfoAuthorIncluded | schoolInfoTechnicalUser | absenceFileStateIncluded>;
+    included: Array<nonTeachingStaffIncluded | schoolIncluded | fileIncluded | schoolInfoAuthorIncluded | schoolInfoTechnicalUser | absenceFileStateIncluded | homeworkIncluded>;
 }
 
 export interface BaseDataResponse<
@@ -59,10 +61,9 @@ export type fileIncluded = BaseIncluded<"schoolInfoFile", {
 }>;
 
 export interface RelationshipData<T extends string> {
-    data: {
-        id: string;
-        type: T;
-    };
+    data:
+    | { id: string; type: T; }
+    | Array<{ id: string; type: T; }>;
 }
 
 export interface Relationships {
@@ -72,4 +73,6 @@ export interface Relationships {
     teacher?: RelationshipData<"teacher">;
     subject?: RelationshipData<"subject">;
     currentState?: RelationshipData<"absenceFileState">;
+    homeworkAssignments?: RelationshipData<"absenceFileState">;
+    lessons?: RelationshipData<"lesson">;
 }

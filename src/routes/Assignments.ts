@@ -4,6 +4,7 @@ import { Assignment } from "../structures/Assignment";
 import { RestManager } from "../rest/RESTManager";
 import { attachmentInclude, HomeworkAttributes, subjectIncluded, teacherIncluded } from "../types/Assignment";
 import { Attachment } from "../structures/Attachment";
+import { getSingleRelation } from "../util/Relations";
 
 const manager = new RestManager(BASE_URL());
 
@@ -39,9 +40,9 @@ export const GetAssignments = async (
     return (Array.isArray(response.data) ? response.data : [])
         .filter((item): item is BaseDataResponse<"homework", HomeworkAttributes> => item.type === "homework")
         .map(assignment => {
-            const teacherId = assignment.relationships.teacher?.data.id;
+            const teacherId = getSingleRelation(assignment.relationships.teacher)?.id;
             const teacher = teacherId ? includedMap.get(`teacher:${teacherId}`) as teacherIncluded : null;
-            const subjectId = assignment.relationships.subject?.data.id;
+            const subjectId = getSingleRelation(assignment.relationships.subject)?.id;
             const subject = subjectId ? includedMap.get(`subject:${subjectId}`) as subjectIncluded : null;
 
             return new Assignment(
@@ -57,16 +58,16 @@ export const GetAssignments = async (
                 assignment.attributes?.deliverWorkOnline ?? false,
                 assignment.attributes?.onlineDeliverUrl ?? "",
                 {
+                    id:    subjectId                   ?? "",
+                    label: subject?.attributes?.label  ?? "",
+                    color: subject?.attributes?.color  ?? ""
+                },
+                {
                     id:        teacherId                      ?? "",
                     title:     teacher?.attributes?.title     ?? "",
                     firstName: teacher?.attributes?.firstName ?? "",
                     lastName:  teacher?.attributes?.lastName  ?? "",
                     photoUrl:  teacher?.attributes?.photoUrl  ?? ""
-                },
-                {
-                    id:    subjectId                   ?? "",
-                    label: subject?.attributes?.label  ?? "",
-                    color: subject?.attributes?.color  ?? ""
                 }
             );
         });
@@ -134,8 +135,10 @@ export const SetAssignmentCompletion = async (
         includedMap.set(`${item.type}:${item.id}`, item);
     }
     const data = response.data as BaseDataResponse<"homework", HomeworkAttributes>;
-    const subject = data.relationships.subject?.data.id ? includedMap.get("subject:" + data.relationships.subject?.data.id) as subjectIncluded : null;
-    const teacher = data.relationships.teacher?.data.id ? includedMap.get("teacher:" + data.relationships.teacher?.data.id) as teacherIncluded : null;
+    const subjectId = getSingleRelation(data.relationships.subject)?.id;
+    const teacherId = getSingleRelation(data.relationships.teacher)?.id;
+    const subject = subjectId ? includedMap.get("subject:" + subjectId) as subjectIncluded : null;
+    const teacher = teacherId ? includedMap.get("teacher:" + teacherId) as teacherIncluded : null;
 
     return new Assignment(
         accessToken,
@@ -150,16 +153,16 @@ export const SetAssignmentCompletion = async (
         data.attributes?.deliverWorkOnline ?? false,
         data.attributes?.onlineDeliverUrl ?? "",
         {
+            id:    subject?.id                ?? "",
+            label: subject?.attributes?.label ?? "",
+            color: subject?.attributes?.color ?? ""
+        },
+        {
             id:        teacher?.id                    ?? "",
             title:     teacher?.attributes?.title     ?? "",
             firstName: teacher?.attributes?.firstName ?? "",
             lastName:  teacher?.attributes?.lastName  ?? "",
             photoUrl:  teacher?.attributes?.photoUrl  ?? ""
-        },
-        {
-            id:    subject?.id                ?? "",
-            label: subject?.attributes?.label ?? "",
-            color: subject?.attributes?.color ?? ""
         }
     );
 };

@@ -4,6 +4,7 @@ import { AttendanceItem } from "../structures/AttendanceItem";
 import { absenceFileStateIncluded, absenceReasonIncluded } from "../types/Attendance";
 import { BaseDataResponse, BaseResponse } from "../types/RequestHandler";
 import { AttendanceItemState, AttendanceItemType } from "../util/Constants";
+import { getSingleRelation } from "../util/Relations";
 
 const manager = new RestManager(BASE_URL());
 
@@ -29,8 +30,10 @@ export const GetAttendanceItems = async (userId: string, schoolId: string, emsCo
     return (Array.isArray(response.data) ? response.data : [])
         .filter((item): item is BaseDataResponse<"absenceFile"> => item.type === "absenceFile")
         .map(absenceItem => {
-            const file = absenceItem.relationships.currentState?.data.id ? includedMap.get("absenceFileState:" + absenceItem.relationships.currentState.data.id) as absenceFileStateIncluded : null;
-            const reason = file?.relationships?.absenceReason.data.id ? includedMap.get("absenceReason:" + file.relationships.absenceReason.data.id) as absenceReasonIncluded : null;
+            const fileId = getSingleRelation(absenceItem.relationships.currentState)?.id;
+            const file = fileId ? includedMap.get("absenceFileState:" + fileId) as absenceFileStateIncluded : null;
+            const reasonId = getSingleRelation(file?.relationships?.absenceReason)?.id;
+            const reason = reasonId ? includedMap.get("absenceReason:" + reasonId) as absenceReasonIncluded : null;
             return new AttendanceItem(
                 absenceItem.id,
                 new Date(file?.attributes?.creationDateTime ?? ""),

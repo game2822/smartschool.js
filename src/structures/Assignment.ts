@@ -18,7 +18,7 @@ export class Assignment {
      * @param dueDateTime - Deadline for submitting the assignment.
      * @param deliverWorkOnline - Whether the student must submit work through an online platform.
      * @param onlineDeliverUrl - URL where the student can upload their work, if applicable.
-     * @param teacher - The teacher who assigned the work.
+     * @param teacher optional - The teacher who assigned the work.
      * @param subject - The school subject associated with this assignment.
      */
     constructor(
@@ -33,8 +33,8 @@ export class Assignment {
         public dueDateTime: Date,
         public deliverWorkOnline: boolean,
         public onlineDeliverUrl: string | null,
-        public teacher: Teacher,
-        public subject: Subject
+        public subject: Subject,
+        public teacher?: Teacher
     ) {}
 
     /**

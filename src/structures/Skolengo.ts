@@ -2,10 +2,12 @@ import { School } from "./School";
 import { News } from "./News";
 import { Assignment } from "./Assignment";
 import { AttendanceItem } from "./AttendanceItem";
+import { TimetableDay } from "./TimetableDay";
 import { Kind, Permissions } from "../util/Constants";
 import { GetSchoolNews } from "../routes/School";
 import { GetAssignments } from "../routes/Assignments";
 import { GetAttendanceItems } from "../routes/Attendance";
+import { getTimetableForPeriods } from "../routes/Agenda";
 
 export class Skolengo {
     constructor(
@@ -34,5 +36,7 @@ export class Skolengo {
         return GetSchoolNews(this.accessToken, this.school.emsCode);
     }
 
-
+    async GetTimetable(periodStart?: Date, periodEnd?: Date): Promise<Array<TimetableDay>> {
+        return getTimetableForPeriods(this.userId, this.school.id, this.school.emsCode, this.accessToken, periodStart, periodEnd);
+    }
 }

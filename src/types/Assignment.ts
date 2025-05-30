@@ -1,4 +1,4 @@
-import { BaseIncluded } from "./RequestHandler";
+import { BaseIncluded, RelationshipData } from "./RequestHandler";
 
 export interface HomeworkAttributes {
     done: boolean;
@@ -9,6 +9,13 @@ export interface HomeworkAttributes {
     onlineDeliverUrl: string | null;
 }
 
+export type homeworkIncluded = BaseIncluded<
+"homework",
+HomeworkAttributes,
+{
+    subject: RelationshipData<"subject">;
+}
+>;
 export type teacherIncluded = BaseIncluded<"teacher", {
     title: string;
     firstName: string;
