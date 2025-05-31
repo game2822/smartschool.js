@@ -40,6 +40,6 @@ jobs:
           npm version --no-git-tag-version "$NIGHTLY_VERSION"
 
       - name: Publish to NPM with provenance
-        run: npm publish --tag nightly --provenance
+        run: npm publish --tag nightly --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
