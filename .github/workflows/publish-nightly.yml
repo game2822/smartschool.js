@@ -12,6 +12,7 @@ jobs:
 
     permissions:
       contents: read
+      id-token: write  # ← Requis pour --provenance
 
     steps:
       - name: Checkout repository
