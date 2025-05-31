@@ -1,0 +1,44 @@
+name: Publish Nightly
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish-nightly:
+    name: Publish Nightly to NPM
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org/
+          cache: 'npm'
+
+      - name: Get short commit SHA
+        id: vars
+        run: echo "sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Update package.json version to nightly
+        run: |
+          BASE_VERSION=$(node -p "require('./package.json').version.split('-')[0]")
+          NIGHTLY_VERSION="${BASE_VERSION}-nightly.${{ steps.vars.outputs.sha }}"
+          echo "Nightly version: $NIGHTLY_VERSION"
+          npm version --no-git-tag-version "$NIGHTLY_VERSION"
+
+      - name: Publish to NPM with provenance
+        run: npm publish --tag nightly --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
