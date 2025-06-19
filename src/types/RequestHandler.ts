@@ -1,6 +1,7 @@
 import { AgendaAttributes } from "./Agenda";
 import { HomeworkAttributes, homeworkIncluded } from "./Assignment";
 import { absenceFileStateIncluded } from "./Attendance";
+import { GradesAttributes, gradesIncluded, gradesServiceIncluded } from "./Grades";
 import { NewsAttributes, schoolInfoAuthorIncluded, schoolInfoTechnicalUser } from "./News";
 import { SchoolAttributes, schoolIncluded } from "./School";
 import { UserAttributes } from "./User";
@@ -20,10 +21,11 @@ export interface BaseResponse {
     | BaseDataResponse<"homework", HomeworkAttributes>
     | BaseDataResponse<"absenceFile">
     | BaseDataResponse<"agenda", AgendaAttributes>
+    | BaseDataResponse<"evaluationResult", GradesAttributes>
     >
     | BaseDataResponse<"studentUserInfo", UserAttributes>
     | BaseDataResponse<"homework", HomeworkAttributes>;
-    included: Array<nonTeachingStaffIncluded | schoolIncluded | fileIncluded | schoolInfoAuthorIncluded | schoolInfoTechnicalUser | absenceFileStateIncluded | homeworkIncluded>;
+    included: Array<nonTeachingStaffIncluded | schoolIncluded | fileIncluded | schoolInfoAuthorIncluded | schoolInfoTechnicalUser | absenceFileStateIncluded | homeworkIncluded | gradesIncluded | gradesServiceIncluded>;
 }
 
 export interface BaseDataResponse<
@@ -75,4 +77,6 @@ export interface Relationships {
     currentState?: RelationshipData<"absenceFileState">;
     homeworkAssignments?: RelationshipData<"absenceFileState">;
     lessons?: RelationshipData<"lesson">;
+    evaluation?: RelationshipData<"evaluation">;
+    subSkillsEvaluationResults?: RelationshipData<"subSkillsEvaluationResults">;
 }
