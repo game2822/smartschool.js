@@ -1,7 +1,16 @@
 import { AgendaAttributes } from "./Agenda";
 import { HomeworkAttributes, homeworkIncluded } from "./Assignment";
 import { absenceFileStateIncluded } from "./Attendance";
-import { GradesAttributes, gradesIncluded, gradesServiceIncluded } from "./Grades";
+import {
+    gradeResultIncluded,
+    GradesAttributes,
+    gradesIncluded,
+    GradesServiceAttribute,
+    gradesServiceIncluded,
+    GradesSettings,
+    skillColorsIncluded,
+    skillsIncluded
+} from "./Grades";
 import { NewsAttributes, schoolInfoAuthorIncluded, schoolInfoTechnicalUser } from "./News";
 import { SchoolAttributes, schoolIncluded } from "./School";
 import { UserAttributes } from "./User";
@@ -22,10 +31,12 @@ export interface BaseResponse {
     | BaseDataResponse<"absenceFile">
     | BaseDataResponse<"agenda", AgendaAttributes>
     | BaseDataResponse<"evaluationResult", GradesAttributes>
+    | BaseDataResponse<"evaluationsSetting", GradesSettings>
+    | BaseDataResponse<"evaluationService", GradesServiceAttribute>
     >
     | BaseDataResponse<"studentUserInfo", UserAttributes>
     | BaseDataResponse<"homework", HomeworkAttributes>;
-    included: Array<nonTeachingStaffIncluded | schoolIncluded | fileIncluded | schoolInfoAuthorIncluded | schoolInfoTechnicalUser | absenceFileStateIncluded | homeworkIncluded | gradesIncluded | gradesServiceIncluded>;
+    included: Array<nonTeachingStaffIncluded | schoolIncluded | fileIncluded | schoolInfoAuthorIncluded | schoolInfoTechnicalUser | absenceFileStateIncluded | homeworkIncluded | gradesIncluded | gradesServiceIncluded | skillColorsIncluded | skillsIncluded | gradeResultIncluded>;
 }
 
 export interface BaseDataResponse<
@@ -78,5 +89,10 @@ export interface Relationships {
     homeworkAssignments?: RelationshipData<"absenceFileState">;
     lessons?: RelationshipData<"lesson">;
     evaluation?: RelationshipData<"evaluation">;
+    evaluations?: RelationshipData<"evaluation">;
     subSkillsEvaluationResults?: RelationshipData<"subSkillsEvaluationResults">;
+    periods?: RelationshipData<"periods">;
+    skillsSetting?: RelationshipData<"skillsSetting">;
+    evaluationService?: RelationshipData<"evaluationService">;
+    teachers?: RelationshipData<"teacher">;
 }

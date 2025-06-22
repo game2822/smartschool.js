@@ -38,3 +38,11 @@ export enum AttendanceItemState {
     LOCKED = "LOCKED",
     OPEN = "OPEN"
 }
+
+export enum SkillLevels {
+    NONE = "NONE",
+    INSUFFICIENT_MASTERY = "INSUFFICIENT_MASTERY",
+    LOW_MASTERY = "LOW_MASTERY",
+    SATISFACTORY_MASTERY = "SATISFACTORY_MASTERY",
+    VERY_GOOD_MASTERY = "VERY_GOOD_MASTERY"
+}
