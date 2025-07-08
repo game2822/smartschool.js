@@ -13,3 +13,7 @@ export const USER_LAST_GRADES = () => "evaluations-results";
 export const USER_SERVICES = () => "evaluation-services"
 
 export const ATTENDANCE_FILES = () => "absence-files";
+
+export const MAIL = () => "communications";
+export const MAIL_PARTICIPATIONS = (mailId: string) => "communications/" + mailId + "/participations";
+export const MAIL_SETTINGS = (userId: string) => "users-mail-settings/" + userId;

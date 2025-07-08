@@ -11,6 +11,15 @@ import {
     skillColorsIncluded,
     skillsIncluded
 } from "./Grades";
+import {
+    CommunicationAttributes,
+    folderIncluded,
+    ParticipationAttributes,
+    participationIncluded,
+    personParticipantIncluded,
+    signatureIncluded,
+    userMailSettingAttributes
+} from "./Mail";
 import { NewsAttributes, schoolInfoAuthorIncluded, schoolInfoTechnicalUser } from "./News";
 import { SchoolAttributes, schoolIncluded } from "./School";
 import { UserAttributes } from "./User";
@@ -33,10 +42,13 @@ export interface BaseResponse {
     | BaseDataResponse<"evaluationResult", GradesAttributes>
     | BaseDataResponse<"evaluationsSetting", GradesSettings>
     | BaseDataResponse<"evaluationService", GradesServiceAttribute>
+    | BaseDataResponse<"communication", CommunicationAttributes>
+    | BaseDataResponse<"participation", ParticipationAttributes>
     >
     | BaseDataResponse<"studentUserInfo", UserAttributes>
-    | BaseDataResponse<"homework", HomeworkAttributes>;
-    included: Array<nonTeachingStaffIncluded | schoolIncluded | fileIncluded | schoolInfoAuthorIncluded | schoolInfoTechnicalUser | absenceFileStateIncluded | homeworkIncluded | gradesIncluded | gradesServiceIncluded | skillColorsIncluded | skillsIncluded | gradeResultIncluded>;
+    | BaseDataResponse<"homework", HomeworkAttributes>
+    | BaseDataResponse<"userMailSetting", userMailSettingAttributes>;
+    included: Array<nonTeachingStaffIncluded | schoolIncluded | fileIncluded | schoolInfoAuthorIncluded | schoolInfoTechnicalUser | absenceFileStateIncluded | homeworkIncluded | gradesIncluded | gradesServiceIncluded | skillColorsIncluded | skillsIncluded | gradeResultIncluded | participationIncluded | personParticipantIncluded | signatureIncluded | folderIncluded>;
 }
 
 export interface BaseDataResponse<
@@ -95,4 +107,9 @@ export interface Relationships {
     skillsSetting?: RelationshipData<"skillsSetting">;
     evaluationService?: RelationshipData<"evaluationService">;
     teachers?: RelationshipData<"teacher">;
+    folders?: RelationshipData<"folder">;
+    signature?: RelationshipData<"signature">;
+    lastParticipation?: RelationshipData<"participation">;
+    attachments?: RelationshipData<"attachments">;
+    sender?: RelationshipData<"sender">;
 }

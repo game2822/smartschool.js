@@ -5,6 +5,8 @@ import { AttendanceItem } from "./AttendanceItem";
 import { TimetableDay } from "./TimetableDay";
 import { Grade } from "./Grade";
 import { Subject } from "./Subject";
+import { MailFolder } from "./MailFolder";
+import { Mail } from "./Mail";
 import { Kind, Permissions } from "../util/Constants";
 import { GetSchoolNews } from "../routes/School";
 import { GetAssignments } from "../routes/Assignments";
@@ -12,6 +14,8 @@ import { GetAttendanceItems } from "../routes/Attendance";
 import { getTimetableForPeriods } from "../routes/Agenda";
 import { GradesSettings } from "../types/Grades";
 import { GetGradesForPeriod, GetGradesSettings, GetLastGrades } from "../routes/Grades";
+import { MailSettings } from "../types/Mail";
+import { GetMailSettings, GetMailsFromFolder } from "../routes/Mail";
 
 export class Skolengo {
     constructor(
@@ -29,10 +33,18 @@ export class Skolengo {
         public school: School
     ){}
 
+    async GetAllMails(limitPerFolder = 20, offset = 0): Promise<Array<MailFolder>> {
+        const folders: Array<MailFolder> = (await this.GetMailSettings()).folders;
+        for (const folder of folders) {
+            const mails: Array<Mail> = await GetMailsFromFolder(folder.id, limitPerFolder, offset, this.school.emsCode, this.accessToken);
+            if (!folder.mails) folder.mails = [];
+            folder.mails?.push(...mails);
+        }
+        return folders;
+    }
     async GetAssignments(periodStart?: Date, periodEnd?: Date): Promise<Array<Assignment>> {
         return GetAssignments(this.userId, this.accessToken, this.school.emsCode, this.school.id, periodStart, periodEnd);
     }
-
     async GetAttendanceItems(): Promise<Array<AttendanceItem>> {
         return GetAttendanceItems(this.userId, this.school.id, this.school.emsCode, this.accessToken);
     }
@@ -50,6 +62,15 @@ export class Skolengo {
     async GetLastGrades(limit?: number, offset?: number): Promise<Array<Grade>> {
         return GetLastGrades(this.userId, this.accessToken, this.school.emsCode, this.school.id, limit, offset);
     }
+    async GetMailFromFolder(folderId: string, limit: number, offset: number): Promise<Array<Mail>> {
+        const mails: Array<Mail> = await GetMailsFromFolder(folderId, limit, offset, this.school.emsCode, this.accessToken);
+        return mails;
+    }
+
+
+    async GetMailSettings(): Promise<MailSettings> {
+        return GetMailSettings(this.userId, this.school.emsCode, this.accessToken);
+    }
 
     async GetNews(): Promise<Array<News>> {
         return GetSchoolNews(this.accessToken, this.school.emsCode);
@@ -57,4 +78,6 @@ export class Skolengo {
     async GetTimetable(periodStart?: Date, periodEnd?: Date): Promise<Array<TimetableDay>> {
         return getTimetableForPeriods(this.userId, this.school.id, this.school.emsCode, this.accessToken, periodStart, periodEnd);
     }
+
+
 }
