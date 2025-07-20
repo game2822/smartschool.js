@@ -1,5 +1,5 @@
 import { BaseDataResponse, BaseResponse, MailFolderType, nonTeachingStaffIncluded } from "..";
-import { BASE_URL, MAIL, MAIL_PARTICIPATIONS, MAIL_SETTINGS } from "../rest/Endpoints";
+import { BASE_URL, MAIL, MAIL_PARTICIPATIONS, MAIL_SETTINGS } from "../rest/endpoints";
 import { RestManager } from "../rest/RESTManager";
 import { Attachment } from "../structures/Attachment";
 import { Mail } from "../structures/Mail";
