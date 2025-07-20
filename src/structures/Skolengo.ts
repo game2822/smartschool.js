@@ -16,11 +16,15 @@ import { GradesSettings } from "../types/Grades";
 import { GetGradesForPeriod, GetGradesSettings, GetLastGrades } from "../routes/Grades";
 import { MailSettings } from "../types/Mail";
 import { GetMailSettings, GetMailsFromFolder } from "../routes/Mail";
+import { OIDCAccessToken } from "../types/OIDC";
+import { OIDCRefresh } from "../routes/OIDC";
 
 export class Skolengo {
     constructor(
         protected accessToken: string,
         protected refreshToken: string,
+        protected refreshURL: string,
+        protected accessTokenTTL: number,
         public userId: string,
         public firstName: string,
         public lastName: string,
@@ -33,6 +37,18 @@ export class Skolengo {
         public school: School
     ){}
 
+    private async refreshAccessToken(): Promise<boolean> {
+        if (!this.refreshToken) {
+            throw new Error("No refresh token available. Please authenticate again.");
+        }
+        if (Date.now() >= this.accessTokenTTL) {
+            const response = await OIDCRefresh(this.refreshURL, this.refreshToken);
+            this.accessToken = response.access_token;
+            this.refreshToken = response.refresh_token;
+            return true;
+        }
+        return false;
+    }
     async GetAllMails(limitPerFolder = 20, offset = 0): Promise<Array<MailFolder>> {
         const folders: Array<MailFolder> = (await this.GetMailSettings()).folders;
         for (const folder of folders) {

@@ -11,12 +11,12 @@ export class Mail {
         public messages: number,
         public participants: Array<string>,
         public read: boolean,
-        public replyToAllAllowed: boolean,
-        public replyToSenderAllowed: boolean,
-        public readTrackingEnabled: boolean,
         public date: Date,
         public content: string,
-        public sender: Author
+        public sender?: Author,
+        public replyToAllAllowed?: boolean,
+        public replyToSenderAllowed?: boolean,
+        public readTrackingEnabled?: boolean,
     ){}
 
     async getMessages(): Promise<Array<Message>> {

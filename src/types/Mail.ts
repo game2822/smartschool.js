@@ -49,4 +49,10 @@ export interface userMailSettingAttributes {
 export interface MailSettings extends userMailSettingAttributes {
     signature: string;
     folders: Array<MailFolder>;
+    recipients: Array<Recipients>;
+}
+
+export interface  Recipients {
+    id: string;
+    type: "personContact" | "groupContact";
 }

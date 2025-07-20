@@ -112,4 +112,5 @@ export interface Relationships {
     lastParticipation?: RelationshipData<"participation">;
     attachments?: RelationshipData<"attachments">;
     sender?: RelationshipData<"sender">;
+    contacts?: RelationshipData<"personContact" | "groupContact">;
 }

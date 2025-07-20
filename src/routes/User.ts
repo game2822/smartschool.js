@@ -1,5 +1,5 @@
 import { School } from "../structures/School";
-import { BASE_URL, USER_INFO } from "../rest/Endpoints";
+import { BASE_URL, USER_INFO } from "../rest/endpoints";
 import { RestManager } from "../rest/RESTManager";
 import { Skolengo } from "../structures/Skolengo";
 import { DecodePayload } from "../util/JWT";
@@ -16,6 +16,7 @@ export const GetUserInfo = async (
     accessToken: string,
     refreshToken: string,
     wellKnownURL: string,
+    refreshURL: string,
     emsCode: string
 ): Promise<Skolengo> => {
     const payload = DecodePayload(accessToken) as unknown as JWTPayload;
@@ -77,6 +78,8 @@ export const GetUserInfo = async (
     return new Skolengo(
         accessToken,
         refreshToken,
+        refreshURL,
+        (payload.exp - 300) * 1000,
         userInfo.id,
         attributes.firstName,
         attributes.lastName,

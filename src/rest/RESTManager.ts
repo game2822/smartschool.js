@@ -51,10 +51,12 @@ export class RestManager {
         });
     }
 
-    async post<T>(path: string, body: any, options?: RequestOptions): Promise<T> {
+    async post<T>(path: string, body: any, params?: Record<string, any>, options?: RequestOptions): Promise<T> {
+        const urlParams = new URLSearchParams(params).toString();
+        const urlPath = urlParams ? `${path}?${urlParams}` : path;
         return this.sendRequest<T>({
             method:  "POST",
-            path,
+            path: urlPath,
             body,
             headers: options?.headers
         });

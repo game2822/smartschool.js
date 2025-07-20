@@ -13,6 +13,7 @@ import {
     ParticipationAttributes,
     participationIncluded,
     personParticipantIncluded,
+    Recipients,
     signatureIncluded,
     userMailSettingAttributes
 } from "../types/Mail";
@@ -23,7 +24,7 @@ const manager = new RestManager(BASE_URL());
 
 export const GetMailSettings = async (userId: string, emsCode: string, accessToken: string): Promise<MailSettings> => {
     const response = await manager.get<BaseResponse>(MAIL_SETTINGS(userId), {
-        "include":                 "signature,folders,folders.parent",
+        "include":                 "contacts,contacts.person,contacts.personContacts,signature,folders,folders.parent",
         "fields[userMailSetting]": "maxCharsInParticipationContent,maxCharsInCommunicationSubject",
         "fields[signature]":       "content",
         "fields[folder]":          "name,position,type,parent"
@@ -52,11 +53,18 @@ export const GetMailSettings = async (userId: string, emsCode: string, accessTok
         };
     });
 
+    const rawRecipients = getMultipleRelations(data.relationships.contacts);
+    const recipients: Array<Recipients> = rawRecipients.map(recipient => ({
+        id:   recipient.id,
+        type: recipient.type
+    }));
+
     return {
         maxCharsInCommunicationSubject: data.attributes?.maxCharsInCommunicationSubject ?? 0,
         maxCharsInParticipationContent: data.attributes?.maxCharsInParticipationContent ?? 0,
         signature:                      signature.attributes?.content ?? "",
-        folders
+        folders,
+        recipients
     };
 };
 
@@ -103,9 +111,6 @@ export const GetMailsFromFolder = async (folderId: string, limit: number, offset
                 mail.attributes?.participationsNumber ?? 1,
                 recipients ?? [],
                 mail.attributes?.read ?? false,
-                mail.attributes?.replyToAllAllowed ?? false,
-                mail.attributes?.replyToSenderAllowed ?? false,
-                mail.attributes?.readTrackingEnabled ?? false,
                 new Date(partData.attributes?.dateTime ?? ""),
                 partData.attributes?.content ?? "",
                 {
@@ -117,7 +122,10 @@ export const GetMailsFromFolder = async (folderId: string, limit: number, offset
                         : (realSenderData && "attributes" in realSenderData && realSenderData.attributes && "firstName" in realSenderData.attributes && "lastName" in realSenderData.attributes
                             ? `${realSenderData.attributes.firstName} ${realSenderData.attributes.lastName}`
                             : "")
-                }
+                },
+                mail.attributes?.replyToAllAllowed ?? false,
+                mail.attributes?.replyToSenderAllowed ?? false,
+                mail.attributes?.readTrackingEnabled ?? false
             );
         });
 };
@@ -179,4 +187,59 @@ export const GetMessagesFromMail = async (mailId: string, emsCode: string, acces
                 }
             );
         });
+};
+
+export const SendMail = async (
+    subject: string,
+    content: string,
+    recipients: Array<Recipients> = [],
+    cc: Array<Recipients> = [],
+    bcc: Array<Recipients> = [],
+    accessToken: string,
+    emsCode: string
+): Promise<Mail> => {
+    const response = await manager.post<BaseResponse>(
+        MAIL(),
+        {
+            data: {
+                type:       "communication",
+                attributes: {
+                    subject,
+                    firstParticipationContent: content
+                },
+                relationships: {
+                    toRecipients: {
+                        data: recipients
+                    },
+                    ccRecipients: {
+                        data: recipients
+                    },
+                    bccRecipients: {
+                        data: recipients
+                    }
+                }
+            }
+        },
+        {},
+        {
+            headers: {
+                "Authorization":       `Bearer ${accessToken}`,
+                "x-skolengo-ems-code": emsCode
+            }
+        }
+    );
+
+    const mailId = (response.data as unknown as BaseDataResponse<"communication", CommunicationAttributes>).id;
+
+    return new Mail(
+        emsCode,
+        accessToken,
+        mailId,
+        subject,
+        1,
+        [...recipients.map(r => r.id), ...cc.map(r => r.id), ...bcc.map(r => r.id)],
+        false,
+        new Date(),
+        content
+    );
 };

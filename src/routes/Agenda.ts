@@ -1,4 +1,4 @@
-import { BASE_URL, USER_AGENDA } from "../rest/Endpoints";
+import { BASE_URL, USER_AGENDA } from "../rest/endpoints";
 import { RestManager } from "../rest/RESTManager";
 import { Assignment } from "../structures/Assignment";
 import { Lesson } from "../structures/Lesson";
