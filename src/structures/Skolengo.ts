@@ -36,18 +36,6 @@ export class Skolengo {
         public school: School
     ){}
 
-    private async refreshAccessToken(): Promise<boolean> {
-        if (!this.refreshToken) {
-            throw new Error("No refresh token available. Please authenticate again.");
-        }
-        if (Date.now() >= this.accessTokenTTL) {
-            const response = await OIDCRefresh(this.refreshURL, this.refreshToken);
-            this.accessToken = response.access_token;
-            this.refreshToken = response.refresh_token;
-            return true;
-        }
-        return false;
-    }
     async GetAllMails(limitPerFolder = 20, offset = 0): Promise<Array<MailFolder>> {
         await this.refreshAccessToken();
         const folders: Array<MailFolder> = (await this.GetMailSettings()).folders;
@@ -87,13 +75,10 @@ export class Skolengo {
         await this.refreshAccessToken();
         return GetMailsFromFolder(folderId, limit, offset, this.school.emsCode, this.accessToken);
     }
-
-
     async GetMailSettings(): Promise<MailSettings> {
         await this.refreshAccessToken();
         return GetMailSettings(this.userId, this.school.emsCode, this.accessToken);
     }
-
     async GetNews(): Promise<Array<News>> {
         await this.refreshAccessToken();
         return GetSchoolNews(this.accessToken, this.school.emsCode);
@@ -102,6 +87,20 @@ export class Skolengo {
         await this.refreshAccessToken();
         return getTimetableForPeriods(this.userId, this.school.id, this.school.emsCode, this.accessToken, periodStart, periodEnd);
     }
+    async refreshAccessToken(): Promise<boolean> {
+        if (!this.refreshToken) {
+            throw new Error("No refresh token available. Please authenticate again.");
+        }
+        if (Date.now() >= this.accessTokenTTL) {
+            const response = await OIDCRefresh(this.refreshURL, this.refreshToken);
+            this.accessToken = response.access_token;
+            this.refreshToken = response.refresh_token;
+            return true;
+        }
+        return false;
+    }
+
+
     async SendMail(subject: string, content: string, recipients?: Array<Recipients>, cc?: Array<Recipients>, bcc?: Array<Recipients>): Promise<Mail> {
         await this.refreshAccessToken();
         return SendMail(subject, content, recipients, cc, bcc, this.school.emsCode, this.accessToken);
