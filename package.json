@@ -15,7 +15,7 @@
   },
   "scripts": {
     "init": "npm install",
-    "build": "npm install && eslint src --fix && tsup",
+    "build": "npm install && tsup",
     "compile": "node scripts/build && gen-esm-wrapper dist/index.js dist/index.mjs",
     "lint": "eslint src --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix",
