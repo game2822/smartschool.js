@@ -1,6 +1,6 @@
 {
   "name": "skolengojs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A wrapper around Skolengo internal API.",
   "repository": "github:raphckrman/skolengo.js",
   "main": "./dist/index.js",
