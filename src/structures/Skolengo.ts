@@ -14,9 +14,8 @@ import { GetAttendanceItems } from "../routes/Attendance";
 import { getTimetableForPeriods } from "../routes/Agenda";
 import { GradesSettings } from "../types/Grades";
 import { GetGradesForPeriod, GetGradesSettings, GetLastGrades } from "../routes/Grades";
-import { MailSettings } from "../types/Mail";
-import { GetMailSettings, GetMailsFromFolder } from "../routes/Mail";
-import { OIDCAccessToken } from "../types/OIDC";
+import { MailSettings, Recipients } from "../types/Mail";
+import { GetMailSettings, GetMailsFromFolder, SendMail } from "../routes/Mail";
 import { OIDCRefresh } from "../routes/OIDC";
 
 export class Skolengo {
@@ -50,6 +49,7 @@ export class Skolengo {
         return false;
     }
     async GetAllMails(limitPerFolder = 20, offset = 0): Promise<Array<MailFolder>> {
+        await this.refreshAccessToken();
         const folders: Array<MailFolder> = (await this.GetMailSettings()).folders;
         for (const folder of folders) {
             const mails: Array<Mail> = await GetMailsFromFolder(folder.id, limitPerFolder, offset, this.school.emsCode, this.accessToken);
@@ -59,12 +59,15 @@ export class Skolengo {
         return folders;
     }
     async GetAssignments(periodStart?: Date, periodEnd?: Date): Promise<Array<Assignment>> {
+        await this.refreshAccessToken();
         return GetAssignments(this.userId, this.accessToken, this.school.emsCode, this.school.id, periodStart, periodEnd);
     }
     async GetAttendanceItems(): Promise<Array<AttendanceItem>> {
+        await this.refreshAccessToken();
         return GetAttendanceItems(this.userId, this.school.id, this.school.emsCode, this.accessToken);
     }
     async GetGradesForPeriod(period?: string): Promise<Array<Subject>> {
+        await this.refreshAccessToken();
         const periods = [];
         if (!period) {
             periods.push(...(await this.GetGradesSettings()).periods);
@@ -73,26 +76,35 @@ export class Skolengo {
         return GetGradesForPeriod(this.userId, this.accessToken, this.school.emsCode, this.school.id, period ?? periods[0].id);
     }
     async GetGradesSettings(): Promise<GradesSettings> {
+        await this.refreshAccessToken();
         return GetGradesSettings(this.userId, this.accessToken, this.school.emsCode, this.school.id);
     }
     async GetLastGrades(limit?: number, offset?: number): Promise<Array<Grade>> {
+        await this.refreshAccessToken();
         return GetLastGrades(this.userId, this.accessToken, this.school.emsCode, this.school.id, limit, offset);
     }
     async GetMailFromFolder(folderId: string, limit: number, offset: number): Promise<Array<Mail>> {
-        const mails: Array<Mail> = await GetMailsFromFolder(folderId, limit, offset, this.school.emsCode, this.accessToken);
-        return mails;
+        await this.refreshAccessToken();
+        return GetMailsFromFolder(folderId, limit, offset, this.school.emsCode, this.accessToken);
     }
 
 
     async GetMailSettings(): Promise<MailSettings> {
+        await this.refreshAccessToken();
         return GetMailSettings(this.userId, this.school.emsCode, this.accessToken);
     }
 
     async GetNews(): Promise<Array<News>> {
+        await this.refreshAccessToken();
         return GetSchoolNews(this.accessToken, this.school.emsCode);
     }
     async GetTimetable(periodStart?: Date, periodEnd?: Date): Promise<Array<TimetableDay>> {
+        await this.refreshAccessToken();
         return getTimetableForPeriods(this.userId, this.school.id, this.school.emsCode, this.accessToken, periodStart, periodEnd);
+    }
+    async SendMail(subject: string, content: string, recipients?: Array<Recipients>, cc?: Array<Recipients>, bcc?: Array<Recipients>): Promise<Mail> {
+        await this.refreshAccessToken();
+        return SendMail(subject, content, recipients, cc, bcc, this.school.emsCode, this.accessToken);
     }
 
 
