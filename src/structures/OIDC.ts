@@ -94,6 +94,7 @@ export class AuthFlow {
             tokens.access_token,
             tokens.refresh_token,
             this.endpoints.wellKnown,
+            this.endpoints.tokenEndpoint,
             this.school.emsCode
         );
     }

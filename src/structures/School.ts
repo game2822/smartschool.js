@@ -6,7 +6,7 @@ import { ChallengeMethod, Services } from "../util/Constants";
 /**
  * Represents a school entity with identity, location, and authentication details.
  */
-export class School {
+export class    School {
     /**
      * @param id - Unique ID for each school, starting with "SKO-E-".
      * @param name - Display name of the school.

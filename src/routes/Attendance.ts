@@ -1,4 +1,4 @@
-import { ATTENDANCE_FILES, BASE_URL } from "../rest/Endpoints";
+import { ATTENDANCE_FILES, BASE_URL } from "../rest/endpoints";
 import { RestManager } from "../rest/RESTManager";
 import { AttendanceItem } from "../structures/AttendanceItem";
 import { absenceFileStateIncluded, absenceReasonIncluded } from "../types/Attendance";

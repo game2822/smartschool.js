@@ -1,4 +1,4 @@
-import { BASE_URL, USER_ASSIGNMENTS, USER_LAST_GRADES, USER_SERVICES } from "../rest/Endpoints";
+import { BASE_URL, USER_ASSIGNMENTS, USER_LAST_GRADES, USER_SERVICES } from "../rest/endpoints";
 import { RestManager } from "../rest/RESTManager";
 import { Grade } from "../structures/Grade";
 import { Period } from "../structures/Period";

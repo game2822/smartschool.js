@@ -43,6 +43,19 @@ export const GetOIDCAccessTokens = async (url: string, code: string, verifier: s
         redirect_uri:  REDIRECT_URI
     });
 
-    const response = await manager.get<OIDCAccessToken>(path, params);
-    return response;
+    return manager.get<OIDCAccessToken>(path, params);
+};
+
+export const OIDCRefresh = async (url: string, refreshToken: string): Promise<OIDCAccessToken> => {
+    const [base, path] = extractBaseUrl(url);
+    const manager = new RestManager(base);
+    const params = new URLSearchParams({
+        grant_type:    "refresh_token",
+        refresh_token: refreshToken,
+        client_id:     OIDC_CLIENT_ID,
+        client_secret: OIDC_CLIENT_SECRET,
+        scope:         "openid+profile"
+    });
+
+    return manager.post<OIDCAccessToken>(path, params);
 };

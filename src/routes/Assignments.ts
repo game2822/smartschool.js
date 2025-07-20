@@ -1,4 +1,4 @@
-import { BASE_URL, USER_ASSIGNMENT, USER_ASSIGNMENTS } from "../rest/Endpoints";
+import { BASE_URL, USER_ASSIGNMENT, USER_ASSIGNMENTS } from "../rest/endpoints";
 import { BaseDataResponse, BaseResponse } from "../types/RequestHandler";
 import { Assignment } from "../structures/Assignment";
 import { RestManager } from "../rest/RESTManager";
