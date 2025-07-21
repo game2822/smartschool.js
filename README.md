@@ -18,3 +18,4 @@ npm install skolengojs
 ## 💡 Credits
 Thanks to the following people for their contributions to this project:
 - [Orion](https://github.com/oriionn/) for giving me his account to test the API.
+- [Akala9](https://github.com/Akala9) for giving me his account to test the API.
