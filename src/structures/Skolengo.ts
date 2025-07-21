@@ -69,6 +69,26 @@ export class Skolengo {
         await this.refreshAccessToken();
         return GetGradesSettings(this.userId, this.accessToken, this.school.emsCode, this.school.id);
     }
+    async GetLastGrades(limit?: number, offset?: number): Promise<Array<Grade>> {
+        await this.refreshAccessToken();
+        return GetLastGrades(this.userId, this.accessToken, this.school.emsCode, this.school.id, limit, offset);
+    }
+    async GetMailFromFolder(folderId: string, limit: number, offset: number): Promise<Array<Mail>> {
+        await this.refreshAccessToken();
+        return GetMailsFromFolder(folderId, limit, offset, this.school.emsCode, this.accessToken);
+    }
+    async GetMailSettings(): Promise<MailSettings> {
+        await this.refreshAccessToken();
+        return GetMailSettings(this.userId, this.school.emsCode, this.accessToken);
+    }
+    async GetNews(): Promise<Array<News>> {
+        await this.refreshAccessToken();
+        return GetSchoolNews(this.accessToken, this.school.emsCode);
+    }
+    async GetTimetable(periodStart?: Date, periodEnd?: Date): Promise<Array<TimetableDay>> {
+        await this.refreshAccessToken();
+        return getTimetableForPeriods(this.userId, this.school.id, this.school.emsCode, this.accessToken, periodStart, periodEnd);
+    }
     async initKids(kids: Array<KidData>): Promise<void> {
         if (this.kind === Kind.PARENT) {
             this.kids = kids.map(kid => new Skolengo(
@@ -91,26 +111,6 @@ export class Skolengo {
     }
 
 
-    async GetLastGrades(limit?: number, offset?: number): Promise<Array<Grade>> {
-        await this.refreshAccessToken();
-        return GetLastGrades(this.userId, this.accessToken, this.school.emsCode, this.school.id, limit, offset);
-    }
-    async GetMailFromFolder(folderId: string, limit: number, offset: number): Promise<Array<Mail>> {
-        await this.refreshAccessToken();
-        return GetMailsFromFolder(folderId, limit, offset, this.school.emsCode, this.accessToken);
-    }
-    async GetMailSettings(): Promise<MailSettings> {
-        await this.refreshAccessToken();
-        return GetMailSettings(this.userId, this.school.emsCode, this.accessToken);
-    }
-    async GetNews(): Promise<Array<News>> {
-        await this.refreshAccessToken();
-        return GetSchoolNews(this.accessToken, this.school.emsCode);
-    }
-    async GetTimetable(periodStart?: Date, periodEnd?: Date): Promise<Array<TimetableDay>> {
-        await this.refreshAccessToken();
-        return getTimetableForPeriods(this.userId, this.school.id, this.school.emsCode, this.accessToken, periodStart, periodEnd);
-    }
     async refreshAccessToken(): Promise<boolean> {
         if (!this.refreshToken) {
             throw new Error("No refresh token available. Please authenticate again.");

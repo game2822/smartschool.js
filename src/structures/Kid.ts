@@ -67,19 +67,15 @@ export class Kid extends Skolengo {
         await this.refreshAccessToken();
         return GetLastGrades(this.userId, this.accessToken, this.school.emsCode, this.school.id, limit, offset);
     }
-override async GetTimetable(periodStart?: Date, periodEnd?: Date): Promise<Array<TimetableDay>> {
+    override async GetTimetable(periodStart?: Date, periodEnd?: Date): Promise<Array<TimetableDay>> {
         await this.refreshAccessToken();
         return getTimetableForPeriods(this.userId, this.school.id, this.school.emsCode, this.accessToken, periodStart, periodEnd);
     }
 
 
-    
     override async refreshAccessToken(): Promise<boolean> {
         return this.parent.refreshAccessToken();
     }
-
-
-
 
 
 }

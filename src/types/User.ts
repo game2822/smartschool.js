@@ -1,6 +1,5 @@
-import {Permissions, Services} from "../util/Constants";
-import {BaseIncluded, RelationshipData} from "./RequestHandler";
-import {SchoolAudience} from "./School";
+import { BaseIncluded, RelationshipData } from "./RequestHandler";
+import { Permissions } from "../util/Constants";
 
 export interface UserAttributes {
     regime: string;
