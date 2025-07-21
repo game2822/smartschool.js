@@ -17,6 +17,7 @@ import { GetGradesForPeriod, GetGradesSettings, GetLastGrades } from "../routes/
 import { MailSettings, Recipients } from "../types/Mail";
 import { GetMailSettings, GetMailsFromFolder, SendMail } from "../routes/Mail";
 import { OIDCRefresh } from "../routes/OIDC";
+import { KidData } from "../types/User";
 
 export class Skolengo {
     constructor(
@@ -33,7 +34,8 @@ export class Skolengo {
         public regime: string,
         public kind: Kind,
         public permissions: Array<Permissions>,
-        public school: School
+        public school: School,
+        public kids?: Array<Skolengo>
     ){}
 
     async GetAllMails(limitPerFolder = 20, offset = 0): Promise<Array<MailFolder>> {
@@ -67,6 +69,28 @@ export class Skolengo {
         await this.refreshAccessToken();
         return GetGradesSettings(this.userId, this.accessToken, this.school.emsCode, this.school.id);
     }
+    async initKids(kids: Array<KidData>): Promise<void> {
+        if (this.kind === Kind.PARENT) {
+            this.kids = kids.map(kid => new Skolengo(
+                this.accessToken,
+                this.refreshToken,
+                this.refreshURL,
+                this.accessTokenTTL,
+                kid.id,
+                kid.firstName,
+                kid.lastName,
+                kid.className,
+                "",
+                new Date(kid.dateOfBirth),
+                kid.regime,
+                Kind.STUDENT,
+                [],
+                this.school
+            ));
+        }
+    }
+
+
     async GetLastGrades(limit?: number, offset?: number): Promise<Array<Grade>> {
         await this.refreshAccessToken();
         return GetLastGrades(this.userId, this.accessToken, this.school.emsCode, this.school.id, limit, offset);

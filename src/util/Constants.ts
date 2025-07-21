@@ -28,10 +28,6 @@ export enum ChallengeMethod {
     S256 = "S256"
 }
 
-export enum Kind {
-    STUDENT = "Eleve"
-}
-
 export enum AttendanceItemType {
     LATENESS = "LATENESS",
     ABSENCE = "ABSENCE"
@@ -55,4 +51,9 @@ export enum MailFolderType {
     SENT = "SENT",
     PERSONAL = "PERSONAL",
     TRASH = "TRASH"
+}
+
+export enum Kind {
+    STUDENT,
+    PARENT
 }
