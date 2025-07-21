@@ -22,7 +22,7 @@ import {
 } from "./Mail";
 import { NewsAttributes, schoolInfoAuthorIncluded, schoolInfoTechnicalUser } from "./News";
 import { SchoolAttributes, schoolIncluded } from "./School";
-import { UserAttributes } from "./User";
+import {studentIncluded, UserAttributes} from "./User";
 
 export interface RequestOptions {
     method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
@@ -46,9 +46,10 @@ export interface BaseResponse {
     | BaseDataResponse<"participation", ParticipationAttributes>
     >
     | BaseDataResponse<"studentUserInfo", UserAttributes>
+    | BaseDataResponse<"legalRepresentativeUserInfo", UserAttributes>
     | BaseDataResponse<"homework", HomeworkAttributes>
     | BaseDataResponse<"userMailSetting", userMailSettingAttributes>;
-    included: Array<nonTeachingStaffIncluded | schoolIncluded | fileIncluded | schoolInfoAuthorIncluded | schoolInfoTechnicalUser | absenceFileStateIncluded | homeworkIncluded | gradesIncluded | gradesServiceIncluded | skillColorsIncluded | skillsIncluded | gradeResultIncluded | participationIncluded | personParticipantIncluded | signatureIncluded | folderIncluded>;
+    included: Array<nonTeachingStaffIncluded | schoolIncluded | fileIncluded | schoolInfoAuthorIncluded | schoolInfoTechnicalUser | absenceFileStateIncluded | homeworkIncluded | gradesIncluded | gradesServiceIncluded | skillColorsIncluded | skillsIncluded | gradeResultIncluded | participationIncluded | personParticipantIncluded | signatureIncluded | folderIncluded | studentIncluded>;
 }
 
 export interface BaseDataResponse<
@@ -112,5 +113,6 @@ export interface Relationships {
     lastParticipation?: RelationshipData<"participation">;
     attachments?: RelationshipData<"attachments">;
     sender?: RelationshipData<"sender">;
+    students?: RelationshipData<"student">;
     contacts?: RelationshipData<"personContact" | "groupContact">;
 }

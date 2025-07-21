@@ -7,8 +7,8 @@ import { JWTPayload } from "../types/OIDC";
 import { Kind } from "../util/Constants";
 import { BaseResponse } from "../types/RequestHandler";
 import { schoolIncluded } from "../types/School";
-import { UserAttributes } from "../types/User";
-import { getSingleRelation } from "../util/Relations";
+import { KidData, studentIncluded, UserAttributes } from "../types/User";
+import { getMultipleRelations, getSingleRelation } from "../util/Relations";
 
 const manager = new RestManager(BASE_URL());
 
@@ -51,7 +51,46 @@ export const GetUserInfo = async (
 
     const userInfo = response.data;
     const attributes = userInfo.attributes as UserAttributes;
-    const schoolId = getSingleRelation(userInfo.relationships.school)?.id;
+    const kind = determineAccountKind(userInfo.type);
+    const kids: Array<KidData> = [];
+    let schoolId = "";
+
+    if (kind === Kind.STUDENT) {
+        schoolId = getSingleRelation(userInfo.relationships.school)?.id ?? "";
+    }
+
+    if (kind === Kind.PARENT) {
+        const kidId = getMultipleRelations(userInfo.relationships.students);
+        if (kidId.length === 0) {
+            throw new Error("No kids found for this parent.");
+        }
+
+        const kidInfo = response.included.find(
+            item => item.id === kidId[0].id && item.type === "student"
+        ) as studentIncluded;
+
+        schoolId = getSingleRelation(kidInfo.relationships?.school)?.id ?? "";
+
+        for (const kid of kidId) {
+            const kidData = response.included.find(
+                item => item.id === kid.id && item.type === "student"
+            ) as studentIncluded;
+
+            if (!kidData) {
+                throw new Error(`Kid with ID ${kid.id} not found in response.`);
+            }
+
+            kids.push({
+                id:          kidData.id,
+                lastName:    kidData.attributes?.lastName ?? "",
+                firstName:   kidData.attributes?.firstName ?? "",
+                photoUrl:    kidData.attributes?.photoUrl ?? "",
+                className:   kidData.attributes?.className ?? "",
+                dateOfBirth: new Date(kidData.attributes?.dateOfBirth ?? ""),
+                regime:      kidData.attributes?.regime ?? ""
+            });
+        }
+    }
 
     const school = response.included.find(
         item => item.id === schoolId
@@ -68,14 +107,7 @@ export const GetUserInfo = async (
         schoolAttr?.administrativeId,
         schoolAttr?.subscribedServices
     );
-
-    if (!Object.values(Kind).includes(payload.profile as Kind)) {
-        throw new Error(
-            `Unsupported profile "${payload.profile}", please open an issue on GitHub.`
-        );
-    }
-
-    return new Skolengo(
+    const client = new Skolengo(
         accessToken,
         refreshToken,
         refreshURL,
@@ -87,8 +119,22 @@ export const GetUserInfo = async (
         attributes.mobilePhone,
         new Date(attributes.dateOfBirth),
         attributes.regime,
-        payload.profile as Kind,
+        kind,
         attributes.permissions.flatMap(p => p.permittedOperations),
         schoolInstance
     );
+
+    await client.initKids(kids);
+    return client;
 };
+
+function determineAccountKind(type: string): Kind {
+    switch (type) {
+        case "legalRepresentativeUserInfo": {
+            return Kind.PARENT;
+        }
+        default: {
+            return Kind.STUDENT;
+        }
+    }
+}
