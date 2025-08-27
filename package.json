@@ -1,6 +1,6 @@
 {
   "name": "smartschooljs",
-  "version": "0.0.2",
+  "version": "0.0.1",
   "description": "A wrapper around SmartSchool internal API based on Skolengo.js by Raphaël <raphckrman>.",
   "repository": "github:game2822/smartschool.js",
   "main": "./dist/index.js",
@@ -60,7 +60,7 @@
     "terser": "^5.26.0",
     "ts-node": "^10.9.2",
     "tsup": "^8.2.4",
-    "tsx": "^4.7.0",
+    "tsx": "^4.20.5",
     "typescript": "^5.5.4"
   },
   "dependencies": {

@@ -13,13 +13,18 @@ export class RestManager {
         const { method, path, body, headers } = options;
         const url = `${this.baseURL}/${path}`;
 
+            let requestBody = body;
+            const contentType = headers?.["Content-Type"] || headers?.["content-type"];
+            if (body && contentType === "application/json") {
+                requestBody = JSON.stringify(body) ;
+            }
         const response = await fetch(url, {
             method,
-            body:    body ? JSON.stringify(body) : undefined,
+            body:    requestBody as any,
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": contentType || "application/json",
                 ...headers,
-                "User-Agent":   "@raphckrman/skolengo.js"
+                "User-Agent":   "@game28/smartschool.js"
             }
         });
 

@@ -1,40 +1,45 @@
-import { ChallengeMethod, SearchSchools } from '../src/';
-import { input, Separator } from '@inquirer/prompts';
+import { input } from '@inquirer/prompts';
 import search from '@inquirer/search';
+import { ChallengeMethod } from '../src/util/Constants';
+import { getSmartschoolLoginUrl, GetOIDCAccessTokens } from '../src/routes/OIDC';
+import { generateCodeChallenge, generateRandomCode } from '../src/util/Verifier';
+
+const TOKEN_ENDPOINT_PATH = "/OAuth/mobile/token";
 
 (async () => {
-    const schoolName = await input({ message: 'Enter the name of your school' });
-    const schools = await SearchSchools(schoolName);
-    const selectedSchool = await search({
-        message: 'Select your school',
-        source: async (input, { signal }) => {
-            return schools.map((school) => ({
-            name: school.name,
-            value: school.id,
-            description: `${school.location.city}, ${school.location.country}`,
-            }));
-        },
-    });
-
+    const baseURL = await input({ message: 'Enter your instance URL of your Smartschool (e.g., https://myschool.smartschool.be)' });
+    console.log(`[DEBUG] Base URL: ${baseURL}`);
     const selectedMethod = await search({
         message: 'Select your challenge generation method',
-        source: async (input, { signal }) => {
+        source: async () => {
             return Object.values(ChallengeMethod).map((method) => ({
-            name: method === ChallengeMethod.S256 ? String(method)  + " (recommended)" : String(method),
-            value: method
+                name: method === ChallengeMethod.S256 ? String(method) + " (recommended)" : String(method),
+                value: method
             }));
         },
     });
 
-    const flow = await schools.find((school) => school.id === selectedSchool)?.initializeLogin(selectedMethod);
-    console.log(`\x1b[32m➜\x1b[0m URL Generated to Log in: ${flow?.loginURL}`);
-    const state = await input({ message: 'Enter the state to verify the request' });
-    const code = await input({ message: 'Enter the code to complete authentication' });
+    console.log(`[DEBUG] Selected challenge method: ${selectedMethod}`);
+    const codeVerifier = generateRandomCode();
+    console.log(`[DEBUG] Generated code verifier: ${codeVerifier}`);
+    const codeChallenge = await generateCodeChallenge(codeVerifier, selectedMethod);
+    console.log(`[DEBUG] Generated code challenge: ${codeChallenge}`);
+    const loginUrl = getSmartschoolLoginUrl(baseURL, codeChallenge);
+    console.log(`\x1b[32m➜\x1b[0m URL Generated to Log in: ${loginUrl}`);
+    console.log(`\x1b[34m[INFO]\x1b[0m Save this code verifier for token exchange: ${codeVerifier}`);
+
+    const code = await input({ message: 'Paste the code you received after login:' });
+    console.log(`[DEBUG] Received code: ${code}`);
     try {
-        const client = await flow?.finalizeLogin(code, state);
+        const tokenEndpoint = baseURL + TOKEN_ENDPOINT_PATH;
+        console.log(`[DEBUG] Token endpoint: ${tokenEndpoint}`);
+        console.log(`[DEBUG] Exchanging code for tokens with:`);
+        console.log(`        code: ${code}`);
+        console.log(`        code_verifier: ${codeVerifier}`);
+        const tokens = await GetOIDCAccessTokens(tokenEndpoint, code, codeVerifier);
         console.log(`\x1b[32m✓\x1b[0m Login successful!`);
-        console.log(client);
+        console.log(tokens);
     } catch (error) {
-        console.error(`\x1b[31m✗\x1b[0m We could not finalize the login: ${error}`);
+        console.error(`\x1b[31m✗\x1b[0m Could not exchange code for tokens: ${error}`);
     }
 })();
