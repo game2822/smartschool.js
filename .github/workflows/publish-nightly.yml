@@ -39,6 +39,9 @@ jobs:
           echo "Nightly version: $NIGHTLY_VERSION"
           npm version --no-git-tag-version "$NIGHTLY_VERSION"
 
+      - name: Build
+        run: npm run build
+
       - name: Publish to NPM with provenance
         run: npm publish --tag nightly --provenance --access public
         env:
