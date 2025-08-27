@@ -39,4 +39,3 @@ export * from "./util/Constants";
 export * from "./util/JWT";
 export * from "./util/Relations";
 export * from "./util/URL";
-export * from "./util/Verifier";

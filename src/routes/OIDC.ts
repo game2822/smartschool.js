@@ -2,6 +2,7 @@ import { RestManager } from "../rest/RESTManager";
 import { JWKS, OIDCAccessToken, OIDCProviderMetadata } from "../types/OIDC";
 import { OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, REDIRECT_URI } from "../util/Constants";
 import { extractBaseUrl } from "../util/URL";
+import { generateCodeChallenge, generateRandomCode } from "../util/Verifier";
 
 export const GetOIDCWellKnown = async (url: string): Promise<OIDCProviderMetadata> => {
     const [base, path] = extractBaseUrl(url);
@@ -19,7 +20,10 @@ export const GetOIDCWellKnown = async (url: string): Promise<OIDCProviderMetadat
     throw new Error("Invalid OIDC Provider Metadata");
 };
 
-export const getSmartschoolLoginUrl = (baseURL: string, codeChallenge: string): string => {
+export const getSmartschoolLoginUrl = (baseURL: string): string => {
+    const codeVerifier = generateRandomCode();
+    const codeChallenge = generateCodeChallenge(codeVerifier, "S256");
+
     const params = new URLSearchParams({
         client_id: OIDC_CLIENT_ID,
         response_type: "code",
