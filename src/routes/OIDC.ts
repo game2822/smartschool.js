@@ -46,6 +46,7 @@ export const GetOIDCAccessTokens = async (url: string, code: string, verifier: s
     return manager.get<OIDCAccessToken>(path, params);
 };
 
+
 export const OIDCRefresh = async (url: string, refreshToken: string): Promise<OIDCAccessToken> => {
     const [base, path] = extractBaseUrl(url);
     const manager = new RestManager(base);

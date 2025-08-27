@@ -1,4 +1,4 @@
-import { Skolengo } from "./Skolengo";
+import { Skolengo } from "./Smartschool";
 import { School } from "./School";
 import { TimetableDay } from "./TimetableDay";
 import { Assignment } from "./Assignment";

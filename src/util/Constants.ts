@@ -1,6 +1,6 @@
-export const OIDC_CLIENT_ID = "SkoApp.Prod.0d349217-9a4e-41ec-9af9-df9e69e09494";
-export const OIDC_CLIENT_SECRET = "7cb4d9a8-2580-4041-9ae8-d5803869183f";
-export const REDIRECT_URI = "skoapp-prod://sign-in-callback";
+export const OIDC_CLIENT_ID = "fc8cbe0f99af7a9e8d407ad765f41cf7";
+export const OIDC_CLIENT_SECRET = "aa13da7de7e173860bb62abf8bcf99ff";
+export const REDIRECT_URI = "smsc://";
 
 export enum Permissions {
     READ_EVALUATIONS = "READ_EVALUATIONS",

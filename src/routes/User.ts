@@ -1,7 +1,7 @@
 import { School } from "../structures/School";
 import { BASE_URL, USER_INFO } from "../rest/endpoints";
 import { RestManager } from "../rest/RESTManager";
-import { Skolengo } from "../structures/Skolengo";
+import { SmartSchool } from "../structures/Smartschool";
 import { DecodePayload } from "../util/JWT";
 import { JWTPayload } from "../types/OIDC";
 import { Kind } from "../util/Constants";
@@ -18,7 +18,7 @@ export const GetUserInfo = async (
     wellKnownURL: string,
     refreshURL: string,
     emsCode: string
-): Promise<Skolengo> => {
+): Promise<SmartSchool> => {
     const payload = DecodePayload(accessToken) as unknown as JWTPayload;
 
     const headers = {
@@ -107,7 +107,7 @@ export const GetUserInfo = async (
         schoolAttr?.administrativeId,
         schoolAttr?.subscribedServices
     );
-    const client = new Skolengo(
+    const client = new SmartSchool(
         accessToken,
         refreshToken,
         refreshURL,

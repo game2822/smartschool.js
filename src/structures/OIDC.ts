@@ -1,5 +1,5 @@
 import { School } from "./School";
-import { Skolengo } from "./Skolengo";
+import { SmartSchool } from "./Smartschool";
 import { Endpoints, JWKS } from "../types/OIDC";
 import { ChallengeMethod, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, REDIRECT_URI } from "../util/Constants";
 import { generateRandomCode } from "../util/Verifier";
@@ -78,7 +78,7 @@ export class AuthFlow {
      * @param state - The state returned from the provider (must match the one we generated).
      * @returns A promise resolving to the authenticated Skolengo user.
      */
-    async finalizeLogin(code: string, state: string): Promise<Skolengo> {
+    async finalizeLogin(code: string, state: string): Promise<SmartSchool> {
         const decodedState = decodeURIComponent(state);
         if (decodedState !== this.state) {
             throw new Error(`Invalid state: received "${decodedState}", expected "${this.state}"`);

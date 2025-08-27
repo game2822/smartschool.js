@@ -1,8 +1,8 @@
 {
-  "name": "skolengojs",
-  "version": "1.1.1",
-  "description": "A wrapper around Skolengo internal API.",
-  "repository": "github:raphckrman/skolengo.js",
+  "name": "smartschooljs",
+  "version": "0.0.1",
+  "description": "A wrapper around SmartSchool internal API based on Skolengo.js by Raphaël <raphckrman>.",
+  "repository": "github:game2822/smartschool.js",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -25,13 +25,13 @@
     "dist"
   ],
   "keywords": [
-    "skolengo",
+    "smartschool",
     "api",
     "wrapper",
     "student",
-    "France"
+    "Belgique"
   ],
-  "author": "Raphaël <raphckrman> (https://github.com/raphckrman)",
+  "author": "Raphaël <raphckrman> (https://github.com/raphckrman), Game2822 <game2822> (https://github.com/game2822)",
   "license": "GPL-3.0",
   "engines": {
     "node": ">=18"

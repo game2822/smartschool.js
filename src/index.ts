@@ -21,7 +21,7 @@ export * from "./structures/OIDC";
 export * from "./structures/Period";
 export * from "./structures/School";
 export * from "./structures/SkillLevel";
-export * from "./structures/Skolengo";
+export * from "./structures/Smartschool";
 export * from "./structures/Subject";
 export * from "./structures/TimetableDay";
 
