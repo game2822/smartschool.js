@@ -1,6 +1,6 @@
 {
   "name": "smartschooljs",
-  "version": "a.0.1",
+  "version": "0.0.2",
   "description": "A wrapper around SmartSchool internal API based on Skolengo.js by Raphaël <raphckrman>.",
   "repository": "github:game2822/smartschool.js",
   "main": "./dist/index.js",
