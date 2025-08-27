@@ -1,5 +1,5 @@
 import { RestManager } from "../rest/RESTManager";
-import { JWKS, OIDCAccessToken, OIDCProviderMetadata, LoginURL } from "../types/OIDC";
+import { JWKS, OIDCAccessToken, OIDCProviderMetadata } from "../types/OIDC";
 import { OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, REDIRECT_URI } from "../util/Constants";
 import { extractBaseUrl } from "../util/URL";
 
