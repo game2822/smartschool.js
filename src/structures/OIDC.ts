@@ -86,8 +86,7 @@ export class AuthFlow {
 
         const tokens = await GetOIDCAccessTokens(
             this.endpoints.tokenEndpoint,
-            code,
-            this.verifier
+            code
         );
 
         return GetUserInfo(
