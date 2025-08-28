@@ -21,12 +21,12 @@ export const GetOIDCWellKnown = async (url: string): Promise<OIDCProviderMetadat
 
 export const getSmartschoolLoginUrl = (baseURL: string, codeChallenge: string): string => {
     const params = new URLSearchParams({
-        client_id: OIDC_CLIENT_ID,
-        response_type: "code",
-        scope: "mobile",
+        client_id:             OIDC_CLIENT_ID,
+        response_type:         "code",
+        scope:                 "mobile",
         code_challenge_method: "S256",
-        code_challenge: codeChallenge,
-        redirect_uri: REDIRECT_URI
+        code_challenge:        codeChallenge,
+        redirect_uri:          REDIRECT_URI
     });
 
     return `${baseURL}/OAuth/mobile?${params.toString()}`;
@@ -54,7 +54,7 @@ export const GetOIDCAccessTokens = async (url: string, code: string, verifier: s
         grant_type:    "authorization_code",
         code,
         code_verifier: verifier,
-        scope: "mobile"
+        scope:         "mobile"
     }).toString();
 
     return manager.post<OIDCAccessToken>(
