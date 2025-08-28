@@ -44,7 +44,7 @@ export const GetOIDCJWKS = async (url: string): Promise<JWKS> => {
     throw new Error("Invalid JWK");
 };
 
-export const GetOIDCAccessTokens = async (url: string, code: string, verifier: string): Promise<OIDCAccessToken> => {
+export const GetOIDCAccessTokens = async (url: string, code: string): Promise<OIDCAccessToken> => {
     const [base, path] = extractBaseUrl(url);
     const manager = new RestManager(base);
     const body = new URLSearchParams({
@@ -53,7 +53,6 @@ export const GetOIDCAccessTokens = async (url: string, code: string, verifier: s
         redirect_uri:  REDIRECT_URI,
         grant_type:    "authorization_code",
         code,
-        code_verifier: verifier,
         scope:         "mobile"
     }).toString();
 
