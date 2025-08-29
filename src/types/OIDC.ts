@@ -53,7 +53,6 @@ export interface JWKS {
 }
 
 export interface Endpoints {
-    wellKnown: string;
     authorizationEndpoint: string;
     tokenEndpoint: string;
     revokeEndpoint: string;

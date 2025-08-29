@@ -24,9 +24,7 @@ const manager = new RestManager(BASE_URL());
 
 export const GetGradesSettings = async (
     userId: string,
-    accessToken: string,
-    emsCode: string,
-    schoolId: string
+    accessToken: string
 ): Promise<GradesSettings> => {
     const response = await manager.get<BaseResponse>(USER_ASSIGNMENTS(), {
         "filter[student.id]":             userId,
@@ -36,9 +34,7 @@ export const GetGradesSettings = async (
         "fields[skillsSetting]":          "skillAcquisitionLevels,skillAcquisitionColors",
         "fields[skillAcquisitionColors]": "colorLevelMappings"
     }, {
-        "Authorization":        `Bearer ${accessToken}`,
-        "x-skolengo-ems-code":  emsCode,
-        "x-skolengo-school-id": schoolId
+        Authorization: `Bearer ${accessToken}`
     });
 
     const includedMap = new Map<string, unknown>();
@@ -86,8 +82,6 @@ export const GetGradesSettings = async (
 export const GetLastGrades = async (
     userId: string,
     accessToken: string,
-    emsCode: string,
-    schoolId: string,
     limit = 20,
     offset = 0
 ): Promise<Array<Grade>> => {
@@ -103,9 +97,7 @@ export const GetLastGrades = async (
         "fields[evaluationService]":        "subject",
         "fields[subject]":                  "label,color"
     }, {
-        "Authorization":        `Bearer ${accessToken}`,
-        "x-skolengo-ems-code":  emsCode,
-        "x-skolengo-school-id": schoolId
+        Authorization: `Bearer ${accessToken}`
     });
 
     const includedMap = new Map<string, unknown>();
@@ -149,8 +141,6 @@ export const GetLastGrades = async (
 export const GetGradesForPeriod = async (
     userId: string,
     accessToken: string,
-    emsCode: string,
-    schoolId: string,
     period: string
 ): Promise<Array<Subject>> => {
     const response = await manager.get<BaseResponse>(USER_SERVICES(), {
@@ -165,9 +155,7 @@ export const GetGradesForPeriod = async (
         "fields[teacher]":                  "firstName,lastName,title",
         "fields[subSkill]":                 "shortLabel"
     }, {
-        "Authorization":        `Bearer ${accessToken}`,
-        "x-skolengo-ems-code":  emsCode,
-        "x-skolengo-school-id": schoolId
+        Authorization: `Bearer ${accessToken}`
     });
 
     const includedMap = new Map<string, unknown>();

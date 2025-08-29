@@ -47,13 +47,13 @@ export enum SkillLevels {
 }
 
 export enum MailFolderType {
-    INBOX = "INBOX",
+    TRASH = "TRASH",
     SENT = "SENT",
     PERSONAL = "PERSONAL",
-    TRASH = "TRASH"
+    INBOX = "INBOX"
 }
 
 export enum Kind {
-    STUDENT,
-    PARENT
+    PARENT,
+    STUDENT
 }

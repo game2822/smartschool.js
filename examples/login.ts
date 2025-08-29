@@ -2,10 +2,17 @@ import { input } from '@inquirer/prompts';
 import search from '@inquirer/search';
 import { ChallengeMethod } from '../src/util/Constants';
 import { getSmartschoolLoginUrl, GetOIDCAccessTokens } from '../src/routes/OIDC';
-import { generateCodeChallenge, generateRandomCode } from '../src/util/Verifier';
+import { crypto } from '@noble/hashes/crypto';
+import {generateRandomCode} from '../src/util/Verifier';
 
 const TOKEN_ENDPOINT_PATH = "/OAuth/mobile/token";
-
+    function base64UrlEncode(buffer: ArrayBuffer): string {
+    return Buffer.from(buffer)
+        .toString("base64")
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_")
+        .replace(/=+$/, "");
+}
 (async () => {
     const baseURL = await input({ message: 'Enter your instance URL of your Smartschool (e.g., https://myschool.smartschool.be)' });
     console.log(`[DEBUG] Base URL: ${baseURL}`);
@@ -22,7 +29,10 @@ const TOKEN_ENDPOINT_PATH = "/OAuth/mobile/token";
     console.log(`[DEBUG] Selected challenge method: ${selectedMethod}`);
     const codeVerifier = generateRandomCode();
     console.log(`[DEBUG] Generated code verifier: ${codeVerifier}`);
-    const codeChallenge = await generateCodeChallenge(codeVerifier, selectedMethod);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(codeVerifier));
+    const codeChallenge = base64UrlEncode(hashBuffer);
+
+    console.log(`[DEBUG] Selected challenge method: ${selectedMethod}`);
     console.log(`[DEBUG] Generated code challenge: ${codeChallenge}`);
     const loginUrl = getSmartschoolLoginUrl(baseURL, codeChallenge);
     console.log(`\x1b[32m➜\x1b[0m URL Generated to Log in: ${loginUrl}`);

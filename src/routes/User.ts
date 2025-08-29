@@ -1,4 +1,3 @@
-import { School } from "../structures/School";
 import { BASE_URL, USER_INFO } from "../rest/endpoints";
 import { RestManager } from "../rest/RESTManager";
 import { SmartSchool } from "../structures/Smartschool";
@@ -6,24 +5,20 @@ import { DecodePayload } from "../util/JWT";
 import { JWTPayload } from "../types/OIDC";
 import { Kind } from "../util/Constants";
 import { BaseResponse } from "../types/RequestHandler";
-import { schoolIncluded } from "../types/School";
 import { KidData, studentIncluded, UserAttributes } from "../types/User";
-import { getMultipleRelations, getSingleRelation } from "../util/Relations";
+import { getMultipleRelations } from "../util/Relations";
 
 const manager = new RestManager(BASE_URL());
 
 export const GetUserInfo = async (
     accessToken: string,
     refreshToken: string,
-    wellKnownURL: string,
-    refreshURL: string,
-    emsCode: string
+    refreshURL: string
 ): Promise<SmartSchool> => {
     const payload = DecodePayload(accessToken) as unknown as JWTPayload;
 
     const headers = {
-        "Authorization":       `Bearer ${accessToken}`,
-        "x-skolengo-ems-code": emsCode
+        Authorization: `Bearer ${accessToken}`
     };
 
     const query = {
@@ -53,11 +48,7 @@ export const GetUserInfo = async (
     const attributes = userInfo.attributes as UserAttributes;
     const kind = determineAccountKind(userInfo.type);
     const kids: Array<KidData> = [];
-    let schoolId = "";
 
-    if (kind === Kind.STUDENT) {
-        schoolId = getSingleRelation(userInfo.relationships.school)?.id ?? "";
-    }
 
     if (kind === Kind.PARENT) {
         const kidId = getMultipleRelations(userInfo.relationships.students);
@@ -65,11 +56,6 @@ export const GetUserInfo = async (
             throw new Error("No kids found for this parent.");
         }
 
-        const kidInfo = response.included.find(
-            item => item.id === kidId[0].id && item.type === "student"
-        ) as studentIncluded;
-
-        schoolId = getSingleRelation(kidInfo.relationships?.school)?.id ?? "";
 
         for (const kid of kidId) {
             const kidData = response.included.find(
@@ -87,26 +73,9 @@ export const GetUserInfo = async (
                 photoUrl:    kidData.attributes?.photoUrl ?? "",
                 className:   kidData.attributes?.className ?? "",
                 dateOfBirth: new Date(kidData.attributes?.dateOfBirth ?? ""),
-                regime:      kidData.attributes?.regime ?? ""
             });
         }
     }
-
-    const school = response.included.find(
-        item => item.id === schoolId
-    ) as schoolIncluded;
-    const schoolAttr = school?.attributes;
-
-    const schoolInstance = new School(
-        school?.id ?? "",
-        schoolAttr?.name ?? "",
-        emsCode,
-        wellKnownURL,
-        { city: schoolAttr?.city ?? "" },
-        undefined,
-        schoolAttr?.administrativeId,
-        schoolAttr?.subscribedServices
-    );
     const client = new SmartSchool(
         accessToken,
         refreshToken,
@@ -118,10 +87,8 @@ export const GetUserInfo = async (
         attributes.className,
         attributes.mobilePhone,
         new Date(attributes.dateOfBirth),
-        attributes.regime,
         kind,
-        attributes.permissions.flatMap(p => p.permittedOperations),
-        schoolInstance
+        attributes.permissions.flatMap(p => p.permittedOperations)
     );
 
     await client.initKids(kids);

@@ -1,4 +1,3 @@
-import { School } from "./School";
 import { News } from "./News";
 import { Assignment } from "./Assignment";
 import { AttendanceItem } from "./AttendanceItem";
@@ -31,10 +30,8 @@ export class SmartSchool {
         public className: string,
         public mobilePhone: string,
         public dateOfBirth: Date,
-        public regime: string,
         public kind: Kind,
         public permissions: Array<Permissions>,
-        public school: School,
         public kids?: Array<SmartSchool>
     ){}
 
@@ -42,7 +39,7 @@ export class SmartSchool {
         await this.refreshAccessToken();
         const folders: Array<MailFolder> = (await this.GetMailSettings()).folders;
         for (const folder of folders) {
-            const mails: Array<Mail> = await GetMailsFromFolder(folder.id, limitPerFolder, offset, this.school.emsCode, this.accessToken);
+            const mails: Array<Mail> = await GetMailsFromFolder(folder.id, limitPerFolder, offset, this.accessToken);
             if (!folder.mails) folder.mails = [];
             folder.mails?.push(...mails);
         }
@@ -50,11 +47,11 @@ export class SmartSchool {
     }
     async GetAssignments(periodStart?: Date, periodEnd?: Date): Promise<Array<Assignment>> {
         await this.refreshAccessToken();
-        return GetAssignments(this.userId, this.accessToken, this.school.emsCode, this.school.id, periodStart, periodEnd);
+        return GetAssignments(this.userId, this.accessToken, periodStart, periodEnd);
     }
     async GetAttendanceItems(): Promise<Array<AttendanceItem>> {
         await this.refreshAccessToken();
-        return GetAttendanceItems(this.userId, this.school.id, this.school.emsCode, this.accessToken);
+        return GetAttendanceItems(this.userId, this.accessToken);
     }
     async GetGradesForPeriod(period?: string): Promise<Array<Subject>> {
         await this.refreshAccessToken();
@@ -63,31 +60,31 @@ export class SmartSchool {
             periods.push(...(await this.GetGradesSettings()).periods);
             if (!periods[0]) throw new Error("We are unable to find any periods.");
         }
-        return GetGradesForPeriod(this.userId, this.accessToken, this.school.emsCode, this.school.id, period ?? periods[0].id);
+        return GetGradesForPeriod(this.userId, this.accessToken,  period ?? periods[0].id);
     }
     async GetGradesSettings(): Promise<GradesSettings> {
         await this.refreshAccessToken();
-        return GetGradesSettings(this.userId, this.accessToken, this.school.emsCode, this.school.id);
+        return GetGradesSettings(this.userId, this.accessToken);
     }
     async GetLastGrades(limit?: number, offset?: number): Promise<Array<Grade>> {
         await this.refreshAccessToken();
-        return GetLastGrades(this.userId, this.accessToken, this.school.emsCode, this.school.id, limit, offset);
+        return GetLastGrades(this.userId, this.accessToken, limit, offset);
     }
     async GetMailFromFolder(folderId: string, limit: number, offset: number): Promise<Array<Mail>> {
         await this.refreshAccessToken();
-        return GetMailsFromFolder(folderId, limit, offset, this.school.emsCode, this.accessToken);
+        return GetMailsFromFolder(folderId, limit, offset, this.accessToken);
     }
     async GetMailSettings(): Promise<MailSettings> {
         await this.refreshAccessToken();
-        return GetMailSettings(this.userId, this.school.emsCode, this.accessToken);
+        return GetMailSettings(this.userId, this.accessToken);
     }
     async GetNews(): Promise<Array<News>> {
         await this.refreshAccessToken();
-        return GetSchoolNews(this.accessToken, this.school.emsCode);
+        return GetSchoolNews(this.accessToken);
     }
     async GetTimetable(periodStart?: Date, periodEnd?: Date): Promise<Array<TimetableDay>> {
         await this.refreshAccessToken();
-        return getTimetableForPeriods(this.userId, this.school.id, this.school.emsCode, this.accessToken, periodStart, periodEnd);
+        return getTimetableForPeriods(this.userId, this.accessToken, periodStart, periodEnd);
     }
     async initKids(kids: Array<KidData>): Promise<void> {
         if (this.kind === Kind.PARENT) {
@@ -102,10 +99,8 @@ export class SmartSchool {
                 kid.className,
                 "",
                 new Date(kid.dateOfBirth),
-                kid.regime,
                 Kind.STUDENT,
-                [],
-                this.school
+                []
             ));
         }
     }
@@ -127,7 +122,7 @@ export class SmartSchool {
 
     async SendMail(subject: string, content: string, recipients?: Array<Recipients>, cc?: Array<Recipients>, bcc?: Array<Recipients>): Promise<Mail> {
         await this.refreshAccessToken();
-        return SendMail(subject, content, recipients, cc, bcc, this.school.emsCode, this.accessToken);
+        return SendMail(subject, content, recipients, cc, bcc, this.accessToken);
     }
 
 

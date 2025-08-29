@@ -24,8 +24,6 @@ export class Assignment {
     constructor(
         protected accessToken: string,
         public userId: string,
-        public schoolId: string,
-        public emsCode: string,
         public id: string,
         public done: boolean,
         public title: string,
@@ -45,9 +43,7 @@ export class Assignment {
         return GetAssignmentAttachments(
             this.id,
             this.userId,
-            this.schoolId,
-            this.accessToken,
-            this.emsCode
+            this.accessToken
         );
     }
 
@@ -62,9 +58,7 @@ export class Assignment {
             this.id,
             this.userId,
             newDoneState,
-            this.schoolId,
-            this.accessToken,
-            this.emsCode
+            this.accessToken
         );
     }
 }

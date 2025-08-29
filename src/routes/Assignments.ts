@@ -11,8 +11,6 @@ const manager = new RestManager(BASE_URL());
 export const GetAssignments = async (
     userId: string,
     accessToken: string,
-    emsCode: string,
-    schoolId: string,
     periodStart = new Date(),
     periodEnd = new Date(new Date().setMonth(new Date().getMonth() + 1))
 ): Promise<Array<Assignment>> => {
@@ -27,9 +25,7 @@ export const GetAssignments = async (
         "fields[homework]":    "title,html,deliverWorkOnline,onlineDeliveryUrl,done,dueDateTime",
         "fields[subject]":     "label,color"
     }, {
-        "Authorization":        `Bearer ${accessToken}`,
-        "x-skolengo-ems-code":  emsCode,
-        "x-skolengo-school-id": schoolId
+        Authorization: `Bearer ${accessToken}`
     });
 
     const includedMap = new Map<string, unknown>();
@@ -48,8 +44,6 @@ export const GetAssignments = async (
             return new Assignment(
                 accessToken,
                 userId,
-                schoolId,
-                emsCode,
                 assignment.id,
                 assignment.attributes?.done ?? false,
                 assignment.attributes?.title ?? "",
@@ -73,15 +67,13 @@ export const GetAssignments = async (
         });
 };
 
-export const GetAssignmentAttachments = async (assignmentId: string, userId: string, schoolId: string, accessToken: string, emsCode: string): Promise<Array<Attachment>> => {
+export const GetAssignmentAttachments = async (assignmentId: string, userId: string, accessToken: string): Promise<Array<Attachment>> => {
     const response = await manager.get<BaseResponse>(USER_ASSIGNMENT(assignmentId), {
         "filter[student.id]": userId,
         "include":            "attachments",
         "fields[attachment]": "name,mimeType,mimeTypeLabel,size,url"
     }, {
-        "Authorization":        `Bearer ${accessToken}`,
-        "x-skolengo-ems-code":  emsCode,
-        "x-skolengo-school-id": schoolId
+        Authorization: `Bearer ${accessToken}`
     });
 
     const includedMap = new Map<string, unknown>();
@@ -109,9 +101,7 @@ export const SetAssignmentCompletion = async (
     assignmentId: string,
     userId: string,
     completed: boolean,
-    schoolId: string,
     accessToken: string,
-    emsCode: string
 ): Promise<Assignment> => {
     const response = await manager.patch<BaseResponse>(
         USER_ASSIGNMENT(assignmentId),
@@ -123,9 +113,7 @@ export const SetAssignmentCompletion = async (
         },
         {
             headers: {
-                "Authorization":        `Bearer ${accessToken}`,
-                "x-skolengo-ems-code":  emsCode,
-                "x-skolengo-school-id": schoolId
+                Authorization: `Bearer ${accessToken}`
             }
         }
     );
@@ -143,8 +131,6 @@ export const SetAssignmentCompletion = async (
     return new Assignment(
         accessToken,
         userId,
-        schoolId,
-        emsCode,
         assignmentId,
         completed,
         data.attributes?.title ?? "",

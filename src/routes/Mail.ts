@@ -22,15 +22,14 @@ import { getMultipleRelations, getSingleRelation } from "../util/Relations";
 
 const manager = new RestManager(BASE_URL());
 
-export const GetMailSettings = async (userId: string, emsCode: string, accessToken: string): Promise<MailSettings> => {
+export const GetMailSettings = async (userId: string, accessToken: string): Promise<MailSettings> => {
     const response = await manager.get<BaseResponse>(MAIL_SETTINGS(userId), {
         "include":                 "contacts,contacts.person,contacts.personContacts,signature,folders,folders.parent",
         "fields[userMailSetting]": "maxCharsInParticipationContent,maxCharsInCommunicationSubject",
         "fields[signature]":       "content",
         "fields[folder]":          "name,position,type,parent"
     }, {
-        "Authorization":       `Bearer ${accessToken}`,
-        "x-skolengo-ems-code": emsCode
+        Authorization: `Bearer ${accessToken}`
     });
 
     const includedMap = new Map<string, unknown>();
@@ -68,7 +67,7 @@ export const GetMailSettings = async (userId: string, emsCode: string, accessTok
     };
 };
 
-export const GetMailsFromFolder = async (folderId: string, limit: number, offset: number, emsCode: string, accessToken: string): Promise<Array<Mail>> => {
+export const GetMailsFromFolder = async (folderId: string, limit: number, offset: number, accessToken: string): Promise<Array<Mail>> => {
     const response = await manager.get<BaseResponse>(MAIL(), {
         "filter[folders.id]":        folderId,
         "include":                   "lastParticipation,lastParticipation.sender,lastParticipation.sender.person,lastParticipation.sender.technicalUser",
@@ -80,8 +79,7 @@ export const GetMailsFromFolder = async (folderId: string, limit: number, offset
         "page[limit]":               limit,
         "page[offset]":              offset
     }, {
-        "Authorization":       `Bearer ${accessToken}`,
-        "x-skolengo-ems-code": emsCode
+        Authorization: `Bearer ${accessToken}`
     });
 
     const includedMap = new Map<string, unknown>();
@@ -104,7 +102,6 @@ export const GetMailsFromFolder = async (folderId: string, limit: number, offset
             const realSenderData = realSender && realSender.type === "technicalUser" ? includedMap.get(`${realSender?.type}:${realSender?.id ?? ""}`) as schoolInfoTechnicalUser : includedMap.get(`${realSender?.type ?? ""}:${realSender?.id ?? ""}`) as nonTeachingStaffIncluded;
 
             return new Mail(
-                emsCode,
                 accessToken,
                 mail.id,
                 mail.attributes?.subject ?? "",
@@ -124,13 +121,12 @@ export const GetMailsFromFolder = async (folderId: string, limit: number, offset
                             : "")
                 },
                 mail.attributes?.replyToAllAllowed ?? false,
-                mail.attributes?.replyToSenderAllowed ?? false,
-                mail.attributes?.readTrackingEnabled ?? false
+                mail.attributes?.replyToSenderAllowed ?? false
             );
         });
 };
 
-export const GetMessagesFromMail = async (mailId: string, emsCode: string, accessToken: string): Promise<Array<Message>> => {
+export const GetMessagesFromMail = async (mailId: string, accessToken: string): Promise<Array<Message>> => {
     const response = await manager.get<BaseResponse>(MAIL_PARTICIPATIONS(mailId), {
         "include":                   "sender,sender.person,sender.technicalUser,attachments",
         "fields[participation]":     "dateTime,content,read,sender",
@@ -139,8 +135,7 @@ export const GetMessagesFromMail = async (mailId: string, emsCode: string, acces
         "fields[technicalUser]":     "label",
         "fields[attachment]":        "name,mimeType,mimeTypeLabel,size,url"
     }, {
-        "Authorization":       `Bearer ${accessToken}`,
-        "x-skolengo-ems-code": emsCode
+        Authorization: `Bearer ${accessToken}`
     });
 
     const includedMap = new Map<string, unknown>();
@@ -195,8 +190,7 @@ export const SendMail = async (
     recipients: Array<Recipients> = [],
     cc: Array<Recipients> = [],
     bcc: Array<Recipients> = [],
-    accessToken: string,
-    emsCode: string
+    accessToken: string
 ): Promise<Mail> => {
     const response = await manager.post<BaseResponse>(
         MAIL(),
@@ -223,8 +217,7 @@ export const SendMail = async (
         {},
         {
             headers: {
-                "Authorization":       `Bearer ${accessToken}`,
-                "x-skolengo-ems-code": emsCode
+                Authorization: `Bearer ${accessToken}`
             }
         }
     );
@@ -232,7 +225,6 @@ export const SendMail = async (
     const mailId = (response.data as unknown as BaseDataResponse<"communication", CommunicationAttributes>).id;
 
     return new Mail(
-        emsCode,
         accessToken,
         mailId,
         subject,

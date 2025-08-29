@@ -2,7 +2,6 @@ import { BaseIncluded, RelationshipData } from "./RequestHandler";
 import { Permissions } from "../util/Constants";
 
 export interface UserAttributes {
-    regime: string;
     audienceId: string;
     firstName: string;
     lastName: string;
@@ -39,5 +38,4 @@ export interface KidData {
     photoUrl: string | null;
     className: string;
     dateOfBirth: Date;
-    regime: string;
 }

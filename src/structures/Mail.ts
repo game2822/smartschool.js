@@ -4,7 +4,6 @@ import { Author } from "../types/News";
 
 export class Mail {
     constructor(
-        private emsCode: string,
         private accessToken: string,
         public id: string,
         public subject: string,
@@ -16,10 +15,10 @@ export class Mail {
         public sender?: Author,
         public replyToAllAllowed?: boolean,
         public replyToSenderAllowed?: boolean,
-        public readTrackingEnabled?: boolean,
+        public readTrackingEnabled?: boolean
     ){}
 
     async getMessages(): Promise<Array<Message>> {
-        return GetMessagesFromMail(this.id, this.emsCode, this.accessToken);
+        return GetMessagesFromMail(this.id, this.accessToken);
     }
 }

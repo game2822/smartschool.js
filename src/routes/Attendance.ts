@@ -8,7 +8,7 @@ import { getSingleRelation } from "../util/Relations";
 
 const manager = new RestManager(BASE_URL());
 
-export const GetAttendanceItems = async (userId: string, schoolId: string, emsCode: string, accessToken: string): Promise<Array<AttendanceItem>> => {
+export const GetAttendanceItems = async (userId: string, accessToken: string): Promise<Array<AttendanceItem>> => {
     const response = await manager.get<BaseResponse>(ATTENDANCE_FILES(), {
         "filter[student.id]":               userId,
         "filter[currentState.absenceType]": "ABSENCE,CLATENESS",
@@ -17,9 +17,7 @@ export const GetAttendanceItems = async (userId: string, schoolId: string, emsCo
         "fields[absenceFileState]":         "creationDateTime,absenceStartDateTime,absenceEndDateTime,absenceType,absenceFileStatus,absenceReason,absenceRecurrence",
         "fields[absenceReason]":            "code,longLabel"
     }, {
-        "Authorization":        `Bearer ${accessToken}`,
-        "x-skolengo-ems-code":  emsCode,
-        "x-skolengo-school-id": schoolId
+        Authorization: `Bearer ${accessToken}`
     });
 
     const includedMap = new Map<string, unknown>();

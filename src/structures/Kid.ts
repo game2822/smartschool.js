@@ -44,11 +44,11 @@ export class Kid extends Skolengo {
 
     override  async GetAssignments(periodStart?: Date, periodEnd?: Date): Promise<Array<Assignment>> {
         await this.refreshAccessToken();
-        return GetAssignments(this.userId, this.accessToken, this.school.emsCode, this.school.id, periodStart, periodEnd);
+        return GetAssignments(this.userId, this.refreshAccessToken, periodStart, periodEnd);
     }
     override async GetAttendanceItems(): Promise<Array<AttendanceItem>> {
         await this.refreshAccessToken();
-        return GetAttendanceItems(this.userId, this.school.id, this.school.emsCode, this.accessToken);
+        return GetAttendanceItems(this.userId, this.refreshAccessToken);
     }
     override async GetGradesForPeriod(period?: string): Promise<Array<Subject>> {
         await this.refreshAccessToken();
@@ -57,19 +57,19 @@ export class Kid extends Skolengo {
             periods.push(...(await this.GetGradesSettings()).periods);
             if (!periods[0]) throw new Error("We are unable to find any periods.");
         }
-        return GetGradesForPeriod(this.userId, this.accessToken, this.school.emsCode, this.school.id, period ?? periods[0].id);
+        return GetGradesForPeriod(this.userId, this.refreshAccessToken, period ?? periods[0].id);
     }
     override async GetGradesSettings(): Promise<GradesSettings> {
         await this.refreshAccessToken();
-        return GetGradesSettings(this.userId, this.accessToken, this.school.emsCode, this.school.id);
+        return GetGradesSettings(this.userId, this.refreshAccessToken);
     }
     override async GetLastGrades(limit?: number, offset?: number): Promise<Array<Grade>> {
         await this.refreshAccessToken();
-        return GetLastGrades(this.userId, this.accessToken, this.school.emsCode, this.school.id, limit, offset);
+        return GetLastGrades(this.userId, this.school.id, limit, offset);
     }
     override async GetTimetable(periodStart?: Date, periodEnd?: Date): Promise<Array<TimetableDay>> {
         await this.refreshAccessToken();
-        return getTimetableForPeriods(this.userId, this.school.id, this.school.emsCode, this.accessToken, periodStart, periodEnd);
+        return getTimetableForPeriods(this.userId, this.refreshAccessToken, periodStart, periodEnd);
     }
 
 

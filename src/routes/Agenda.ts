@@ -10,7 +10,7 @@ import { getMultipleRelations, getSingleRelation } from "../util/Relations";
 
 const manager = new RestManager(BASE_URL());
 
-export const getTimetableForPeriods = async (userId: string, schoolId: string, emsCode: string, accessToken: string, periodStart = new Date(), periodEnd = new Date(new Date().setMonth(new Date().getMonth() + 1)), limit = 50): Promise<Array<TimetableDay>> => {
+export const getTimetableForPeriods = async (userId: string, accessToken: string, periodStart = new Date(), periodEnd = new Date(new Date().setMonth(new Date().getMonth() + 1)), limit = 50): Promise<Array<TimetableDay>> => {
     const formatDate = (date: Date): string =>
         date.toISOString().slice(0, 10);
 
@@ -26,9 +26,7 @@ export const getTimetableForPeriods = async (userId: string, schoolId: string, e
         "fields[subject]":         "label,color",
         "page[limit]":             limit
     }, {
-        "Authorization":        `Bearer ${accessToken}`,
-        "x-skolengo-ems-code":  emsCode,
-        "x-skolengo-school-id": schoolId
+        Authorization: `Bearer ${accessToken}`
     });
 
     const includedMap = new Map<string, unknown>();
@@ -53,8 +51,6 @@ export const getTimetableForPeriods = async (userId: string, schoolId: string, e
             assignments.push(new Assignment(
                 accessToken,
                 userId,
-                schoolId,
-                emsCode,
                 assignment.id,
                 assignmentData.attributes?.done ?? false,
                 assignmentData.attributes?.title ?? "",

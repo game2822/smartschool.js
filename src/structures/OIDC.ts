@@ -1,4 +1,3 @@
-import { School } from "./School";
 import { SmartSchool } from "./Smartschool";
 import { Endpoints, JWKS } from "../types/OIDC";
 import { ChallengeMethod, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, REDIRECT_URI } from "../util/Constants";
@@ -31,8 +30,7 @@ export class AuthFlow {
         public challengeMethod: ChallengeMethod,
         public endpoints: Endpoints,
         public schoolId: string,
-        public jwks: JWKS,
-        public school: School
+        public jwks: JWKS
     ){
         this.challenge = this.generateChallenge(this.verifier, this.challengeMethod);
     }
@@ -92,9 +90,7 @@ export class AuthFlow {
         return GetUserInfo(
             tokens.access_token,
             tokens.refresh_token,
-            this.endpoints.wellKnown,
-            this.endpoints.tokenEndpoint,
-            this.school.emsCode
+            this.endpoints.tokenEndpoint
         );
     }
 }
