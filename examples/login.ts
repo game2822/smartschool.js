@@ -1,7 +1,7 @@
 import { input } from '@inquirer/prompts';
 import search from '@inquirer/search';
 import { ChallengeMethod } from '../src/util/Constants';
-import { getSmartschoolLoginUrl, GetOIDCAccessTokens } from '../src/routes/OIDC';
+import { getSmartschoolLoginUrl, GetOIDCAccessTokens, OIDCRefresh } from '../src/routes/OIDC';
 import { crypto } from '@noble/hashes/crypto';
 import {generateRandomCode} from '../src/util/Verifier';
 
@@ -13,6 +13,7 @@ const TOKEN_ENDPOINT_PATH = "/OAuth/mobile/token";
         .replace(/\//g, "_")
         .replace(/=+$/, "");
 }
+let tokens: { access_token: string; refresh_token: string; expires_in: number; token_type: string; } = { access_token: '', refresh_token: '', expires_in: 0, token_type: ''};
 (async () => {
     const baseURL = await input({ message: 'Enter your instance URL of your Smartschool (e.g., https://myschool.smartschool.be)' });
     console.log(`[DEBUG] Base URL: ${baseURL}`);
@@ -46,10 +47,23 @@ const TOKEN_ENDPOINT_PATH = "/OAuth/mobile/token";
         console.log(`[DEBUG] Exchanging code for tokens with:`);
         console.log(`        code: ${code}`);
         console.log(`        code_verifier: ${codeVerifier}`);
-        const tokens = await GetOIDCAccessTokens(tokenEndpoint, code, codeVerifier);
+        tokens = await GetOIDCAccessTokens(tokenEndpoint, code, codeVerifier);
         console.log(`\x1b[32m✓\x1b[0m Login successful!`);
         console.log(tokens);
     } catch (error) {
         console.error(`\x1b[31m✗\x1b[0m Could not exchange code for tokens: ${error}`);
+    }
+    const refresh = await input({ message: 'Do you want to refresh the access token? (yes/no)' });
+    if (refresh.toLowerCase() === 'yes') {
+        try {
+            const tokenEndpoint = baseURL + TOKEN_ENDPOINT_PATH;
+            console.log(`[DEBUG] Token endpoint: ${tokenEndpoint}`);
+            console.log(`[DEBUG] Refreshing access token with refresh token: ${tokens.refresh_token}`);
+            const newTokens = await OIDCRefresh(tokenEndpoint, tokens.refresh_token);
+            console.log(`\x1b[32m✓\x1b[0m Token refresh successful!`);
+            console.log(newTokens);
+        } catch (error) {
+            console.error(`\x1b[31m✗\x1b[0m Could not refresh access token: ${error}`);
+        }
     }
 })();

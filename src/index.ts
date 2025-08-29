@@ -19,7 +19,6 @@ export * from "./structures/Message";
 export * from "./structures/News";
 export * from "./structures/OIDC";
 export * from "./structures/Period";
-export * from "./structures/School";
 export * from "./structures/SkillLevel";
 export * from "./structures/Smartschool";
 export * from "./structures/Subject";
