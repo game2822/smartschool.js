@@ -49,6 +49,8 @@ export class RestManager {
     async get<T>(path: string, params?: Record<string, any>, headers?: Record<string, string>): Promise<T> {
         const urlParams = new URLSearchParams(params).toString();
         const urlPath = urlParams ? `${path}?${urlParams}` : path;
+        console.log("URL Params:", urlParams);
+        console.log("Full URL Path:", urlPath);
         return this.sendRequest<T>({
             method: "GET",
             path:   urlPath,

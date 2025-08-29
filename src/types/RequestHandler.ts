@@ -21,7 +21,7 @@ import {
     userMailSettingAttributes
 } from "./Mail";
 import { NewsAttributes, schoolInfoAuthorIncluded, schoolInfoTechnicalUser } from "./News";
-import { SchoolAttributes, schoolIncluded } from "./School";
+import { schoolIncluded } from "./School";
 import { studentIncluded, UserAttributes } from "./User";
 
 export interface RequestOptions {
@@ -35,7 +35,6 @@ export interface BaseResponse {
     data:
     | Array<
     | BaseDataResponse<"news", NewsAttributes>
-    | BaseDataResponse<"school", SchoolAttributes>
     | BaseDataResponse<"homework", HomeworkAttributes>
     | BaseDataResponse<"absenceFile">
     | BaseDataResponse<"agenda", AgendaAttributes>
