@@ -11,6 +11,7 @@ export const USER_AGENDA = (userId: string) => "planner/api/v1/planned-elements/
 export const USER_GRADES_SETTINGS = () => "evaluations-settings";
 export const USER_LAST_GRADES = () => "evaluations-results";
 export const USER_SERVICES = () => "evaluation-services"
+export const InstanceValidation = () => "OAuth/verifyplatform";
 
 export const ATTENDANCE_FILES = () => "absence-files";
 

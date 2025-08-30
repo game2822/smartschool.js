@@ -1,3 +1,5 @@
+import { Verify } from "crypto";
+import { BASE_URL, InstanceValidation } from "../rest/endpoints";
 import { RestManager } from "../rest/RESTManager";
 import { JWKS, OIDCAccessToken, OIDCProviderMetadata } from "../types/OIDC";
 import { OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, REDIRECT_URI } from "../util/Constants";
@@ -64,6 +66,18 @@ export const GetOIDCAccessTokens = async (url: string, code: string, codeVerifie
         { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
     );
 };
+
+export const isValidInstance = async (url: string): Promise<boolean> => {
+    try {
+        const base = url
+        const manager = new RestManager(base);
+        await manager.get(InstanceValidation());
+        return true;
+    } catch (error) {
+        console.error("Instance validation error:", error);
+        return false;
+    }
+}
 
 
 export const OIDCRefresh = async (url: string, refreshToken: string): Promise<OIDCAccessToken> => {
