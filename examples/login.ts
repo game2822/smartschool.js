@@ -1,7 +1,7 @@
 import { input } from '@inquirer/prompts';
 import search from '@inquirer/search';
 import { ChallengeMethod } from '../src/util/Constants';
-import { getSmartschoolLoginUrl, GetOIDCAccessTokens, OIDCRefresh } from '../src/routes/OIDC';
+import { getSmartschoolLoginUrl, GetOIDCAccessTokens, OIDCRefresh, isValidInstance } from '../src/routes/OIDC';
 import { crypto } from '@noble/hashes/crypto';
 import {generateRandomCode} from '../src/util/Verifier';
 
@@ -17,6 +17,7 @@ let tokens: { access_token: string; refresh_token: string; expires_in: number; t
 (async () => {
     const baseURL = await input({ message: 'Enter your instance URL of your Smartschool (e.g., https://myschool.smartschool.be)' });
     console.log(`[DEBUG] Base URL: ${baseURL}`);
+    console.log(await isValidInstance(baseURL) ? "\x1b[32m✓\x1b[0m Instance is valid." : "\x1b[31m✗\x1b[0m Instance is not valid.");
     const selectedMethod = await search({
         message: 'Select your challenge generation method',
         source: async () => {

@@ -71,10 +71,12 @@ export const isValidInstance = async (url: string): Promise<boolean> => {
     try {
         const base = url
         const manager = new RestManager(base);
-        await manager.get(InstanceValidation());
-        return true;
+        const response = await manager.get(InstanceValidation());
+        if (typeof response === 'object' && response !== null && 'isValid' in response) {
+            return response.isValid === true;
+        }
+        return false;
     } catch (error) {
-        console.error("Instance validation error:", error);
         return false;
     }
 }
