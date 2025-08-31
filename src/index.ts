@@ -17,7 +17,6 @@ export * from "./structures/Mail";
 export * from "./structures/MailFolder";
 export * from "./structures/Message";
 export * from "./structures/News";
-export * from "./structures/OIDC";
 export * from "./structures/Period";
 export * from "./structures/SkillLevel";
 export * from "./structures/Smartschool";
