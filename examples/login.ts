@@ -4,6 +4,7 @@ import { ChallengeMethod } from '../src/util/Constants';
 import { getSmartschoolLoginUrl, GetOIDCAccessTokens, OIDCRefresh, isValidInstance } from '../src/routes/OIDC';
 import { crypto } from '@noble/hashes/crypto';
 import {generateRandomCode} from '../src/util/Verifier';
+import { url } from 'inspector';
 
 const TOKEN_ENDPOINT_PATH = "/OAuth/mobile/token";
     function base64UrlEncode(buffer: ArrayBuffer): string {
@@ -43,12 +44,11 @@ let tokens: { access_token: string; refresh_token: string; expires_in: number; t
     const code = await input({ message: 'Paste the code you received after login:' });
     console.log(`[DEBUG] Received code: ${code}`);
     try {
-        const tokenEndpoint = baseURL + TOKEN_ENDPOINT_PATH;
-        console.log(`[DEBUG] Token endpoint: ${tokenEndpoint}`);
+        console.log(`[DEBUG] Token endpoint: ${baseURL}`);
         console.log(`[DEBUG] Exchanging code for tokens with:`);
         console.log(`        code: ${code}`);
         console.log(`        code_verifier: ${codeVerifier}`);
-        tokens = await GetOIDCAccessTokens(tokenEndpoint, code, codeVerifier);
+        tokens = await GetOIDCAccessTokens(baseURL, code, codeVerifier);
         console.log(`\x1b[32m✓\x1b[0m Login successful!`);
         console.log(tokens);
     } catch (error) {
@@ -57,10 +57,9 @@ let tokens: { access_token: string; refresh_token: string; expires_in: number; t
     const refresh = await input({ message: 'Do you want to refresh the access token? (yes/no)' });
     if (refresh.toLowerCase() === 'yes') {
         try {
-            const tokenEndpoint = baseURL + TOKEN_ENDPOINT_PATH;
-            console.log(`[DEBUG] Token endpoint: ${tokenEndpoint}`);
+            console.log(`[DEBUG] Token endpoint: ${baseURL}`);
             console.log(`[DEBUG] Refreshing access token with refresh token: ${tokens.refresh_token}`);
-            const newTokens = await OIDCRefresh(tokenEndpoint, tokens.refresh_token);
+            const newTokens = await OIDCRefresh(baseURL, tokens.refresh_token);
             console.log(`\x1b[32m✓\x1b[0m Token refresh successful!`);
             console.log(newTokens);
         } catch (error) {

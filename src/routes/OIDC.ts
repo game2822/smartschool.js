@@ -1,9 +1,12 @@
 import { Verify } from "crypto";
-import { BASE_URL, InstanceValidation } from "../rest/endpoints";
+import { BASE_URL, InstanceValidation, OIDC_TOKEN_PATH } from "../rest/endpoints";
 import { RestManager } from "../rest/RESTManager";
 import { JWKS, OIDCAccessToken, OIDCProviderMetadata } from "../types/OIDC";
 import { OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, REDIRECT_URI } from "../util/Constants";
 import { extractBaseUrl } from "../util/URL";
+import { RegisterDevice } from "./User";
+import { SmartSchool } from "../structures/Smartschool";
+
 
 export const GetOIDCWellKnown = async (url: string): Promise<OIDCProviderMetadata> => {
     const [base, path] = extractBaseUrl(url);
@@ -47,7 +50,8 @@ export const GetOIDCJWKS = async (url: string): Promise<JWKS> => {
 };
 
 export const GetOIDCAccessTokens = async (url: string, code: string, codeVerifier: string): Promise<OIDCAccessToken> => {
-    const [base, path] = extractBaseUrl(url);
+    const tokenUrl = url + OIDC_TOKEN_PATH;
+    const [base, path] = extractBaseUrl(tokenUrl);
     const manager = new RestManager(base);
     const body = new URLSearchParams({
         client_id:     OIDC_CLIENT_ID,
@@ -81,9 +85,32 @@ export const isValidInstance = async (url: string): Promise<boolean> => {
     }
 }
 
+export const finalizeLogin = async (
+    url: string,
+    code: string,
+    deviceType: string,
+    deviceName: string,
+    deviceId: string
+): Promise<SmartSchool> => {
+    const tokens = await GetOIDCAccessTokens(
+        url,
+        code,
+        this.verifier // Assurez-vous que `this.verifier` est défini dans le contexte approprié
+    );
+
+    return RegisterDevice(
+        tokens.access_token,
+        tokens.refresh_token,
+        url,
+        deviceType,
+        deviceName,
+        deviceId
+    );
+};
 
 export const OIDCRefresh = async (url: string, refreshToken: string): Promise<OIDCAccessToken> => {
-    const [base, path] = extractBaseUrl(url);
+    const tokenUrl = url + OIDC_TOKEN_PATH;
+    const [base, path] = extractBaseUrl(tokenUrl);
     const manager = new RestManager(base);
     const body = new URLSearchParams({
         grant_type:    "refresh_token",

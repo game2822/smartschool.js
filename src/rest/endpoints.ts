@@ -12,6 +12,8 @@ export const USER_GRADES_SETTINGS = () => "evaluations-settings";
 export const USER_LAST_GRADES = () => "evaluations-results";
 export const USER_SERVICES = () => "evaluation-services"
 export const InstanceValidation = () => "OAuth/verifyplatform";
+export const OIDC_TOKEN_PATH = () => "OAuth/mobile/token";
+export const REGISTER_DEVICE_PATH = () => "OAuth/mobile/register";
 
 export const ATTENDANCE_FILES = () => "absence-files";
 
