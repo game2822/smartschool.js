@@ -18,7 +18,6 @@ export const RegisterDevice = async (
     deviceId: string
 ): Promise<SmartSchool> => {
     const manager = new RestManager(url);
-    const payload = DecodePayload(accessToken) as unknown as JWTPayload;
 
     const headers = {
         Authorization: `Bearer ${accessToken}`,
@@ -85,7 +84,7 @@ export const RegisterDevice = async (
         accessToken,
         refreshToken,
         refreshURL,
-        (payload.exp - 300) * 1000,
+        5,
         userInfo.accountInfo.user.id,
         userInfo.accountInfo.user.name.firstName,
         lastName,

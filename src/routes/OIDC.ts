@@ -58,9 +58,7 @@ export const GetOIDCJWKS = async (url: string): Promise<JWKS> => {
 };
 
 export const GetOIDCAccessTokens = async (url: string, code: string, codeVerifier: string): Promise<OIDCAccessToken> => {
-    const tokenUrl = url + OIDC_TOKEN_PATH;
-    const [base, path] = extractBaseUrl(tokenUrl);
-    const manager = new RestManager(base);
+    const manager = new RestManager(url);
     const body = new URLSearchParams({
         client_id:     OIDC_CLIENT_ID,
         client_secret: OIDC_CLIENT_SECRET,
@@ -72,7 +70,7 @@ export const GetOIDCAccessTokens = async (url: string, code: string, codeVerifie
     }).toString();
 
     return manager.post<OIDCAccessToken>(
-        path,
+        OIDC_TOKEN_PATH(),
         body,
         undefined,
         { headers: { "Content-Type": "application/x-www-form-urlencoded" } }

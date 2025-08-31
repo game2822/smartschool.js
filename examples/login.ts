@@ -37,7 +37,7 @@ let tokens: { access_token: string; refresh_token: string; expires_in: number; t
 
     console.log(`[DEBUG] Selected challenge method: ${selectedMethod}`);
     console.log(`[DEBUG] Generated code challenge: ${codeChallenge}`);
-    const loginUrl = getSmartschoolLoginUrl(baseURL, codeChallenge);
+    const loginUrl = getSmartschoolLoginUrl(baseURL);
     console.log(`\x1b[32m➜\x1b[0m URL Generated to Log in: ${loginUrl}`);
     console.log(`\x1b[34m[INFO]\x1b[0m Save this code verifier for token exchange: ${codeVerifier}`);
 
