@@ -68,13 +68,14 @@ export const GetOIDCAccessTokens = async (url: string, code: string, codeVerifie
         code_verifier: codeVerifier,
         scope:         "mobile"
     }).toString();
-
+    console.log("OIDC URL:", url + OIDC_TOKEN_PATH());
     return manager.post<OIDCAccessToken>(
         OIDC_TOKEN_PATH(),
         body,
         undefined,
         { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
     );
+
 };
 
 export const isValidInstance = async (url: string): Promise<boolean> => {
@@ -104,6 +105,8 @@ export const finalizeLogin = async (
         code,
         verifier
     );
+    console.log("Tokens received:", tokens);
+    console.log(url + OIDC_TOKEN_PATH());
 
     return RegisterDevice(
         tokens.access_token,
@@ -116,9 +119,7 @@ export const finalizeLogin = async (
 };
 
 export const OIDCRefresh = async (url: string, refreshToken: string): Promise<OIDCAccessToken> => {
-    const tokenUrl = url + OIDC_TOKEN_PATH;
-    const [base, path] = extractBaseUrl(tokenUrl);
-    const manager = new RestManager(base);
+    const manager = new RestManager(url);
     const body = new URLSearchParams({
         grant_type:    "refresh_token",
         refresh_token: refreshToken,
@@ -127,7 +128,7 @@ export const OIDCRefresh = async (url: string, refreshToken: string): Promise<OI
     }).toString();
 
     return manager.post<OIDCAccessToken>(
-        path,
+        OIDC_TOKEN_PATH(),
         body,
         undefined,
         { headers: { "Content-Type": "application/x-www-form-urlencoded" } }

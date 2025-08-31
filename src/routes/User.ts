@@ -20,21 +20,19 @@ export const RegisterDevice = async (
     const manager = new RestManager(url);
 
     const headers = {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type":  "application/json"
-    };
+        Authorization: `Bearer ${accessToken}`
+        };
 
-    const query = {
-            "accessToken": accessToken,
-            "deviceType": deviceType,
-            "deviceTitle": "Papillon sur " + deviceName,
-            "uniqueDeviceId": deviceId,
-            "pincodeEnabled": false
-           }.toString();
+    const body = JSON.stringify({
+        accessToken,
+        deviceType,
+        deviceName,
+        deviceId
+    });
 
     const response = await manager.post<BaseResponse>(
         REGISTER_DEVICE_PATH(),
-        query,
+        body,
         undefined,
         { headers }
     );
@@ -91,9 +89,8 @@ export const RegisterDevice = async (
         "Class TEMP",
         "0600000000",
         new Date("2000-01-01"),
-        kind,
-        userInfo.config(p => p.permittedOperations)
-    );
+        kind
+        );
 
     return client;
 };

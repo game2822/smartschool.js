@@ -1,7 +1,7 @@
 import { input } from '@inquirer/prompts';
 import search from '@inquirer/search';
 import { ChallengeMethod } from '../src/util/Constants';
-import { getSmartschoolLoginUrl, GetOIDCAccessTokens, OIDCRefresh, isValidInstance } from '../src/routes/OIDC';
+import { getSmartschoolLoginUrl, GetOIDCAccessTokens, OIDCRefresh, isValidInstance, finalizeLogin } from '../src/routes/OIDC';
 import { crypto } from '@noble/hashes/crypto';
 import {generateRandomCode} from '../src/util/Verifier';
 import { url } from 'inspector';
@@ -14,7 +14,7 @@ const TOKEN_ENDPOINT_PATH = "/OAuth/mobile/token";
         .replace(/\//g, "_")
         .replace(/=+$/, "");
 }
-let tokens: { access_token: string; refresh_token: string; expires_in: number; token_type: string; } = { access_token: '', refresh_token: '', expires_in: 0, token_type: ''};
+let auth: { access_token: string; refresh_token: string; } = { access_token: '', refresh_token: '', expires_in: 0, token_type: ''};
 (async () => {
     const baseURL = await input({ message: 'Enter your instance URL of your Smartschool (e.g., https://myschool.smartschool.be)' });
     console.log(`[DEBUG] Base URL: ${baseURL}`);
@@ -37,7 +37,7 @@ let tokens: { access_token: string; refresh_token: string; expires_in: number; t
 
     console.log(`[DEBUG] Selected challenge method: ${selectedMethod}`);
     console.log(`[DEBUG] Generated code challenge: ${codeChallenge}`);
-    const loginUrl = getSmartschoolLoginUrl(baseURL);
+    const loginUrl = await getSmartschoolLoginUrl(baseURL);
     console.log(`\x1b[32m➜\x1b[0m URL Generated to Log in: ${loginUrl}`);
     console.log(`\x1b[34m[INFO]\x1b[0m Save this code verifier for token exchange: ${codeVerifier}`);
 
@@ -48,9 +48,14 @@ let tokens: { access_token: string; refresh_token: string; expires_in: number; t
         console.log(`[DEBUG] Exchanging code for tokens with:`);
         console.log(`        code: ${code}`);
         console.log(`        code_verifier: ${codeVerifier}`);
-        tokens = await GetOIDCAccessTokens(baseURL, code, codeVerifier);
+        const loginResult = await finalizeLogin(baseURL, code, "android", "test", crypto.randomUUID());
+        console.log("loginresult: ", loginResult);
+        auth = {
+            access_token: loginResult.accessToken,
+            refresh_token: loginResult.refreshToken,
+        };
         console.log(`\x1b[32m✓\x1b[0m Login successful!`);
-        console.log(tokens);
+        console.log(auth);
     } catch (error) {
         console.error(`\x1b[31m✗\x1b[0m Could not exchange code for tokens: ${error}`);
     }
@@ -58,8 +63,8 @@ let tokens: { access_token: string; refresh_token: string; expires_in: number; t
     if (refresh.toLowerCase() === 'yes') {
         try {
             console.log(`[DEBUG] Token endpoint: ${baseURL}`);
-            console.log(`[DEBUG] Refreshing access token with refresh token: ${tokens.refresh_token}`);
-            const newTokens = await OIDCRefresh(baseURL, tokens.refresh_token);
+            console.log(`[DEBUG] Refreshing access token with refresh token: ${auth.refresh_token}`);
+            const newTokens = await OIDCRefresh(baseURL, auth.refresh_token);
             console.log(`\x1b[32m✓\x1b[0m Token refresh successful!`);
             console.log(newTokens);
         } catch (error) {

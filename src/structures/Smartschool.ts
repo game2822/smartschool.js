@@ -31,7 +31,6 @@ export class SmartSchool {
         public mobilePhone: string,
         public dateOfBirth: Date,
         public kind: Kind,
-        public permissions: Array<Permissions>,
         public kids?: Array<SmartSchool>
     ){}
 
