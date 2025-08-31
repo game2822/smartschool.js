@@ -6,8 +6,16 @@ import { OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, REDIRECT_URI } from "../util/Consta
 import { extractBaseUrl } from "../util/URL";
 import { RegisterDevice } from "./User";
 import { SmartSchool } from "../structures/Smartschool";
+import { generateRandomCode } from "../util/Verifier";
+import { base64url } from "@scure/base";
+import { sha256 } from "@noble/hashes/sha2.js";
+
+const verifier = generateRandomCode();
 
 
+const generateChallenge = (verifier: string): string => {
+        return base64url.encode(sha256.create().update(verifier).digest()).slice(0, -1);
+    };
 export const GetOIDCWellKnown = async (url: string): Promise<OIDCProviderMetadata> => {
     const [base, path] = extractBaseUrl(url);
     const manager = new RestManager(base);
@@ -24,13 +32,13 @@ export const GetOIDCWellKnown = async (url: string): Promise<OIDCProviderMetadat
     throw new Error("Invalid OIDC Provider Metadata");
 };
 
-export const getSmartschoolLoginUrl = (baseURL: string, codeChallenge: string): string => {
+export const getSmartschoolLoginUrl = async (baseURL: string): Promise<string> => {
     const params = new URLSearchParams({
         client_id:             OIDC_CLIENT_ID,
         response_type:         "code",
         scope:                 "mobile",
         code_challenge_method: "S256",
-        code_challenge:        codeChallenge,
+        code_challenge:        await generateChallenge(verifier),
         redirect_uri:          REDIRECT_URI
     });
 
@@ -85,6 +93,7 @@ export const isValidInstance = async (url: string): Promise<boolean> => {
     }
 }
 
+
 export const finalizeLogin = async (
     url: string,
     code: string,
@@ -95,7 +104,7 @@ export const finalizeLogin = async (
     const tokens = await GetOIDCAccessTokens(
         url,
         code,
-        this.verifier // Assurez-vous que `this.verifier` est défini dans le contexte approprié
+        verifier
     );
 
     return RegisterDevice(

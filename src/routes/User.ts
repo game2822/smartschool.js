@@ -44,12 +44,12 @@ export const RegisterDevice = async (
         throw new TypeError("Expected a single user object in response data.");
     }
     const refreshURL = url + OIDC_TOKEN_PATH;
-    const userInfo = response;
+    const userInfo = response as unknown as { userLT: number; accountInfo: { user: { name: { startingWithFirstName: string; firstName: string; }; id: string; }; }; config: (callback: (p: any) => any) => any; }; // je bypass le BaseResponse prcq flm de refaire les types a 4h du mat
     const kind = determineAccountKind(userInfo.userLT);
     const lastName = userInfo.accountInfo.user.name.startingWithFirstName
     .replace(userInfo.accountInfo.user.name.firstName, "")
     .trim();
-    
+
 //
 //      Parent accounts will be implemented later
 //
