@@ -109,13 +109,10 @@ export class SmartSchool {
         if (!this.refreshToken) {
             throw new Error("No refresh token available. Please authenticate again.");
         }
-        if (Date.now() >= this.accessTokenTTL) {
-            const response = await OIDCRefresh(this.refreshURL, this.refreshToken);
-            this.accessToken = response.access_token;
-            this.refreshToken = response.refresh_token;
-            return true;
-        }
-        return false;
+        const response = await OIDCRefresh(this.refreshURL, this.refreshToken);
+        this.accessToken = response.access_token;
+        this.refreshToken = response.refresh_token;
+        return true;
     }
 
 
