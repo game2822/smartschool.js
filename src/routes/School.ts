@@ -1,4 +1,4 @@
-import { BASE_URL, SCHOOL_NEWS, SEARCH_SCHOOLS } from "../rest/endpoints";
+import { BASE_URL, SCHOOL_NEWS } from "../rest/endpoints";
 import { RestManager } from "../rest/RESTManager";
 import { Attachment } from "../structures/Attachment";
 import { News } from "../structures/News";

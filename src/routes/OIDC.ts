@@ -119,7 +119,8 @@ export const finalizeLogin = async (
 };
 
 export const OIDCRefresh = async (url: string, refreshToken: string): Promise<OIDCAccessToken> => {
-    const manager = new RestManager(url);
+    const [base, path] = extractBaseUrl(url);
+    const manager = new RestManager(base);
     const body = new URLSearchParams({
         grant_type:    "refresh_token",
         refresh_token: refreshToken,
@@ -128,7 +129,7 @@ export const OIDCRefresh = async (url: string, refreshToken: string): Promise<OI
     }).toString();
 
     return manager.post<OIDCAccessToken>(
-        OIDC_TOKEN_PATH(),
+        path,
         body,
         undefined,
         { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
