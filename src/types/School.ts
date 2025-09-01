@@ -2,9 +2,6 @@ import { BaseIncluded } from "./RequestHandler";
 import { Services } from "../util/Constants";
 
 export type schoolIncluded = BaseIncluded<"school", {
-    name: string;
-    city?: string;
-    timeZone: string;
     subscribedServices: Array<Services>;
     administrativeId: string;
     schoolAudience: SchoolAudience;

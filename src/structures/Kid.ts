@@ -61,11 +61,11 @@ export class Kid extends Skolengo {
     }
     override async GetGradesSettings(): Promise<GradesSettings> {
         await this.refreshAccessToken();
-        return GetGradesSettings(this.userId, this.refreshAccessToken);
+        return GetGradesSettings(this.userId, this.refreshAccessToken, );
     }
     override async GetLastGrades(limit?: number, offset?: number): Promise<Array<Grade>> {
         await this.refreshAccessToken();
-        return GetLastGrades(this.userId, this.school.id, limit, offset);
+        return GetLastGrades(this.userId, this.refreshAccessToken, limit, offset);
     }
     override async GetTimetable(periodStart?: Date, periodEnd?: Date): Promise<Array<TimetableDay>> {
         await this.refreshAccessToken();

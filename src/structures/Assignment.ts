@@ -9,8 +9,6 @@ export class Assignment {
     /**
      * @param accessToken - Token required to fetch attachments or update completion status.
      * @param userId - Unique student identifier (usually prefixed with "ESKO-").
-     * @param schoolId - Unique school identifier (usually prefixed with "SKO-").
-     * @param emsCode - EMS (Education Management Software) code for the school (e.g., 'gdest', 'rra').
      * @param id - Unique assignment identifier.
      * @param done - Whether the student has completed the assignment.
      * @param title - Title of the assignment (e.g., "Exercises", "Autres").
