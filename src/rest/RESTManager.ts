@@ -13,6 +13,7 @@ export class RestManager {
         const { method, path, body, headers } = options;
         const url = `${this.baseURL}/${path}`;
 
+            console.log(`Sending ${method} request to:`, url, "with body:", body, "and headers:", headers);
             let requestBody = body;
             const contentType = headers?.["Content-Type"] || headers?.["content-type"];
             if (body && contentType === "application/json") {
@@ -30,10 +31,16 @@ export class RestManager {
 
         if (!response.ok) {
             const responseData = await response.json();
+            console.error(`Error response from ${method} ${url}:`, responseData);
+            console.error("Request Headers:", headers);
+            console.error("Request Body:", body);
             throw new Error(`${response.status}: ${JSON.stringify(responseData)}`);
         }
 
         const responseData = await response.json();
+        console.log("Body:", body);
+        console.log("Response Data:", responseData);
+        console.log("headers:", headers);
         return responseData as T;
     }
 
@@ -49,6 +56,8 @@ export class RestManager {
     async get<T>(path: string, params?: Record<string, any>, headers?: Record<string, string>): Promise<T> {
         const urlParams = new URLSearchParams(params).toString();
         const urlPath = urlParams ? `${path}?${urlParams}` : path;
+        console.log("URL Params:", urlParams);
+        console.log("Full URL Path:", urlPath);
         return this.sendRequest<T>({
             method: "GET",
             path:   urlPath,
@@ -59,6 +68,8 @@ export class RestManager {
     async post<T>(path: string, body: any, params?: Record<string, any>, options?: RequestOptions): Promise<T> {
         const urlParams = new URLSearchParams(params).toString();
         const urlPath = urlParams ? `${path}?${urlParams}` : path;
+        console.log("POST URL Params:", urlParams);
+        console.log("POST Full URL Path:", urlPath);
         return this.sendRequest<T>({
             method:  "POST",
             path: urlPath,
