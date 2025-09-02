@@ -81,9 +81,9 @@ export class SmartSchool {
         await this.refreshAccessToken();
         return GetSchoolNews(this.accessToken);
     }
-    async GetTimetable(periodStart?: Date, periodEnd?: Date): Promise<Array<TimetableDay>> {
+    async GetTimetable( SmscMobileID: string, periodStart?: Date, periodEnd?: Date): Promise<Array<TimetableDay>> {
         await this.refreshAccessToken();
-        return getTimetableForPeriods(this.userId, this.accessToken, periodStart ? periodStart.toISOString() : "", periodEnd ? periodEnd.toISOString() : "");
+        return getTimetableForPeriods(this.refreshURL, this.userId, this.accessToken, SmscMobileID, periodStart ?? undefined, periodEnd ?? undefined);
     }
     async initKids(kids: Array<KidData>): Promise<void> {
         if (this.kind === Kind.PARENT) {

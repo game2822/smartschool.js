@@ -5,9 +5,11 @@ import { Lesson } from "../structures/Lesson";
 import { TimetableDay } from "../structures/TimetableDay";
 import { Teacher } from "../types/Assignment";
 import { BaseResponse } from "../types/RequestHandler";
+import { extractBaseUrl } from "../util/URL";
 
 export const getTimetableForPeriods = async (url: string, userId: string, accessToken: string, deviceId: string, periodStart = new Date(), periodEnd = new Date(new Date().setMonth(new Date().getMonth() + 1)), limit = 50): Promise<Array<TimetableDay>> => {
-    const manager = new RestManager(url);
+    const [base] = extractBaseUrl(url);
+    const manager = new RestManager(base);
     const formatDate = (date: Date): string =>
         date.toISOString();
 
