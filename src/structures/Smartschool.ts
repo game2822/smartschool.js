@@ -110,6 +110,12 @@ export class SmartSchool {
             throw new Error("No refresh token available. Please authenticate again.");
         }
         const response = await OIDCRefresh(this.refreshURL, this.refreshToken);
+        console.log("Refreshed access token");
+        if (!response.access_token || !response.refresh_token) {
+            throw new Error("Failed to refresh access token.");
+        }
+        console.log("New access token: ", response.access_token);
+        console.log("New refresh token: ", response.refresh_token);
         this.accessToken = response.access_token;
         this.refreshToken = response.refresh_token;
         return true;

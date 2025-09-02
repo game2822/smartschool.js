@@ -2,7 +2,7 @@ import { input } from '@inquirer/prompts';
 import search from '@inquirer/search';
 import { ChallengeMethod } from '../src/util/Constants';
 <<<<<<< HEAD
-import { getSmartschoolLoginUrl, GetOIDCAccessTokens, OIDCRefresh } from '../src/routes/OIDC';
+import { getSmartschoolLoginUrl, GetOIDCAccessTokens, OIDCRefresh, finalizeLogin } from '../src/routes/OIDC';
 =======
 import { getSmartschoolLoginUrl, GetOIDCAccessTokens, OIDCRefresh, isValidInstance, finalizeLogin } from '../src/routes/OIDC';
 >>>>>>> cbc6bd3fff1eec96b223658ccfc1996fd8102431
@@ -50,13 +50,6 @@ let auth: { access_token: string; refresh_token: string; } = { access_token: '',
     let tokens: any = null;
     let tokenEndpoint = baseURL + TOKEN_ENDPOINT_PATH;
     try {
-<<<<<<< HEAD
-        console.log(`[DEBUG] Token endpoint: ${tokenEndpoint}`);
-        console.log(`[DEBUG] Exchanging code for tokens with:`);
-        console.log(`        code: ${code}`);
-        console.log(`        code_verifier: ${codeVerifier}`);
-        tokens = await GetOIDCAccessTokens(tokenEndpoint, code, codeVerifier);
-=======
         console.log(`[DEBUG] Token endpoint: ${baseURL}`);
         console.log(`[DEBUG] Exchanging code for tokens with:`);
         console.log(`        code: ${code}`);
@@ -67,28 +60,11 @@ let auth: { access_token: string; refresh_token: string; } = { access_token: '',
             access_token: loginResult.accessToken,
             refresh_token: loginResult.refreshToken,
         };
->>>>>>> cbc6bd3fff1eec96b223658ccfc1996fd8102431
         console.log(`\x1b[32m✓\x1b[0m Login successful!`);
         console.log(auth);
     } catch (error) {
         console.error(`\x1b[31m✗\x1b[0m Could not exchange code for tokens: ${error}`);
     }
-<<<<<<< HEAD
-    const shouldRefresh = await input({ message: 'Do you want to test the refresh token? (yes/no)' });
-    if (shouldRefresh.trim().toLowerCase().startsWith('y')) {
-        if (!tokens || !tokens.refresh_token) {
-            console.error('\x1b[31m✗\x1b[0m No refresh token available.');
-        } else {
-            try {
-                // Import OIDCRefresh from your OIDC route file
-                // import { OIDCRefresh } from '../src/routes/OIDC';
-                const refreshedTokens = await OIDCRefresh(tokenEndpoint, tokens.refresh_token);
-                console.log('\x1b[32m✓\x1b[0m Token refresh successful!');
-                console.log(refreshedTokens);
-            } catch (refreshError) {
-                console.error(`\x1b[31m✗\x1b[0m Could not refresh token: ${refreshError}`);
-            }
-=======
     const refresh = await input({ message: 'Do you want to refresh the access token? (yes/no)' });
     if (refresh.toLowerCase() === 'yes') {
         try {
@@ -99,7 +75,6 @@ let auth: { access_token: string; refresh_token: string; } = { access_token: '',
             console.log(newTokens);
         } catch (error) {
             console.error(`\x1b[31m✗\x1b[0m Could not refresh access token: ${error}`);
->>>>>>> cbc6bd3fff1eec96b223658ccfc1996fd8102431
         }
     }
 })();
