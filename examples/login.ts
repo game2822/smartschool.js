@@ -1,11 +1,7 @@
 import { input } from '@inquirer/prompts';
 import search from '@inquirer/search';
 import { ChallengeMethod } from '../src/util/Constants';
-<<<<<<< HEAD
-import { getSmartschoolLoginUrl, GetOIDCAccessTokens, OIDCRefresh, finalizeLogin } from '../src/routes/OIDC';
-=======
 import { getSmartschoolLoginUrl, GetOIDCAccessTokens, OIDCRefresh, isValidInstance, finalizeLogin } from '../src/routes/OIDC';
->>>>>>> cbc6bd3fff1eec96b223658ccfc1996fd8102431
 import { crypto } from '@noble/hashes/crypto';
 import {generateRandomCode} from '../src/util/Verifier';
 import { url } from 'inspector';

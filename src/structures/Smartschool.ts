@@ -31,7 +31,7 @@ export class SmartSchool {
         public mobilePhone: string,
         public dateOfBirth: Date,
         public kind: Kind,
-        public SMSCMobileID?: string,
+        public SMSCMobileID: string,
         public kids?: Array<SmartSchool>
     ){}
 
@@ -100,6 +100,7 @@ export class SmartSchool {
                 "",
                 new Date(kid.dateOfBirth),
                 Kind.STUDENT,
+                this.SMSCMobileID
             ));
         }
     }
