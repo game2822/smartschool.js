@@ -31,6 +31,7 @@ export class SmartSchool {
         public mobilePhone: string,
         public dateOfBirth: Date,
         public kind: Kind,
+        public SMSCMobileID?: string,
         public kids?: Array<SmartSchool>
     ){}
 
@@ -81,9 +82,9 @@ export class SmartSchool {
         await this.refreshAccessToken();
         return GetSchoolNews(this.accessToken);
     }
-    async GetTimetable( SmscMobileID: string, periodStart?: Date, periodEnd?: Date): Promise<Array<TimetableDay>> {
+    async GetTimetable(periodStart?: Date, periodEnd?: Date): Promise<Array<TimetableDay>> {
         await this.refreshAccessToken();
-        return getTimetableForPeriods(this.refreshURL, this.userId, this.accessToken, SmscMobileID, periodStart ?? undefined, periodEnd ?? undefined);
+        return getTimetableForPeriods(this.refreshURL, this.userId, this.accessToken, this.SMSCMobileID ?? "", periodStart ?? undefined, periodEnd ?? undefined);
     }
     async initKids(kids: Array<KidData>): Promise<void> {
         if (this.kind === Kind.PARENT) {
@@ -99,7 +100,6 @@ export class SmartSchool {
                 "",
                 new Date(kid.dateOfBirth),
                 Kind.STUDENT,
-                []
             ));
         }
     }
