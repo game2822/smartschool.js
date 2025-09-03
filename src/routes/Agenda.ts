@@ -64,8 +64,8 @@ export const getTimetableForPeriods = async (url: string, userId: string, access
         const assignments: Array<Assignment> = [
             // Mock data for now
             new Assignment(
-                this.accessToken ?? "",
-                this.userId ?? "",
+                accessToken ?? "",
+                userId ?? "",
                 "1",
                 false,
                 "test homework",
