@@ -57,7 +57,7 @@ export const getTimetableForPeriods = async (url: string, userId: string, access
             {
                 id:    rawLesson.courses?.[0].id ?? "",
                 label: rawLesson.courses?.[0].name ?? "",
-                color: rawLesson.courses?.[0].color ?? ""
+                color: rawLesson.courses?.[0].color ?? "#000000"
             },
             teachers
         ));
