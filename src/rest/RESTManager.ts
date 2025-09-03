@@ -13,14 +13,24 @@ export class RestManager {
         const { method, path, body, headers } = options;
         const url = `${this.baseURL}/${path}`;
 
+        let requestBody: unknown = undefined;
+        let requestHeaders: Record<string, string> = {
+          "User-Agent": "@raphckrman/skolengo.js",
+          ...headers,
+        };
+
+        if (body instanceof URLSearchParams) {
+          requestBody = body.toString();
+          requestHeaders["Content-Type"] = "application/x-www-form-urlencoded";
+        } else if (body) {
+          requestBody = JSON.stringify(body);
+          requestHeaders["Content-Type"] = "application/json";
+        }
+
         const response = await fetch(url, {
             method,
-            body:    body ? JSON.stringify(body) : undefined,
-            headers: {
-                "Content-Type": "application/json",
-                ...headers,
-                "User-Agent":   "@raphckrman/skolengo.js"
-            }
+            body: requestBody,
+            headers: requestHeaders
         });
 
         if (!response.ok) {
