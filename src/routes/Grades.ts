@@ -31,7 +31,7 @@ export const GetGradesSettings = async (
     const formatDate = (date: Date): string =>
         date.toISOString().slice(0, 10);
 
-    const periodStart = new Date(),;
+    const periodStart = new Date();
     const periodEnd = new Date(new Date().setMonth(new Date().getMonth() + 1));
     const response = await manager.get<BaseResponse>(USER_ASSIGNMENTS(), {
         "filter[student.id]":             userId,
