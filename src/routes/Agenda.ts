@@ -55,7 +55,6 @@ export const getTimetableForPeriods = async (url: string, userId: string, access
     }
 
     for (const rawLesson of response as Array<RawLesson>) {
-        const normalizedDate = new Date(rawLesson.period?.dateTimeFrom ?? "").toISOString().split("T")[0];
 
         const teachers: Array<Teacher> = [];
         for (const organisers of rawLesson.organisers?.users ?? []) {
