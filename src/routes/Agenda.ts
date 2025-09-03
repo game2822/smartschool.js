@@ -61,7 +61,25 @@ export const getTimetableForPeriods = async (url: string, userId: string, access
             },
             teachers
         ));
-        const assignments: Array<Assignment> = [];
+        const assignments: Array<Assignment> = [
+            // Mock data for now
+            new Assignment(
+                this.accessToken ?? "",
+                this.userId ?? "",
+                "1",
+                false,
+                "test homework",
+                "<p>Complete the exercises on page 42</p>",
+                new Date("2025-09-05"),
+                false,
+                null,
+                {
+                    id:    "1",
+                    label: "Math",
+                    color: "#FF0000"
+                }
+            )
+        ];
 
         result.push(new TimetableDay(
             new Date(rawLesson.period?.dateTimeFrom ?? ""),
