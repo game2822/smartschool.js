@@ -32,7 +32,30 @@ export const getTimetableForPeriods = async (url: string, userId: string, access
         console.error("Response is not an array:", response);
         return [];
     }
-    for (const rawLesson of response) {
+    // Add a type for rawLesson to avoid unsafe any access
+    interface RawLesson {
+        id: string;
+        period?: {
+            dateTimeFrom?: string;
+            dateTimeTo?: string;
+        };
+        organisers?: {
+            users?: Array<{
+                id: string;
+            }>;
+        };
+        locations?: Array<{
+            title?: string;
+        }>;
+        courses?: Array<{
+            id?: string;
+            name?: string;
+            color?: string;
+        }>;
+    }
+
+    for (const rawLesson of response as Array<RawLesson>) {
+
         const teachers: Array<Teacher> = [];
         for (const organisers of rawLesson.organisers?.users ?? []) {
             teachers.push({
@@ -55,9 +78,9 @@ export const getTimetableForPeriods = async (url: string, userId: string, access
             false,
             false,
             {
-                id:    rawLesson.courses?.[0].id ?? "",
-                label: rawLesson.courses?.[0].name ?? "",
-                color: rawLesson.courses?.[0].color ?? "#000000"
+                id:    rawLesson.courses?.[0]?.id ?? "",
+                label: rawLesson.courses?.[0]?.name ?? "",
+                color: rawLesson.courses?.[0]?.color ?? "#000000"
             },
             teachers
         ));
@@ -80,9 +103,10 @@ export const getTimetableForPeriods = async (url: string, userId: string, access
                 }
             )
         ];
+        const normalizedDate = new Date(rawLesson.period?.dateTimeFrom ?? "").toISOString().split("T")[0];
 
         result.push(new TimetableDay(
-            new Date(rawLesson.period?.dateTimeFrom ?? ""),
+            new Date(normalizedDate),
             lessons,
             assignments
         ));
