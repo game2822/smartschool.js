@@ -1,4 +1,4 @@
-import { BASE_URL, USER_ASSIGNMENTS, USER_LAST_GRADES, USER_SERVICES } from "../rest/endpoints";
+import { BASE_URL, USER_ASSIGNMENTS, USER_GRADES_SETTINGS, USER_LAST_GRADES, USER_SERVICES } from "../rest/endpoints";
 import { RestManager } from "../rest/RESTManager";
 import { Grade } from "../structures/Grade";
 import { Period } from "../structures/Period";
@@ -33,7 +33,7 @@ export const GetGradesSettings = async (
 
     const periodStart = new Date();
     const periodEnd = new Date(new Date().setMonth(new Date().getMonth() + 1));
-    const response = await manager.get<BaseResponse>(USER_ASSIGNMENTS(), {
+    const response = await manager.get<BaseResponse>(USER_GRADES_SETTINGS(), {
         "filter[student.id]":             userId,
         "include":                        "periods,skillsSetting,skillsSetting.skillAcquisitionColors",
         "fields[evaluationsSetting]":     "periodicReportsEnabled,skillsEnabled,evaluationsDetailsAvailable",
