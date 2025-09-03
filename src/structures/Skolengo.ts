@@ -23,7 +23,7 @@ export class Skolengo {
     constructor(
         protected accessToken: string,
         protected refreshToken: string,
-        protected refreshURL: string,
+        readonly refreshURL: string,
         protected accessTokenTTL: number,
         public userId: string,
         public firstName: string,
