@@ -22,7 +22,7 @@ import { KidData } from "../types/User";
 export class Skolengo {
     constructor(
         protected accessToken: string,
-        protected refreshToken: string,
+        public refreshToken: string,
         readonly refreshURL: string,
         protected accessTokenTTL: number,
         public userId: string,
