@@ -1,5 +1,6 @@
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
 import readline from "readline";
+import fs from "fs";
 import { getTimetableForPeriods } from "../src/routes/Agenda";
 
 const rl = readline.createInterface({
@@ -23,6 +24,7 @@ const main = async () => {
 
         console.log("\nFetching timetable...");
         const timetable = await getTimetableForPeriods(url, userId, token, deviceId, periodStart, periodEnd);
+        fs.writeFileSync("timetable.json", JSON.stringify(timetable, null, 2));
 
         console.log("\nTimetable fetched successfully:");
         console.log(JSON.stringify(timetable, null, 2));
