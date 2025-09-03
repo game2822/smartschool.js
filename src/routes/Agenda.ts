@@ -16,7 +16,7 @@ export const getTimetableForPeriods = async (url: string, userId: string, access
     const response = await manager.get<BaseResponse>(USER_AGENDA(userId), {
         from:  formatDate(periodStart),
         to:    formatDate(periodEnd),
-        types: "planned-placeholders"
+        types: "planned-placeholders,planned-lessons"
     }, {
         Authorization: `Bearer ${accessToken}`,
         SmscMobileId:  deviceId
