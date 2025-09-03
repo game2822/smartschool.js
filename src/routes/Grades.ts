@@ -28,11 +28,18 @@ export const GetGradesSettings = async (
     emsCode: string,
     schoolId: string
 ): Promise<GradesSettings> => {
+    const formatDate = (date: Date): string =>
+        date.toISOString().slice(0, 10);
+
+    const periodStart = new Date(),;
+    const periodEnd = new Date(new Date().setMonth(new Date().getMonth() + 1));
     const response = await manager.get<BaseResponse>(USER_ASSIGNMENTS(), {
         "filter[student.id]":             userId,
         "include":                        "periods,skillsSetting,skillsSetting.skillAcquisitionColors",
         "fields[evaluationsSetting]":     "periodicReportsEnabled,skillsEnabled,evaluationsDetailsAvailable",
         "fields[period]":                 "label,startDate,endDate",
+        "filter[dueDate][GE]":            formatDate(periodStart),
+        "filter[dueDate][LE]":            formatDate(periodEnd),
         "fields[skillsSetting]":          "skillAcquisitionLevels,skillAcquisitionColors",
         "fields[skillAcquisitionColors]": "colorLevelMappings"
     }, {
