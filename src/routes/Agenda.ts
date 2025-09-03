@@ -34,13 +34,15 @@ export const getTimetableForPeriods = async (url: string, userId: string, access
     }
     for (const rawLesson of response) {
         const teachers: Array<Teacher> = [];
-        for (const organisers of rawLesson.organisers?.users ?? []) {
+        for (const organisers of rawLesson.organisers ?? []) {
+            const lastName = organisers.users[0].name.startingWithLastName.split(" ")[1];
+            const firstName = organisers.users[0].name.startingWithFirstName.split(" ")[0];
             teachers.push({
-                id:        organisers.id,
+                id:        organisers.users[0]?.id,
                 title:     "",
-                firstName: organisers.firstName ?? "",
-                lastName:  organisers.lastName ?? "",
-                photoUrl:  organisers.photoUrl ?? ""
+                firstName: firstName ?? "",
+                lastName:  lastName ?? "",
+                photoUrl:  organisers.users[0]?.pictureUrl ?? ""
             });
         }
 
@@ -55,9 +57,9 @@ export const getTimetableForPeriods = async (url: string, userId: string, access
             false,
             false,
             {
-                id:    rawLesson.courses?.[0].id ?? "",
-                label: rawLesson.courses?.[0].title ?? "",
-                color: rawLesson.courses?.[0].color ?? ""
+                id:    rawLesson.courses[0]?.id ?? "",
+                label: rawLesson.courses[0]?.name ?? "",
+                color: rawLesson.courses[0]?.color ?? ""
             },
             teachers
         ));

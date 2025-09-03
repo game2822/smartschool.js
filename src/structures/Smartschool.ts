@@ -6,7 +6,7 @@ import { Grade } from "./Grade";
 import { Subject } from "./Subject";
 import { MailFolder } from "./MailFolder";
 import { Mail } from "./Mail";
-import { Kind, Permissions } from "../util/Constants";
+import { Kind } from "../util/Constants";
 import { GetSchoolNews } from "../routes/School";
 import { GetAssignments } from "../routes/Assignments";
 import { GetAttendanceItems } from "../routes/Attendance";
@@ -115,8 +115,8 @@ export class SmartSchool {
         if (!response.access_token || !response.refresh_token) {
             throw new Error("Failed to refresh access token.");
         }
-        console.log("New access token: ", response.access_token);
-        console.log("New refresh token: ", response.refresh_token);
+        console.log("New access token:", response.access_token);
+        console.log("New refresh token:", response.refresh_token);
         this.accessToken = response.access_token;
         this.refreshToken = response.refresh_token;
         return true;
