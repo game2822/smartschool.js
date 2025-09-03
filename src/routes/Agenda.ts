@@ -37,10 +37,10 @@ export const getTimetableForPeriods = async (url: string, userId: string, access
         for (const organisers of rawLesson.organisers?.users ?? []) {
             teachers.push({
                 id:        organisers.id,
-                title:     "",
-                firstName: organisers.users[0]?.firstName ?? "",
-                lastName:  organisers.lastName ?? "",
-                photoUrl:  organisers.photoUrl ?? ""
+                title:     "test",
+                firstName: "test",
+                lastName:  "test",
+                photoUrl:  "test"
             });
         }
 
