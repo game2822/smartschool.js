@@ -21,14 +21,14 @@ export class Assignment {
      */
     constructor(
         protected accessToken: string,
+        public refreshURL: string,
+        public SMSCMobileID: string,
         public userId: string,
         public id: string,
-        public done: boolean,
+        public done: string,
         public title: string,
         public html: string,
         public dueDateTime: Date,
-        public deliverWorkOnline: boolean,
-        public onlineDeliverUrl: string | null,
         public subject: Subject,
         public teacher?: Teacher
     ) {}
@@ -39,9 +39,11 @@ export class Assignment {
      */
     async getAttachments(): Promise<Array<Attachment>> {
         return GetAssignmentAttachments(
+            this.refreshURL,
             this.id,
             this.userId,
-            this.accessToken
+            this.accessToken,
+            this.SMSCMobileID
         );
     }
 
@@ -51,12 +53,20 @@ export class Assignment {
      * @returns A promise resolving to the updated Assignment instance.
      */
     async setCompletion(completed?: boolean): Promise<Assignment> {
-        const newDoneState = completed ?? !this.done;
+        let newDoneState: string;
+        if (completed){
+            newDoneState = "resolve"; // No change needed
+        }
+        else {
+            newDoneState = "unresolve";
+        }
         return SetAssignmentCompletion(
+            this.refreshURL,
             this.id,
             this.userId,
             newDoneState,
-            this.accessToken
+            this.accessToken,
+            this.SMSCMobileID
         );
     }
 }

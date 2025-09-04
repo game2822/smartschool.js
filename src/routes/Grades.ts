@@ -1,4 +1,4 @@
-import { BASE_URL, USER_ASSIGNMENTS, USER_LAST_GRADES, USER_SERVICES } from "../rest/endpoints";
+import { BASE_URL, USER_LAST_GRADES, USER_SERVICES } from "../rest/endpoints";
 import { RestManager } from "../rest/RESTManager";
 import { Grade } from "../structures/Grade";
 import { Period } from "../structures/Period";
@@ -26,7 +26,7 @@ export const GetGradesSettings = async (
     userId: string,
     accessToken: string
 ): Promise<GradesSettings> => {
-    const response = await manager.get<BaseResponse>(USER_ASSIGNMENTS(), {
+    const response = await manager.get<BaseResponse>(USER_LAST_GRADES(), {
         "filter[student.id]":             userId,
         "include":                        "periods,skillsSetting,skillsSetting.skillAcquisitionColors",
         "fields[evaluationsSetting]":     "periodicReportsEnabled,skillsEnabled,evaluationsDetailsAvailable",

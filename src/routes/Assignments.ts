@@ -1,56 +1,59 @@
-import { BASE_URL, USER_ASSIGNMENT, USER_ASSIGNMENTS } from "../rest/endpoints";
+import { USER_AGENDA, USER_ASSIGNMENT } from "../rest/endpoints";
 import { BaseDataResponse, BaseResponse } from "../types/RequestHandler";
 import { Assignment } from "../structures/Assignment";
 import { RestManager } from "../rest/RESTManager";
 import { attachmentInclude, HomeworkAttributes, subjectIncluded, teacherIncluded } from "../types/Assignment";
 import { Attachment } from "../structures/Attachment";
 import { getSingleRelation } from "../util/Relations";
+import { url } from "inspector";
+import { extractBaseUrl } from "../util/URL";
 
-const manager = new RestManager(BASE_URL());
 
 export const GetAssignments = async (
+    url: string,
     userId: string,
     accessToken: string,
+    deviceId: string,
     periodStart = new Date(),
     periodEnd = new Date(new Date().setMonth(new Date().getMonth() + 1))
 ): Promise<Array<Assignment>> => {
     const formatDate = (date: Date): string =>
-        date.toISOString().slice(0, 10);
+        date.toISOString();
+        
+    const [base] = extractBaseUrl(url);
 
-    const response = await manager.get<BaseResponse>(USER_ASSIGNMENTS(), {
-        "filter[student.id]":  userId,
-        "filter[dueDate][GE]": formatDate(periodStart),
-        "filter[dueDate][LE]": formatDate(periodEnd),
-        "include":             "subject,teacher,individualCorrectedWork,individualCorrectedWork.attachments,individualCorrectedWork.audio,commonCorrectedWork.attachments,commonCorrectedWork.audio,commonCorrectedWork.pedagogicContent",
-        "fields[homework]":    "title,html,deliverWorkOnline,onlineDeliveryUrl,done,dueDateTime",
-        "fields[subject]":     "label,color"
+    const manager = new RestManager(base);
+
+   const response = await manager.get<BaseResponse>(USER_AGENDA(userId), {
+        from:  formatDate(periodStart),
+        to:    formatDate(periodEnd),
+        types: "planned-to-dos,planned-lesson-cluster-assignments,planned-assignments"
     }, {
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`,
+        SmscMobileId:  deviceId
     });
-
     const includedMap = new Map<string, unknown>();
     for (const item of response.included ?? []) {
         includedMap.set(`${item.type}:${item.id}`, item);
     }
 
-    return (Array.isArray(response.data) ? response.data : [])
-        .filter((item): item is BaseDataResponse<"homework", HomeworkAttributes> => item.type === "homework")
+    return (Array.isArray(response) ? response : [])
         .map(assignment => {
-            const teacherId = getSingleRelation(assignment.relationships.teacher)?.id;
+            const teacherId = assignment.organisers?.users[0]?.id;
             const teacher = teacherId ? includedMap.get(`teacher:${teacherId}`) as teacherIncluded : null;
-            const subjectId = getSingleRelation(assignment.relationships.subject)?.id;
+            const subjectId = assignment.courses[0]?.id;
             const subject = subjectId ? includedMap.get(`subject:${subjectId}`) as subjectIncluded : null;
 
             return new Assignment(
                 accessToken,
+                url,
+                deviceId,
                 userId,
                 assignment.id,
-                assignment.attributes?.done ?? false,
-                assignment.attributes?.title ?? "",
+                assignment.resolvedStatus ?? false,
+                assignment.name ?? "",
                 assignment.attributes?.html ?? "",
-                new Date(assignment.attributes?.dueDateTime ?? ""),
-                assignment.attributes?.deliverWorkOnline ?? false,
-                assignment.attributes?.onlineDeliverUrl ?? "",
+                new Date(assignment.period?.dateTimeTo ?? ""),
                 {
                     id:    subjectId                   ?? "",
                     label: subject?.attributes?.label  ?? "",
@@ -66,8 +69,12 @@ export const GetAssignments = async (
         });
 };
 
-export const GetAssignmentAttachments = async (assignmentId: string, userId: string, accessToken: string): Promise<Array<Attachment>> => {
-    const response = await manager.get<BaseResponse>(USER_ASSIGNMENT(assignmentId), {
+export const GetAssignmentAttachments = async (url: string, assignmentId: string, userId: string, accessToken: string, deviceId: string): Promise<Array<Attachment>> => {
+    const [base] = extractBaseUrl(url);
+
+    const manager = new RestManager(base);
+
+    /*const response = await manager.get<BaseResponse>(USER_ASSIGNMENT(assignmentId), {
         "filter[student.id]": userId,
         "include":            "attachments",
         "fields[attachment]": "name,mimeType,mimeTypeLabel,size,url"
@@ -83,36 +90,39 @@ export const GetAssignmentAttachments = async (assignmentId: string, userId: str
     return Array.from(includedMap.entries())
         .filter(([key]) => key.startsWith("attachment:"))
         .map(([, value]) => {
-            const attachment = value as attachmentInclude;
-            return new Attachment(
-                accessToken,
-                attachment.id,
-                attachment.attributes?.url ?? "",
-                attachment.attributes?.name ?? "",
-                attachment.attributes?.mimeType ?? "",
-                attachment.attributes?.mimeTypeLabel ?? "",
-                attachment.attributes?.size ?? 0
-            );
-        });
-};
+            const attachment = value as attachmentInclude;*/
+            return [
+                new Attachment(
+                    accessToken,
+                    /*attachment.id ??*/ "",
+                    /*attachment.attributes?.url ??*/ "",
+                    /*attachment.attributes?.name ??*/ "",
+                    /*attachment.attributes?.mimeType ??*/ "",
+                    /*attachment.attributes?.mimeTypeLabel ??*/ "",
+                    /*attachment.attributes?.size ??*/ 0
+                )
+            ];
+        };
 
 export const SetAssignmentCompletion = async (
+    url: string,
     assignmentId: string,
     userId: string,
-    completed: boolean,
+    completed: string,
     accessToken: string,
+    SMSCMobileID: string
 ): Promise<Assignment> => {
-    const response = await manager.patch<BaseResponse>(
-        USER_ASSIGNMENT(assignmentId),
-        { data: { type: "homework",id: assignmentId,attributes: { done: completed } } },
-        {
-            "filter[student.id]": userId,
-            "include":            "attachments",
-            "fields[attachment]": "name,mimeType,mimeTypeLabel,size,url"
-        },
+    const [base] = extractBaseUrl(url);
+    const manager = new RestManager(base);
+
+    const response = await manager.post<BaseResponse>(
+        USER_ASSIGNMENT(assignmentId, userId, completed),
+        undefined,
+        undefined,
         {
             headers: {
-                Authorization: `Bearer ${accessToken}`
+                Authorization: `Bearer ${accessToken}`,
+                "SmscMobileId": SMSCMobileID,
             }
         }
     );
@@ -121,22 +131,21 @@ export const SetAssignmentCompletion = async (
     for (const item of response.included ?? []) {
         includedMap.set(`${item.type}:${item.id}`, item);
     }
-    const data = response.data as BaseDataResponse<"homework", HomeworkAttributes>;
-    const subjectId = getSingleRelation(data.relationships.subject)?.id;
-    const teacherId = getSingleRelation(data.relationships.teacher)?.id;
+    const subjectId = response.courses[0]?.id;
+    const teacherId = response.organisers.users[0]?.id;
     const subject = subjectId ? includedMap.get("subject:" + subjectId) as subjectIncluded : null;
     const teacher = teacherId ? includedMap.get("teacher:" + teacherId) as teacherIncluded : null;
 
     return new Assignment(
         accessToken,
+        url,
+        SMSCMobileID,
         userId,
         assignmentId,
         completed,
-        data.attributes?.title ?? "",
-        data.attributes?.html ?? "",
-        new Date(data.attributes?.dueDateTime ?? ""),
-        data.attributes?.deliverWorkOnline ?? false,
-        data.attributes?.onlineDeliverUrl ?? "",
+        response.name ?? "",
+        response.attributes?.html ?? "",
+        new Date(response.period?.dateTimeTo ?? ""),
         {
             id:    subject?.id                ?? "",
             label: subject?.attributes?.label ?? "",

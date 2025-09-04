@@ -47,7 +47,7 @@ export class SmartSchool {
     }
     async GetAssignments(periodStart?: Date, periodEnd?: Date): Promise<Array<Assignment>> {
         await this.refreshAccessToken();
-        return GetAssignments(this.userId, this.accessToken, periodStart, periodEnd);
+        return GetAssignments(this.refreshURL,this.userId, this.accessToken, this.SMSCMobileID, periodStart, periodEnd);
     }
     async GetAttendanceItems(): Promise<Array<AttendanceItem>> {
         await this.refreshAccessToken();
