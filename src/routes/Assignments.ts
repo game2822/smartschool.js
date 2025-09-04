@@ -55,8 +55,8 @@ export const GetAssignments = async (
                 assignment.attributes?.html ?? "",
                 new Date(assignment.period?.dateTimeTo ?? ""),
                 {
-                    id:    subjectId                   ?? "",
-                    label: subject?.attributes?.label  ?? "",
+                    id:    assignment.courses[0]?.id                   ?? "",
+                    label: assignment.courses[0]?.name  ?? "",
                     color: subject?.attributes?.color  ?? ""
                 },
                 {

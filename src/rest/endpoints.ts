@@ -7,7 +7,7 @@ export const SCHOOL_NEWS = () => "schools-info";
 export const USER_INFO = (userId: string) => "users-info/" + userId;
 export const USER_ASSIGNMENT = (id: string, userId: string, completed: string) => "planner/api/v1/planned-assignments/"+ userId.split("_")[0] + "/" + id + "/" + completed;
 export const USER_AGENDA = (userId: string) => "planner/api/v1/planned-elements/user/" + userId;
-export const USER_GRADES_SETTINGS = () => "evaluations-settings";
+export const USER_GRADES_SETTINGS = () => "results/api/v1/periods/";
 export const USER_LAST_GRADES = () => "evaluations-results";
 export const USER_SERVICES = () => "evaluation-services"
 export const InstanceValidation = () => "OAuth/verifyplatform";

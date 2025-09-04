@@ -1,4 +1,5 @@
-import { BASE_URL, USER_LAST_GRADES, USER_SERVICES } from "../rest/endpoints";
+import { url } from "inspector";
+import { USER_GRADES_SETTINGS, USER_LAST_GRADES, USER_SERVICES } from "../rest/endpoints";
 import { RestManager } from "../rest/RESTManager";
 import { Grade } from "../structures/Grade";
 import { Period } from "../structures/Period";
@@ -19,22 +20,22 @@ import {
 } from "../types/Grades";
 import { BaseDataResponse, BaseResponse } from "../types/RequestHandler";
 import { getMultipleRelations, getSingleRelation } from "../util/Relations";
+import { extractBaseUrl } from "../util/URL";
 
-const manager = new RestManager(BASE_URL());
 
 export const GetGradesSettings = async (
-    userId: string,
+    url: string,
+    deviceId: string,
     accessToken: string
 ): Promise<GradesSettings> => {
-    const response = await manager.get<BaseResponse>(USER_LAST_GRADES(), {
-        "filter[student.id]":             userId,
-        "include":                        "periods,skillsSetting,skillsSetting.skillAcquisitionColors",
-        "fields[evaluationsSetting]":     "periodicReportsEnabled,skillsEnabled,evaluationsDetailsAvailable",
-        "fields[period]":                 "label,startDate,endDate",
-        "fields[skillsSetting]":          "skillAcquisitionLevels,skillAcquisitionColors",
-        "fields[skillAcquisitionColors]": "colorLevelMappings"
-    }, {
-        Authorization: `Bearer ${accessToken}`
+    const [base] = extractBaseUrl(url);
+
+    const manager = new RestManager(base);
+    const response = await manager.get<BaseResponse>(USER_GRADES_SETTINGS(),
+    undefined,
+    {
+        Authorization: `Bearer ${accessToken}`,
+        "SmscMobileId":  deviceId
     });
 
     const includedMap = new Map<string, unknown>();
@@ -85,6 +86,8 @@ export const GetLastGrades = async (
     limit = 20,
     offset = 0
 ): Promise<Array<Grade>> => {
+        const manager = new RestManager(USER_GRADES_SETTINGS());
+
     const response = await manager.get<BaseResponse>(USER_LAST_GRADES(), {
         "page[limit]":                      limit,
         "page[offset]":                     offset,
@@ -143,6 +146,8 @@ export const GetGradesForPeriod = async (
     accessToken: string,
     period: string
 ): Promise<Array<Subject>> => {
+            const manager = new RestManager(USER_GRADES_SETTINGS());
+
     const response = await manager.get<BaseResponse>(USER_SERVICES(), {
         "filter[student.id]":               userId,
         "filter[period.id]":                period,

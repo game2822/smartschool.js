@@ -64,7 +64,7 @@ export class SmartSchool {
     }
     async GetGradesSettings(): Promise<GradesSettings> {
         await this.refreshAccessToken();
-        return GetGradesSettings(this.userId, this.accessToken);
+        return GetGradesSettings(this.refreshURL, this.SMSCMobileID, this.accessToken);
     }
     async GetLastGrades(limit?: number, offset?: number): Promise<Array<Grade>> {
         await this.refreshAccessToken();
