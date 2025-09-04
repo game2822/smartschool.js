@@ -172,8 +172,7 @@ export const GetGradesForPeriod = async (
                 const teacherData = includedMap.get(`teacher:${teacher.id}`) as teacherIncluded;
                 teachers.push({
                     id:        teacher.id,
-                    firstName: teacherData.attributes?.firstName ?? "",
-                    lastName:  teacherData.attributes?.lastName ?? "",
+                    name:      teacherData.attributes?.firstName ?? "",
                     photoUrl:  teacherData.attributes?.photoUrl ?? "",
                     title:     teacherData.attributes?.title ?? ""
                 });
