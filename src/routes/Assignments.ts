@@ -59,8 +59,7 @@ export const GetAssignments = async (
                 {
                     id:        teacherId                      ?? "",
                     title:     teacher?.attributes?.title     ?? "",
-                    firstName: teacher?.attributes?.firstName ?? "",
-                    lastName:  teacher?.attributes?.lastName  ?? "",
+                    name: teacher?.attributes?.firstName ?? "",
                     photoUrl:  teacher?.attributes?.photoUrl  ?? ""
                 }
             );
@@ -146,8 +145,7 @@ export const SetAssignmentCompletion = async (
         {
             id:        teacher?.id                    ?? "",
             title:     teacher?.attributes?.title     ?? "",
-            firstName: teacher?.attributes?.firstName ?? "",
-            lastName:  teacher?.attributes?.lastName  ?? "",
+            name:      teacher?.attributes?.firstName ?? "",
             photoUrl:  teacher?.attributes?.photoUrl  ?? ""
         }
     );
