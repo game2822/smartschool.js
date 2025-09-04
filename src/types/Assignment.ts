@@ -40,8 +40,7 @@ export type attachmentInclude = BaseIncluded<"attachment", {
 export interface Teacher {
     id: string;
     title: string;
-    firstName: string;
-    lastName: string;
+    name: string;
     photoUrl: string;
 }
 

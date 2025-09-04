@@ -42,6 +42,10 @@ export const getTimetableForPeriods = async (url: string, userId: string, access
         organisers?: {
             users?: Array<{
                 id: string;
+                name: {
+                    startingWithLastName: string;
+                };
+                pictureUrl?: string;
             }>;
         };
         locations?: Array<{
@@ -60,10 +64,9 @@ export const getTimetableForPeriods = async (url: string, userId: string, access
         for (const organisers of rawLesson.organisers?.users ?? []) {
             teachers.push({
                 id:        organisers.id,
-                title:     "test",
-                firstName: "test",
-                lastName:  "test",
-                photoUrl:  "test"
+                title:     organisers.name.startingWithLastName ?? "",
+                name:      organisers.name.startingWithLastName ?? "",
+                photoUrl:  organisers.pictureUrl ?? ""
             });
         }
 
