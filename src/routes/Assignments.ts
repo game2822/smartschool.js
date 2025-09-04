@@ -131,31 +131,35 @@ export const SetAssignmentCompletion = async (
     for (const item of response.included ?? []) {
         includedMap.set(`${item.type}:${item.id}`, item);
     }
-    const subjectId = response.courses[0]?.id;
-    const teacherId = response.organisers.users[0]?.id;
-    const subject = subjectId ? includedMap.get("subject:" + subjectId) as subjectIncluded : null;
-    const teacher = teacherId ? includedMap.get("teacher:" + teacherId) as teacherIncluded : null;
+const assignment = Array.isArray(response) ? response[0] : response;
+if (!assignment) {
+    throw new Error("Assignment not found in response");
+}
+const subjectId = assignment.courses[0]?.id;
+const teacherId = assignment.organisers.users[0]?.id;
+const subject = subjectId ? includedMap.get("subject:" + subjectId) as subjectIncluded : null;
+const teacher = teacherId ? includedMap.get("teacher:" + teacherId) as teacherIncluded : null;
 
-    return new Assignment(
-        accessToken,
-        url,
-        SMSCMobileID,
-        userId,
-        assignmentId,
-        completed,
-        response.name ?? "",
-        response.attributes?.html ?? "",
-        new Date(response.period?.dateTimeTo ?? ""),
-        {
-            id:    subject?.id                ?? "",
-            label: subject?.attributes?.label ?? "",
-            color: subject?.attributes?.color ?? ""
-        },
-        {
-            id:        teacher?.id                    ?? "",
-            title:     teacher?.attributes?.title     ?? "",
-            name:      teacher?.attributes?.firstName ?? "",
-            photoUrl:  teacher?.attributes?.photoUrl  ?? ""
-        }
-    );
+return new Assignment(
+    accessToken,
+    url,
+    SMSCMobileID,
+    userId,
+    assignmentId,
+    completed,
+    assignment.name ?? "",
+    assignment.attributes?.html ?? "",
+    new Date(assignment.period?.dateTimeTo ?? ""),
+    {
+        id:    subject?.id                ?? "",
+        label: subject?.attributes?.label ?? "",
+        color: subject?.attributes?.color ?? ""
+    },
+    {
+        id:        teacher?.id                    ?? "",
+        title:     teacher?.attributes?.title     ?? "",
+        name:      teacher?.attributes?.firstName ?? "",
+        photoUrl:  teacher?.attributes?.photoUrl  ?? ""
+    }
+);
 };
