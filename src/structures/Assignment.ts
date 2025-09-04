@@ -25,7 +25,7 @@ export class Assignment {
         public SMSCMobileID: string,
         public userId: string,
         public id: string,
-        public done: string,
+        public done: boolean,
         public title: string,
         public html: string,
         public dueDateTime: Date,

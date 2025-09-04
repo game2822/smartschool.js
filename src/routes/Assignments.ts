@@ -139,6 +139,12 @@ const subjectId = assignment.courses[0]?.id;
 const teacherId = assignment.organisers.users[0]?.id;
 const subject = subjectId ? includedMap.get("subject:" + subjectId) as subjectIncluded : null;
 const teacher = teacherId ? includedMap.get("teacher:" + teacherId) as teacherIncluded : null;
+let booleanCompleted: boolean;
+if (completed === "resolve") {
+    booleanCompleted = true;
+} else {
+    booleanCompleted = false;
+}
 
 return new Assignment(
     accessToken,
@@ -146,7 +152,7 @@ return new Assignment(
     SMSCMobileID,
     userId,
     assignmentId,
-    completed,
+    booleanCompleted,
     assignment.name ?? "",
     assignment.attributes?.html ?? "",
     new Date(assignment.period?.dateTimeTo ?? ""),
