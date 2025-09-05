@@ -147,7 +147,15 @@ export const GetSubjects = async (
     return (Array.isArray(response) ? response : [])
         .filter((item): item is any => !item.parentCourseId)
         .map(subject => {
-            const teachers: Array<Teacher> = (subject.teachers ?? []).map(teacherData => ({
+            interface TeacherData {
+                id: string;
+                name?: {
+                    startingWithLastName?: string;
+                };
+                pictureUrl?: string;
+            }
+
+            const teachers: Array<Teacher> = (subject.teachers as TeacherData[] ?? []).map((teacherData: TeacherData): Teacher => ({
                 id: teacherData.id,
                 name: teacherData.name?.startingWithLastName ?? "",
                 photoUrl: teacherData.pictureUrl ?? "",
@@ -190,7 +198,15 @@ export const GetGradesForPeriod = async (
 
     return (Array.isArray(response) ? response : [])
         .map(subject => {
-            const teachers: Array<Teacher> = (subject.teachers ?? []).map(teacherData => ({
+            interface TeacherData {
+                id: string;
+                name?: {
+                    startingWithLastName?: string;
+                };
+                pictureUrl?: string;
+            }
+
+            const teachers: Array<Teacher> = (subject.teachers as TeacherData[] ?? []).map((teacherData: TeacherData): Teacher => ({
                 id: teacherData.id,
                 name: teacherData.name?.startingWithLastName ?? "",
                 photoUrl: teacherData.pictureUrl ?? "",
