@@ -230,12 +230,9 @@ export const GetGradesForPeriod = async (
                     undefined
                 ));
             }
-            /*const subjectId = getSingleRelation(subject.relationships.subject);
-            const subjectKey = typeof subjectId?.id === "string" ? subjectId.id : "";
-            const subjectData = includedMap.get(`subject:${subjectKey}`) as subjectIncluded;*/
             return new Subject(
-                "test",
-                "test",
+                subject.courses[0]?.id,
+                subject.courses[0]?.name ?? "",
                 1,
                 10,
                 20,
@@ -244,4 +241,4 @@ export const GetGradesForPeriod = async (
                 grades
             );
         });
-};
+}
