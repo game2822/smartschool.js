@@ -12,7 +12,7 @@ import { GetAssignments } from "../routes/Assignments";
 import { GetAttendanceItems } from "../routes/Attendance";
 import { getTimetableForPeriods } from "../routes/Agenda";
 import { GradesSettings } from "../types/Grades";
-import { GetGradesForPeriod, GetGradesSettings, GetLastGrades } from "../routes/Grades";
+import { GetGradesForPeriod, GetGradesSettings, GetLastGrades, GetSubjects } from "../routes/Grades";
 import { MailSettings, Recipients } from "../types/Mail";
 import { GetMailSettings, GetMailsFromFolder, SendMail } from "../routes/Mail";
 import { OIDCRefresh } from "../routes/OIDC";
@@ -65,6 +65,10 @@ export class SmartSchool {
     async GetGradesSettings(): Promise<GradesSettings> {
         await this.refreshAccessToken();
         return GetGradesSettings(this.refreshURL, this.SMSCMobileID, this.accessToken);
+    }
+    async GetSubjects(): Promise<Array<Subject>> {
+        await this.refreshAccessToken();
+        return GetSubjects(this.refreshURL, this.SMSCMobileID, this.accessToken);
     }
     async GetLastGrades(limit?: number, offset?: number): Promise<Array<Grade>> {
         await this.refreshAccessToken();
