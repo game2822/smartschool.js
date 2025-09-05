@@ -5,7 +5,6 @@ import { RestManager } from "../rest/RESTManager";
 import { attachmentInclude, HomeworkAttributes, subjectIncluded, teacherIncluded } from "../types/Assignment";
 import { Attachment } from "../structures/Attachment";
 import { getSingleRelation } from "../util/Relations";
-import { url } from "inspector";
 import { extractBaseUrl } from "../util/URL";
 
 
@@ -19,12 +18,11 @@ export const GetAssignments = async (
 ): Promise<Array<Assignment>> => {
     const formatDate = (date: Date): string =>
         date.toISOString();
-        
     const [base] = extractBaseUrl(url);
 
     const manager = new RestManager(base);
 
-   const response = await manager.get<BaseResponse>(USER_AGENDA(userId), {
+    const response = await manager.get<BaseResponse>(USER_AGENDA(userId), {
         from:  formatDate(periodStart),
         to:    formatDate(periodEnd),
         types: "planned-to-dos,planned-lesson-cluster-assignments,planned-assignments"

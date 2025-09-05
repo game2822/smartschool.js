@@ -40,7 +40,6 @@ undefined,
 
 export interface GradesSettings extends GradesSettingsAttributes {
     periods: Array<Period>;
-    skillLevels: Array<SkillLevel>;
 }
 
 export type periodIncluded = BaseIncluded<

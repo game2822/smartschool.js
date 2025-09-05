@@ -9,7 +9,7 @@ export class Subject {
         public value: number,
         public outOf: number,
         public average: number,
-        public grades: Array<Grade>,
-        public teachers: Array<Teacher>
+        public teachers: Array<Teacher>,
+        public grades?: Array<Grade>,
     ){}
 }
