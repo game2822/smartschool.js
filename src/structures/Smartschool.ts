@@ -60,7 +60,7 @@ export class SmartSchool {
             periods.push(...(await this.GetGradesSettings()).periods);
             if (!periods[0]) throw new Error("We are unable to find any periods.");
         }
-        return GetGradesForPeriod(this.userId, this.accessToken,  period ?? periods[0].id);
+        return GetGradesForPeriod(this.refreshURL, this.SMSCMobileID, this.accessToken, period ?? periods[0].id);
     }
     async GetGradesSettings(): Promise<GradesSettings> {
         await this.refreshAccessToken();
