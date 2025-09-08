@@ -13,20 +13,24 @@ export class RestManager {
         const { method, path, body, headers } = options;
         const url = `${this.baseURL}/${path}`;
 
-            console.log(`Sending ${method} request to:`, url, "with body:", body, "and headers:", headers);
-            let requestBody = body;
-            const contentType = headers?.["Content-Type"] || headers?.["content-type"];
-            if (body && contentType === "application/json") {
-                requestBody = JSON.stringify(body) ;
-            }
+        let requestBody: unknown = undefined;
+        let requestHeaders: Record<string, string> = {
+          "User-Agent": "@game2822/smartschool.js",
+          ...headers,
+        };
+
+        if (body instanceof URLSearchParams) {
+          requestBody = body.toString();
+          requestHeaders["Content-Type"] = "application/x-www-form-urlencoded";
+        } else if (body) {
+          requestBody = JSON.stringify(body);
+          requestHeaders["Content-Type"] = "application/json";
+        }
+
         const response = await fetch(url, {
             method,
-            body:    requestBody as any,
-            headers: {
-                "Content-Type": contentType || "application/json",
-                ...headers,
-                "User-Agent":   "@game28/smartschool.js"
-            }
+            body: requestBody,
+            headers: requestHeaders
         });
 
         if (!response.ok) {

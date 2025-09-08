@@ -21,8 +21,8 @@ import { KidData } from "../types/User";
 export class SmartSchool {
     constructor(
         protected accessToken: string,
-        protected refreshToken: string,
-        protected refreshURL: string,
+        public refreshToken: string,
+        readonly refreshURL: string,
         protected accessTokenTTL: number,
         public userId: string,
         public firstName: string,
