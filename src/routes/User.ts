@@ -23,12 +23,12 @@ export const RegisterDevice = async (
         Authorization: `Bearer ${accessToken}`
         };
 
-    const body = JSON.stringify({
+    const body = {
         accessToken,
         deviceType,
         deviceName,
         deviceId
-    });
+    };
 
     const response = await manager.post<BaseResponse>(
         REGISTER_DEVICE_PATH(),
