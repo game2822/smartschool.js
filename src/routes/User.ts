@@ -7,6 +7,8 @@ import { Kind } from "../util/Constants";
 import { BaseResponse } from "../types/RequestHandler";
 import { KidData, studentIncluded, UserAttributes } from "../types/User";
 import { getMultipleRelations } from "../util/Relations";
+import { log } from "console";
+import { extractBaseUrl } from "../util/URL";
 
 
 export const RegisterDevice = async (
@@ -17,7 +19,8 @@ export const RegisterDevice = async (
     deviceName: string,
     deviceId: string
 ): Promise<SmartSchool> => {
-    const manager = new RestManager(url);
+    const [base] = extractBaseUrl(url);
+    const manager = new RestManager(base);
 
     const headers = {
         Authorization: `Bearer ${accessToken}`
