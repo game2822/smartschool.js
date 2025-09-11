@@ -156,7 +156,7 @@ return new Assignment(
     new Date(assignment.period?.dateTimeTo ?? ""),
     {
         id:    subject?.id                ?? "",
-        label: subject?.attributes?.label ?? "",
+        label: subject?.attributes?.name ?? "",
         color: subject?.attributes?.color ?? ""
     },
     {
