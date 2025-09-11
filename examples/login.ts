@@ -5,6 +5,7 @@ import { getSmartschoolLoginUrl, GetOIDCAccessTokens, OIDCRefresh, isValidInstan
 import { crypto } from '@noble/hashes/crypto';
 import {generateRandomCode} from '../src/util/Verifier';
 import { url } from 'inspector';
+import { LoginWithToken } from '../src';
 
 const TOKEN_ENDPOINT_PATH = "/OAuth/mobile/token";
     function base64UrlEncode(buffer: ArrayBuffer): string {
@@ -66,7 +67,7 @@ let auth: { access_token: string; refresh_token: string; } = { access_token: '',
         try {
             console.log(`[DEBUG] Token endpoint: ${baseURL}`);
             console.log(`[DEBUG] Refreshing access token with refresh token: ${auth.refresh_token}`);
-            const newTokens = await OIDCRefresh(baseURL, auth.refresh_token);
+            const newTokens = await LoginWithToken(baseURL + "/OAuth/mobile/token", auth.refresh_token, "android", "testpapillon", crypto.randomUUID());
             console.log(`\x1b[32m✓\x1b[0m Token refresh successful!`);
             console.log(newTokens);
         } catch (error) {

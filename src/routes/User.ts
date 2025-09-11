@@ -7,6 +7,8 @@ import { Kind } from "../util/Constants";
 import { BaseResponse } from "../types/RequestHandler";
 import { KidData, studentIncluded, UserAttributes } from "../types/User";
 import { getMultipleRelations } from "../util/Relations";
+import { log } from "console";
+import { extractBaseUrl } from "../util/URL";
 
 
 export const RegisterDevice = async (
@@ -17,18 +19,19 @@ export const RegisterDevice = async (
     deviceName: string,
     deviceId: string
 ): Promise<SmartSchool> => {
-    const manager = new RestManager(url);
+    const [base] = extractBaseUrl(url);
+    const manager = new RestManager(base);
 
     const headers = {
         Authorization: `Bearer ${accessToken}`
         };
 
-    const body = JSON.stringify({
+    const body = {
         accessToken,
         deviceType,
         deviceName,
         deviceId
-    });
+    };
 
     const response = await manager.post<BaseResponse>(
         REGISTER_DEVICE_PATH(),
@@ -41,7 +44,7 @@ export const RegisterDevice = async (
         throw new TypeError("Expected a single user object in response data.");
     }
     const refreshURL = url + "/" + OIDC_TOKEN_PATH();
-    const userInfo = response as unknown as { identifier: string; userLT: number; accountInfo: { user: { name: { startingWithFirstName: string; firstName: string; }; id: string; }; }; config: (callback: (p: any) => any) => any; }; // je bypass le BaseResponse prcq flm de refaire les types a 4h du mat
+    const userInfo = response as unknown as { identifier: string; userLT: number; accountInfo: { user: { name: { startingWithFirstName: string; firstName: string; }; id: string; pictureUrl: string; }; }; config: (callback: (p: any) => any) => any; }; // je bypass le BaseResponse prcq flm de refaire les types a 4h du mat
     const kind = determineAccountKind(userInfo.userLT);
     const lastName = userInfo.accountInfo.user.name.startingWithFirstName
     .replace(userInfo.accountInfo.user.name.firstName, "")
@@ -90,7 +93,8 @@ export const RegisterDevice = async (
         "0600000000",
         new Date("2000-01-01"),
         kind,
-        userInfo.identifier
+        userInfo.identifier,
+        userInfo.accountInfo.user.pictureUrl
         );
 
     return client;

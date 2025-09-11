@@ -1,4 +1,3 @@
-import { url } from "inspector";
 import { GRADES_COURSES, USER_GRADES_SETTINGS, USER_LAST_GRADES, USER_SERVICES } from "../rest/endpoints";
 import { RestManager } from "../rest/RESTManager";
 import { Grade } from "../structures/Grade";
@@ -248,4 +247,4 @@ export const GetGradesForPeriod = async (
                 grades
             );
         });
-};
+}
