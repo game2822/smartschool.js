@@ -116,7 +116,7 @@ export const GetLastGrades = async (
                 evaluationInclude.attributes?.topic ?? "",
                 {
                     id:    subjectKey,
-                    label: subjectData?.attributes?.label ?? "",
+                    label: subjectData?.attributes?.name ?? "",
                     color: subjectData?.attributes?.color ?? ""
                 },
                 grade.attributes?.nonEvaluationReason ?? undefined
