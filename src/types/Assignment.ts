@@ -24,7 +24,7 @@ export type teacherIncluded = BaseIncluded<"teacher", {
 }>;
 
 export type subjectIncluded = BaseIncluded<"subject", {
-    label: string;
+    name: string;
     color: string;
 }>;
 

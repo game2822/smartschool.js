@@ -38,9 +38,9 @@ export class RestManager {
         }
 
         const responseData = await response.json();
-        console.log("Body:", body);
-        console.log("Response Data:", responseData);
-        console.log("headers:", headers);
+       // console.log("Body:", body);
+       // console.log("Response Data:", responseData);
+       // console.log("headers:", headers);
         return responseData as T;
     }
 

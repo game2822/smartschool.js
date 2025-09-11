@@ -19,6 +19,9 @@ import { getMultipleRelations, getSingleRelation } from "../util/Relations";
 import { extractBaseUrl } from "../util/URL";
 
 
+const subjectsMap = new Map<string, unknown>();
+
+
 export const GetGradesSettings = async (
     url: string,
     deviceId: string,
@@ -139,9 +142,10 @@ export const GetSubjects = async (
         }
     );
 
-    const includedMap = new Map<string, unknown>();
-    for (const item of response.included ?? []) {
-        includedMap.set(`${item.type}:${item.id}`, item);
+    const dataArray = Array.isArray(response) ? response : response ? [response] : [];
+    for (const item of dataArray) {
+        subjectsMap.set(`subject:${item.id}`, item);
+        console.log("itemid:", item.id);
     }
 
     return (Array.isArray(response) ? response : [])
@@ -206,7 +210,7 @@ export const GetGradesForPeriod = async (
                 pictureUrl?: string;
             }
 
-            const teachers: Array<Teacher> = (subject.teachers as TeacherData[] ?? []).map((teacherData: TeacherData): Teacher => ({
+            const teachers: Array<Teacher> = (subject.courses[0].teachers as TeacherData[] ?? []).map((teacherData: TeacherData): Teacher => ({
                 id: teacherData.id,
                 name: teacherData.name?.startingWithLastName ?? "",
                 photoUrl: teacherData.pictureUrl ?? "",
@@ -226,16 +230,16 @@ export const GetGradesForPeriod = async (
                     new Date(grade?.date ?? ""),
                     1,
                     undefined,
-                    undefined,
+                    grade?.name ?? "",
                     undefined
                 ));
             }
-            /*const subjectId = getSingleRelation(subject.relationships.subject);
-            const subjectKey = typeof subjectId?.id === "string" ? subjectId.id : "";
-            const subjectData = includedMap.get(`subject:${subjectKey}`) as subjectIncluded;*/
+            const subjectId = subject.courses[0].id;
+            const subjectData = subjectsMap.get(`subject:${subjectId}`) as subjectIncluded & {name: string};
+            console.log("subjectData:", subjectId, subjectData);
             return new Subject(
-                "test",
-                "test",
+                subjectData?.id ?? "",
+                subjectData?.name ?? "",
                 1,
                 10,
                 20,

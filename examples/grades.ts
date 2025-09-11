@@ -1,8 +1,11 @@
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 import readline from "readline";
 import fs from "fs";
+import dotenv from "dotenv";
 import { getTimetableForPeriods } from "../src/routes/Agenda";
 import { GetGradesSettings, GetGradesForPeriod, GetSubjects } from "../src/routes/Grades";
+
+dotenv.config();
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -15,10 +18,10 @@ const askQuestion = (query: string): Promise<string> => {
 
 const main = async () => {
     try {
-        const url = await askQuestion("Enter the base URL (e.g., https://example.smartschool.be): ");
-        const token = await askQuestion("Enter your access token: ");
-        const userId = await askQuestion("Enter the user ID: ");
-        const deviceId = await askQuestion("Enter the device ID: ");
+        const url = process.env.INSTANCE_URL ?? "";
+        const token = process.env.ACCESS_TOKEN ?? "";
+        const userId = process.env.USER_ID ?? "";
+        const deviceId = process.env.DEVICE_ID ?? "";
 
         // Fetch periods
         console.log("\nFetching periods...");
@@ -53,17 +56,17 @@ const main = async () => {
         allSubjects.forEach(subject => subjectsMap.set(subject.id, subject));
 
         console.log(`Found ${subjectsMap.size} subjects.`);
-        console.log("Subjects:", Array.from(subjectsMap.values()).map(s => s.name).join(", "));
+        //console.log("Subjects:", Array.from(subjectsMap.values()).map(s => s.name).join(", "));
         fs.writeFileSync("subjects.json", JSON.stringify(Array.from(subjectsMap.values()), null, 2));
 
 
         // Fetch grades for the selected period
-        console.log(`\nFetching grades for period: ${selectedPeriod.label || selectedPeriod.startDate || selectedPeriod.endDate || selectedPeriod.id}...`);
+        //console.log(`\nFetching grades for period: ${selectedPeriod.label || selectedPeriod.startDate || selectedPeriod.endDate || selectedPeriod.id}...`);
         const grades = await GetGradesForPeriod(url, deviceId, token, selectedPeriod.id);
 
         fs.writeFileSync("grades.json", JSON.stringify(grades, null, 2));
         console.log("\nGrades fetched successfully:");
-        console.log(JSON.stringify(grades, null, 2));
+        //console.log(JSON.stringify(grades, null, 2));
     } catch (error) {
         console.error("\nAn error occurred:");
         console.error(error);
