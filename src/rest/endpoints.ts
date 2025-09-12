@@ -10,7 +10,7 @@ export const USER_AGENDA = (userId: string) => "planner/api/v1/planned-elements/
 export const USER_GRADES_SETTINGS = () => "results/api/v1/periods/";
 export const GRADES_COURSES = () => "results/api/v1/courses/?=&startDate=2024-08-26&endDate=2025-08-23";
 export const USER_LAST_GRADES = () => "evaluations-results";
-export const USER_SERVICES = (periodId: string) => "results/api/v1/evaluations/?pageNumber=1&itemsOnPage=1&startDate=2024-08-27&endDate=2026-08-23";
+export const USER_SERVICES = (periodId: string) => "results/api/v1/evaluations/?pageNumber=1&itemsOnPage=5&startDate=2024-08-27&endDate=2026-08-23";
 export const InstanceValidation = () => "OAuth/verifyplatform";
 export const OIDC_TOKEN_PATH = () => "OAuth/mobile/token";
 export const REGISTER_DEVICE_PATH = () => "OAuth/mobile/register";
