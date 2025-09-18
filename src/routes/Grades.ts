@@ -237,12 +237,12 @@ export const GetGradesForPeriod = async (
             const subjectData = subjectsMap.get(`subject:${subjectId}`) as subjectIncluded & {name: string};
             console.log("subjectData:", subjectId, subjectData);
             return new Subject(
-                subjectData?.id ?? "",
+                subjectId,
                 subjectData?.name ?? "",
                 1,
-                10,
-                20,
-                10,
+                0,
+                0,
+                0,
                 teachers,
                 grades
             );
