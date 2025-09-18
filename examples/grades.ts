@@ -4,6 +4,7 @@ import fs from "fs";
 import dotenv from "dotenv";
 import { getTimetableForPeriods } from "../src/routes/Agenda";
 import { GetGradesSettings, GetGradesForPeriod, GetSubjects } from "../src/routes/Grades";
+import { LoginWithToken } from "../src";
 
 dotenv.config();
 
@@ -19,10 +20,15 @@ const askQuestion = (query: string): Promise<string> => {
 const main = async () => {
     try {
         const url = process.env.INSTANCE_URL ?? "";
-        const token = process.env.ACCESS_TOKEN ?? "";
+        const refreshToken = process.env.REFRESH_TOKEN ?? "";
         const userId = process.env.USER_ID ?? "";
-        const deviceId = process.env.DEVICE_ID ?? "";
 
+        // Refresh token and get device ID
+        console.log("Refreshing token...");
+        const data = await LoginWithToken(url, refreshToken, "android", "SmartSchool.js debug script", "1234567890");
+        const token = data.accessToken;
+        const deviceId = data.SMSCMobileID;
+        console.log("Token refreshed successfully.");
         // Fetch periods
         console.log("\nFetching periods...");
         const gradesSettings = await GetGradesSettings(url, deviceId, token);
@@ -51,13 +57,8 @@ const main = async () => {
 
         // Fetch all the subjects to get their teachers
         console.log("\nFetching subjects to get teachers...");
-        const allSubjects = await GetSubjects(url, deviceId, token);
-        const subjectsMap = new Map<string, typeof allSubjects[0]>();
-        allSubjects.forEach(subject => subjectsMap.set(subject.id, subject));
 
-        console.log(`Found ${subjectsMap.size} subjects.`);
         //console.log("Subjects:", Array.from(subjectsMap.values()).map(s => s.name).join(", "));
-        fs.writeFileSync("subjects.json", JSON.stringify(Array.from(subjectsMap.values()), null, 2));
 
 
         // Fetch grades for the selected period

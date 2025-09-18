@@ -114,11 +114,11 @@ export const GetLastGrades = async (
                 evaluationInclude.attributes?.coefficient ?? 1,
                 evaluationInclude.attributes?.title ?? "",
                 evaluationInclude.attributes?.topic ?? "",
-                {
-                    id:    subjectKey,
-                    label: subjectData?.attributes?.name ?? "",
-                    color: subjectData?.attributes?.color ?? ""
-                },
+                subjectData ? {
+                    id:    subjectData.id,
+                    label:  subjectData.attributes?.name ?? "",
+                    color: subjectData.attributes?.color ?? ""
+                } : undefined,
                 grade.attributes?.nonEvaluationReason ?? undefined
             );
         });
@@ -185,6 +185,8 @@ export const GetGradesForPeriod = async (
     const [base] = extractBaseUrl(url);
     const manager = new RestManager(base);
 
+    const subjects = await GetSubjects(url, deviceId, accessToken);
+
     const response = await manager.get<BaseResponse>(
         USER_SERVICES(period), 
         undefined, 
@@ -199,29 +201,16 @@ export const GetGradesForPeriod = async (
         includedMap.set(`${item.type}:${item.id}`, item);
     }
 
-    return (Array.isArray(response) ? response : [])
-        .map(subject => {
-            interface TeacherData {
-                id: string;
-                name?: {
-                    startingWithLastName?: string;
-                };
-                pictureUrl?: string;
-            }
-
-            const teachers: Array<Teacher> = (subject.courses[0].teachers as TeacherData[] ?? []).map((teacherData: TeacherData): Teacher => ({
-                id: teacherData.id,
-                name: teacherData.name?.startingWithLastName ?? "",
-                photoUrl: teacherData.pictureUrl ?? "",
-                title: ""
-            }));
-
-            const grades: Array<Grade> = [];
-            const gradesArray = Array.isArray(response) ? response : [];
-            for (const grade of gradesArray) {
-                const outOf = (grade?.graphic.description).split("/")[1];
-                const value = ((grade?.graphic.description ?? "").split("/")[0] ?? "").trim();
-                grades.push(new Grade(
+    const gradesArray = Array.isArray(response) ? response : [];
+    for (const subject of subjects) {
+        subject.grades = gradesArray
+            .filter(grade => {
+                const gradeSubject = grade.courses[0].parentCourseId ?? grade.courses[0].id;
+                return gradeSubject === subject.id;
+            }).map(grade => {
+                const outOf = grade?.graphic?.description.split("/")[1];
+                const value = (grade?.graphic?.description.split("/")[0] ?? "").trim();
+                return new Grade(
                     grade.identifier,
                     grade?.doesCount ? false : true,
                     value ?? 0,
@@ -231,20 +220,9 @@ export const GetGradesForPeriod = async (
                     undefined,
                     grade?.name ?? "",
                     undefined
-                ));
-            }
-            const subjectId = subject.courses[0].id;
-            const subjectData = subjectsMap.get(`subject:${subjectId}`) as subjectIncluded & {name: string};
-            console.log("subjectData:", subjectId, subjectData);
-            return new Subject(
-                subjectId,
-                subjectData?.name ?? "",
-                1,
-                0,
-                0,
-                0,
-                teachers,
-                grades
-            );
-        });
+                );
+            });
+    }
+
+    return subjects;
 }
