@@ -208,8 +208,8 @@ export const GetGradesForPeriod = async (
                 const gradeSubject = grade.courses[0].parentCourseId ?? grade.courses[0].id;
                 return gradeSubject === subject.id;
             }).map(grade => {
-                const outOf = grade?.graphic?.description.split("/")[1];
-                const value = (grade?.graphic?.description.split("/")[0] ?? "").trim();
+                const outOf = parseInt(grade?.graphic?.description.split("/")[1]);
+                const value = parseFloat((grade?.graphic?.description.split("/")[0] ?? "").trim());
                 return new Grade(
                     grade.identifier,
                     grade?.doesCount ? false : true,
