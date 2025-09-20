@@ -172,6 +172,7 @@ export const GetSubjects = async (
                 0,
                 0,
                 teachers,
+                []
             );
         });
 }
