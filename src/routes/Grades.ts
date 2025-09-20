@@ -205,7 +205,7 @@ export const GetGradesForPeriod = async (
     for (const subject of subjects) {
         subject.grades = gradesArray
             .filter(grade => {
-                const gradeSubject = grade.courses[0].parentCourseId ?? grade.courses[0].id;
+                const gradeSubject = String(grade.courses[0].parentCourseId ?? grade.courses[0].id);
                 return gradeSubject === subject.id;
             }).map(grade => {
                 const outOf = parseInt(grade?.graphic?.description.split("/")[1]);
