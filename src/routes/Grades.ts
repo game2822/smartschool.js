@@ -165,7 +165,7 @@ export const GetSubjects = async (
                 title: ""
             }));
             return new Subject(
-                subject.id,
+                String(subject.id),
                 subject.name ?? "",
                 1,
                 0,
