@@ -219,7 +219,11 @@ export const GetGradesForPeriod = async (
                     1,
                     undefined,
                     grade?.name ?? "",
-                    undefined
+                    {
+                        id: subject.id,
+                        label: subject.name ?? "",
+                        color: (subject as any).color ?? ""
+                    }
                 );
             });
     }
