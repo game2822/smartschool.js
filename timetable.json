@@ -1,0 +1,834 @@
+[
+  {
+    "date": "2025-09-23T11:50:00.000Z",
+    "lessons": [
+      {
+        "id": "0e6d18a4-765d-5b61-bf49-e638879ba27e",
+        "startDateTime": "2025-09-23T11:50:00.000Z",
+        "endDateTime": "2025-09-23T12:40:00.000Z",
+        "room": "000",
+        "canceled": false,
+        "hasContent": false,
+        "subject": {
+          "id": "11985467-870f-4cb0-9965-d915d8356132",
+          "label": "Sciences 3h",
+          "color": "#000000"
+        },
+        "teacher": [
+          {
+            "id": "5291_3645_0",
+            "title": "de Lobkowicz Léopold",
+            "name": "de Lobkowicz Léopold",
+            "photoUrl": "https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/initials_LD/plain/1/res/128"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2025-09-25T13:30:00.000Z",
+    "lessons": [
+      {
+        "id": "1bcf237a-8729-4a79-a280-7d4d00cbf3b1",
+        "startDateTime": "2025-09-25T13:30:00.000Z",
+        "endDateTime": "2025-09-25T14:20:00.000Z",
+        "room": "000",
+        "canceled": false,
+        "hasContent": false,
+        "subject": {
+          "id": "d82daa31-eb4b-419e-83ca-4459b5ea9b54",
+          "label": "Sciences sociales",
+          "color": "#000000"
+        },
+        "teacher": [
+          {
+            "id": "5291_294_0",
+            "title": "Pirson Vinciane",
+            "name": "Pirson Vinciane",
+            "photoUrl": "https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/initials_VP/plain/1/res/128"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2025-09-26T11:50:00.000Z",
+    "lessons": [
+      {
+        "id": "20dfebcd-c865-568b-b41d-7b089b85fb5a",
+        "startDateTime": "2025-09-26T11:50:00.000Z",
+        "endDateTime": "2025-09-26T12:40:00.000Z",
+        "room": "000",
+        "canceled": false,
+        "hasContent": false,
+        "subject": {
+          "id": "30309793-413a-43b2-828b-18fcb8cf3ffc",
+          "label": "Néerlandais 4h",
+          "color": "#000000"
+        },
+        "teacher": [
+          {
+            "id": "5291_252_0",
+            "title": "Van Vlaenderen Christel",
+            "name": "Van Vlaenderen Christel",
+            "photoUrl": "https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/initials_CV/plain/1/res/128"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2025-09-25T12:40:00.000Z",
+    "lessons": [
+      {
+        "id": "2270a2e4-a7bc-4958-91ab-9791db5283fc",
+        "startDateTime": "2025-09-25T12:40:00.000Z",
+        "endDateTime": "2025-09-25T13:30:00.000Z",
+        "room": "000",
+        "canceled": false,
+        "hasContent": false,
+        "subject": {
+          "id": "d82daa31-eb4b-419e-83ca-4459b5ea9b54",
+          "label": "Sciences sociales",
+          "color": "#000000"
+        },
+        "teacher": [
+          {
+            "id": "5291_294_0",
+            "title": "Pirson Vinciane",
+            "name": "Pirson Vinciane",
+            "photoUrl": "https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/initials_VP/plain/1/res/128"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2025-09-25T09:10:00.000Z",
+    "lessons": [
+      {
+        "id": "27911870-30f5-59f6-b813-5e17bfed5e25",
+        "startDateTime": "2025-09-25T09:10:00.000Z",
+        "endDateTime": "2025-09-25T10:00:00.000Z",
+        "room": "000",
+        "canceled": false,
+        "hasContent": false,
+        "subject": {
+          "id": "f8d92002-5fca-4959-860e-d0f9f47700c6",
+          "label": "Français",
+          "color": "#000000"
+        },
+        "teacher": [
+          {
+            "id": "5291_268_0",
+            "title": "Neuret Joëlle",
+            "name": "Neuret Joëlle",
+            "photoUrl": "https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/initials_JN/plain/1/res/128"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2025-09-26T07:10:00.000Z",
+    "lessons": [
+      {
+        "id": "301c3de0-fb8d-5105-8e15-411638014a66",
+        "startDateTime": "2025-09-26T07:10:00.000Z",
+        "endDateTime": "2025-09-26T08:00:00.000Z",
+        "room": "000",
+        "canceled": false,
+        "hasContent": false,
+        "subject": {
+          "id": "3d5fe4d0-9238-40c0-ad0d-2d6d04802f92",
+          "label": "Mathématiques 6h",
+          "color": "#000000"
+        },
+        "teacher": [
+          {
+            "id": "5291_3020_0",
+            "title": "De Block Julien",
+            "name": "De Block Julien",
+            "photoUrl": "https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/initials_JD/plain/1/res/128"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2025-09-24T09:10:00.000Z",
+    "lessons": [
+      {
+        "id": "3ed40c7e-6c6f-5b93-8fb1-eca87929df3c",
+        "startDateTime": "2025-09-24T09:10:00.000Z",
+        "endDateTime": "2025-09-24T10:00:00.000Z",
+        "room": "000",
+        "canceled": false,
+        "hasContent": false,
+        "subject": {
+          "id": "30309793-413a-43b2-828b-18fcb8cf3ffc",
+          "label": "Néerlandais 4h",
+          "color": "#000000"
+        },
+        "teacher": [
+          {
+            "id": "5291_252_0",
+            "title": "Van Vlaenderen Christel",
+            "name": "Van Vlaenderen Christel",
+            "photoUrl": "https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/initials_CV/plain/1/res/128"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2025-09-22T13:30:00.000Z",
+    "lessons": [
+      {
+        "id": "4c4cb6c1-33c4-4d82-987b-fa3da9aa13f8",
+        "startDateTime": "2025-09-22T13:30:00.000Z",
+        "endDateTime": "2025-09-22T14:20:00.000Z",
+        "room": "000",
+        "canceled": false,
+        "hasContent": false,
+        "subject": {
+          "id": "30309793-413a-43b2-828b-18fcb8cf3ffc",
+          "label": "Néerlandais 4h",
+          "color": "#000000"
+        },
+        "teacher": [
+          {
+            "id": "5291_252_0",
+            "title": "Van Vlaenderen Christel",
+            "name": "Van Vlaenderen Christel",
+            "photoUrl": "https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/initials_CV/plain/1/res/128"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2025-09-26T08:00:00.000Z",
+    "lessons": [
+      {
+        "id": "5515ab71-634e-5da4-a8e5-c22afde0d62b",
+        "startDateTime": "2025-09-26T08:00:00.000Z",
+        "endDateTime": "2025-09-26T08:50:00.000Z",
+        "room": "000",
+        "canceled": false,
+        "hasContent": false,
+        "subject": {
+          "id": "3d5fe4d0-9238-40c0-ad0d-2d6d04802f92",
+          "label": "Mathématiques 6h",
+          "color": "#000000"
+        },
+        "teacher": [
+          {
+            "id": "5291_3020_0",
+            "title": "De Block Julien",
+            "name": "De Block Julien",
+            "photoUrl": "https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/initials_JD/plain/1/res/128"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2025-09-24T08:00:00.000Z",
+    "lessons": [
+      {
+        "id": "5edf4ebe-b5fc-50b2-a04d-4847bd303afd",
+        "startDateTime": "2025-09-24T08:00:00.000Z",
+        "endDateTime": "2025-09-24T08:50:00.000Z",
+        "room": "000",
+        "canceled": false,
+        "hasContent": false,
+        "subject": {
+          "id": "3d5fe4d0-9238-40c0-ad0d-2d6d04802f92",
+          "label": "Mathématiques 6h",
+          "color": "#000000"
+        },
+        "teacher": [
+          {
+            "id": "5291_3020_0",
+            "title": "De Block Julien",
+            "name": "De Block Julien",
+            "photoUrl": "https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/initials_JD/plain/1/res/128"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2025-09-25T07:10:00.000Z",
+    "lessons": [
+      {
+        "id": "62f60e45-1d59-5156-9dea-0b50cb8576e6",
+        "startDateTime": "2025-09-25T07:10:00.000Z",
+        "endDateTime": "2025-09-25T08:00:00.000Z",
+        "room": "000",
+        "canceled": false,
+        "hasContent": false,
+        "subject": {
+          "id": "a7dec7b3-1f07-45bb-9862-b49f7cdce19f",
+          "label": "Anglais 2h",
+          "color": "#000000"
+        },
+        "teacher": [
+          {
+            "id": "5291_66_0",
+            "title": "Dieu Jee Ae",
+            "name": "Dieu Jee Ae",
+            "photoUrl": "https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/initials_JD/plain/1/res/128"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2025-09-23T09:10:00.000Z",
+    "lessons": [
+      {
+        "id": "671be13e-5b46-5afa-9506-2bc3a4a4d679",
+        "startDateTime": "2025-09-23T09:10:00.000Z",
+        "endDateTime": "2025-09-23T10:00:00.000Z",
+        "room": "000",
+        "canceled": false,
+        "hasContent": false,
+        "subject": {
+          "id": "f8d92002-5fca-4959-860e-d0f9f47700c6",
+          "label": "Français",
+          "color": "#000000"
+        },
+        "teacher": [
+          {
+            "id": "5291_268_0",
+            "title": "Neuret Joëlle",
+            "name": "Neuret Joëlle",
+            "photoUrl": "https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/initials_JN/plain/1/res/128"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2025-09-22T09:10:00.000Z",
+    "lessons": [
+      {
+        "id": "6a468b40-5188-4c7b-ba3a-e62ebfda5438",
+        "startDateTime": "2025-09-22T09:10:00.000Z",
+        "endDateTime": "2025-09-22T10:00:00.000Z",
+        "room": "000",
+        "canceled": false,
+        "hasContent": false,
+        "subject": {
+          "id": "a9c67a39-8f40-4aaa-a04e-c8296806fefc",
+          "label": "Formation géographique et sociale",
+          "color": "#000000"
+        },
+        "teacher": [
+          {
+            "id": "5291_294_0",
+            "title": "Pirson Vinciane",
+            "name": "Pirson Vinciane",
+            "photoUrl": "https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/initials_VP/plain/1/res/128"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2025-09-26T06:20:00.000Z",
+    "lessons": [
+      {
+        "id": "6c393335-5026-4054-919a-bc748013862a",
+        "startDateTime": "2025-09-26T06:20:00.000Z",
+        "endDateTime": "2025-09-26T07:10:00.000Z",
+        "room": "000",
+        "canceled": false,
+        "hasContent": false,
+        "subject": {
+          "id": "d82daa31-eb4b-419e-83ca-4459b5ea9b54",
+          "label": "Sciences sociales",
+          "color": "#000000"
+        },
+        "teacher": [
+          {
+            "id": "5291_294_0",
+            "title": "Pirson Vinciane",
+            "name": "Pirson Vinciane",
+            "photoUrl": "https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/initials_VP/plain/1/res/128"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2025-09-22T11:50:00.000Z",
+    "lessons": [
+      {
+        "id": "6cd16be8-98fe-5ef3-82bb-e45ec453c950",
+        "startDateTime": "2025-09-22T11:50:00.000Z",
+        "endDateTime": "2025-09-22T12:40:00.000Z",
+        "room": "000",
+        "canceled": false,
+        "hasContent": false,
+        "subject": {
+          "id": "f8d92002-5fca-4959-860e-d0f9f47700c6",
+          "label": "Français",
+          "color": "#000000"
+        },
+        "teacher": [
+          {
+            "id": "5291_268_0",
+            "title": "Neuret Joëlle",
+            "name": "Neuret Joëlle",
+            "photoUrl": "https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/initials_JN/plain/1/res/128"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2025-09-22T10:00:00.000Z",
+    "lessons": [
+      {
+        "id": "77bad0dd-994b-4385-bfae-32a77ff194ae",
+        "startDateTime": "2025-09-22T10:00:00.000Z",
+        "endDateTime": "2025-09-22T10:50:00.000Z",
+        "room": "000",
+        "canceled": false,
+        "hasContent": false,
+        "subject": {
+          "id": "16010963-ed4f-4f1a-9fef-3969164f7b4a",
+          "label": "Formation historique",
+          "color": "#000000"
+        },
+        "teacher": [
+          {
+            "id": "5291_250_0",
+            "title": "Vanabelle Olivier",
+            "name": "Vanabelle Olivier",
+            "photoUrl": "https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/initials_OV/plain/1/res/128"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2025-09-25T11:50:00.000Z",
+    "lessons": [
+      {
+        "id": "91b29fa1-d154-55b1-b9d6-9e28e628369e",
+        "startDateTime": "2025-09-25T11:50:00.000Z",
+        "endDateTime": "2025-09-25T12:40:00.000Z",
+        "room": "000",
+        "canceled": false,
+        "hasContent": false,
+        "subject": {
+          "id": "3d5fe4d0-9238-40c0-ad0d-2d6d04802f92",
+          "label": "Mathématiques 6h",
+          "color": "#000000"
+        },
+        "teacher": [
+          {
+            "id": "5291_3020_0",
+            "title": "De Block Julien",
+            "name": "De Block Julien",
+            "photoUrl": "https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/initials_JD/plain/1/res/128"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2025-09-22T07:10:00.000Z",
+    "lessons": [
+      {
+        "id": "9b502edf-5563-5b9b-a8e7-63e5edce5004",
+        "startDateTime": "2025-09-22T07:10:00.000Z",
+        "endDateTime": "2025-09-22T08:00:00.000Z",
+        "room": "000",
+        "canceled": false,
+        "hasContent": false,
+        "subject": {
+          "id": "11985467-870f-4cb0-9965-d915d8356132",
+          "label": "Sciences 3h",
+          "color": "#000000"
+        },
+        "teacher": [
+          {
+            "id": "5291_3645_0",
+            "title": "de Lobkowicz Léopold",
+            "name": "de Lobkowicz Léopold",
+            "photoUrl": "https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/initials_LD/plain/1/res/128"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2025-09-22T12:40:00.000Z",
+    "lessons": [
+      {
+        "id": "9e3deda6-33d6-5236-a337-db2faf4b28c7",
+        "startDateTime": "2025-09-22T12:40:00.000Z",
+        "endDateTime": "2025-09-22T13:30:00.000Z",
+        "room": "000",
+        "canceled": false,
+        "hasContent": false,
+        "subject": {
+          "id": "9c8f40cc-1ee4-4159-b93f-4965ddf80d67",
+          "label": "Religion",
+          "color": "#000000"
+        },
+        "teacher": [
+          {
+            "id": "5291_4145_0",
+            "title": "Abi Rached Lamia",
+            "name": "Abi Rached Lamia",
+            "photoUrl": "https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/initials_LA/plain/1/res/128"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2025-09-23T12:40:00.000Z",
+    "lessons": [
+      {
+        "id": "9f73d5ff-bc87-55f8-856f-cd4d3915fe5f",
+        "startDateTime": "2025-09-23T12:40:00.000Z",
+        "endDateTime": "2025-09-23T13:30:00.000Z",
+        "room": "000",
+        "canceled": false,
+        "hasContent": false,
+        "subject": {
+          "id": "7a3491b6-c8d0-4513-bae6-b4eaabac780a",
+          "label": "Education physique",
+          "color": "#000000"
+        },
+        "teacher": [
+          {
+            "id": "5291_274_0",
+            "title": "Porta Jean-François",
+            "name": "Porta Jean-François",
+            "photoUrl": "https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/initials_JP/plain/1/res/128"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2025-09-26T09:10:00.000Z",
+    "lessons": [
+      {
+        "id": "ab9ff356-6838-431e-96bd-47644bfd7f8f",
+        "startDateTime": "2025-09-26T09:10:00.000Z",
+        "endDateTime": "2025-09-26T10:00:00.000Z",
+        "room": "000",
+        "canceled": false,
+        "hasContent": false,
+        "subject": {
+          "id": "d82daa31-eb4b-419e-83ca-4459b5ea9b54",
+          "label": "Sciences sociales",
+          "color": "#000000"
+        },
+        "teacher": [
+          {
+            "id": "5291_294_0",
+            "title": "Pirson Vinciane",
+            "name": "Pirson Vinciane",
+            "photoUrl": "https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/initials_VP/plain/1/res/128"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2025-09-23T13:30:00.000Z",
+    "lessons": [
+      {
+        "id": "b7001a74-f557-58bc-8584-009cbf6dfc2e",
+        "startDateTime": "2025-09-23T13:30:00.000Z",
+        "endDateTime": "2025-09-23T14:20:00.000Z",
+        "room": "000",
+        "canceled": false,
+        "hasContent": false,
+        "subject": {
+          "id": "7a3491b6-c8d0-4513-bae6-b4eaabac780a",
+          "label": "Education physique",
+          "color": "#000000"
+        },
+        "teacher": [
+          {
+            "id": "5291_274_0",
+            "title": "Porta Jean-François",
+            "name": "Porta Jean-François",
+            "photoUrl": "https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/initials_JP/plain/1/res/128"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2025-09-26T10:00:00.000Z",
+    "lessons": [
+      {
+        "id": "bde82f31-c5f9-50af-b9fe-4a7a830ffb23",
+        "startDateTime": "2025-09-26T10:00:00.000Z",
+        "endDateTime": "2025-09-26T10:50:00.000Z",
+        "room": "000",
+        "canceled": false,
+        "hasContent": false,
+        "subject": {
+          "id": "f8d92002-5fca-4959-860e-d0f9f47700c6",
+          "label": "Français",
+          "color": "#000000"
+        },
+        "teacher": [
+          {
+            "id": "5291_268_0",
+            "title": "Neuret Joëlle",
+            "name": "Neuret Joëlle",
+            "photoUrl": "https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/initials_JN/plain/1/res/128"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2025-09-22T08:00:00.000Z",
+    "lessons": [
+      {
+        "id": "bed3f904-8dec-5725-a244-dedec1082cc2",
+        "startDateTime": "2025-09-22T08:00:00.000Z",
+        "endDateTime": "2025-09-22T08:50:00.000Z",
+        "room": "000",
+        "canceled": false,
+        "hasContent": false,
+        "subject": {
+          "id": "11985467-870f-4cb0-9965-d915d8356132",
+          "label": "Sciences 3h",
+          "color": "#000000"
+        },
+        "teacher": [
+          {
+            "id": "5291_3645_0",
+            "title": "de Lobkowicz Léopold",
+            "name": "de Lobkowicz Léopold",
+            "photoUrl": "https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/initials_LD/plain/1/res/128"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2025-09-26T12:40:00.000Z",
+    "lessons": [
+      {
+        "id": "c01c4645-b727-4288-9d0f-adbfd7df6f27",
+        "startDateTime": "2025-09-26T12:40:00.000Z",
+        "endDateTime": "2025-09-26T13:30:00.000Z",
+        "room": "000",
+        "canceled": false,
+        "hasContent": false,
+        "subject": {
+          "id": "a9c67a39-8f40-4aaa-a04e-c8296806fefc",
+          "label": "Formation géographique et sociale",
+          "color": "#000000"
+        },
+        "teacher": [
+          {
+            "id": "5291_294_0",
+            "title": "Pirson Vinciane",
+            "name": "Pirson Vinciane",
+            "photoUrl": "https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/initials_VP/plain/1/res/128"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2025-09-25T08:00:00.000Z",
+    "lessons": [
+      {
+        "id": "d064483b-f7e6-5794-8bd2-07066394cf66",
+        "startDateTime": "2025-09-25T08:00:00.000Z",
+        "endDateTime": "2025-09-25T08:50:00.000Z",
+        "room": "000",
+        "canceled": false,
+        "hasContent": false,
+        "subject": {
+          "id": "a7dec7b3-1f07-45bb-9862-b49f7cdce19f",
+          "label": "Anglais 2h",
+          "color": "#000000"
+        },
+        "teacher": [
+          {
+            "id": "5291_66_0",
+            "title": "Dieu Jee Ae",
+            "name": "Dieu Jee Ae",
+            "photoUrl": "https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/initials_JD/plain/1/res/128"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2025-09-23T06:20:00.000Z",
+    "lessons": [
+      {
+        "id": "d522cd20-bdaf-5023-8f8f-068bc8688ce9",
+        "startDateTime": "2025-09-23T06:20:00.000Z",
+        "endDateTime": "2025-09-23T07:10:00.000Z",
+        "room": "000",
+        "canceled": false,
+        "hasContent": false,
+        "subject": {
+          "id": "3d5fe4d0-9238-40c0-ad0d-2d6d04802f92",
+          "label": "Mathématiques 6h",
+          "color": "#000000"
+        },
+        "teacher": [
+          {
+            "id": "5291_3020_0",
+            "title": "De Block Julien",
+            "name": "De Block Julien",
+            "photoUrl": "https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/initials_JD/plain/1/res/128"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2025-09-24T07:10:00.000Z",
+    "lessons": [
+      {
+        "id": "e5dbfe1a-e8d1-5e95-8ff7-74fe72cd0055",
+        "startDateTime": "2025-09-24T07:10:00.000Z",
+        "endDateTime": "2025-09-24T08:00:00.000Z",
+        "room": "000",
+        "canceled": false,
+        "hasContent": false,
+        "subject": {
+          "id": "3d5fe4d0-9238-40c0-ad0d-2d6d04802f92",
+          "label": "Mathématiques 6h",
+          "color": "#000000"
+        },
+        "teacher": [
+          {
+            "id": "5291_3020_0",
+            "title": "De Block Julien",
+            "name": "De Block Julien",
+            "photoUrl": "https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/initials_JD/plain/1/res/128"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2025-09-25T10:00:00.000Z",
+    "lessons": [
+      {
+        "id": "ee8edb79-22d7-5c23-ba3c-96f6f26ca607",
+        "startDateTime": "2025-09-25T10:00:00.000Z",
+        "endDateTime": "2025-09-25T10:50:00.000Z",
+        "room": "000",
+        "canceled": false,
+        "hasContent": false,
+        "subject": {
+          "id": "f8d92002-5fca-4959-860e-d0f9f47700c6",
+          "label": "Français",
+          "color": "#000000"
+        },
+        "teacher": [
+          {
+            "id": "5291_268_0",
+            "title": "Neuret Joëlle",
+            "name": "Neuret Joëlle",
+            "photoUrl": "https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/initials_JN/plain/1/res/128"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2025-09-24T06:20:00.000Z",
+    "lessons": [
+      {
+        "id": "f01e9842-3e5b-508d-b4f5-ab3e9e0af8f7",
+        "startDateTime": "2025-09-24T06:20:00.000Z",
+        "endDateTime": "2025-09-24T07:10:00.000Z",
+        "room": "000",
+        "canceled": false,
+        "hasContent": false,
+        "subject": {
+          "id": "16010963-ed4f-4f1a-9fef-3969164f7b4a",
+          "label": "Formation historique",
+          "color": "#000000"
+        },
+        "teacher": [
+          {
+            "id": "5291_250_0",
+            "title": "Vanabelle Olivier",
+            "name": "Vanabelle Olivier",
+            "photoUrl": "https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/initials_OV/plain/1/res/128"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2025-09-24T10:00:00.000Z",
+    "lessons": [
+      {
+        "id": "f4f40728-be8d-52e9-8b11-ff6ca8d9f6a6",
+        "startDateTime": "2025-09-24T10:00:00.000Z",
+        "endDateTime": "2025-09-24T10:50:00.000Z",
+        "room": "000",
+        "canceled": false,
+        "hasContent": false,
+        "subject": {
+          "id": "30309793-413a-43b2-828b-18fcb8cf3ffc",
+          "label": "Néerlandais 4h",
+          "color": "#000000"
+        },
+        "teacher": [
+          {
+            "id": "5291_252_0",
+            "title": "Van Vlaenderen Christel",
+            "name": "Van Vlaenderen Christel",
+            "photoUrl": "https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/initials_CV/plain/1/res/128"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2025-09-23T10:00:00.000Z",
+    "lessons": [
+      {
+        "id": "ff094f1b-548f-5dc0-b0a3-9a0bf8735ca5",
+        "startDateTime": "2025-09-23T10:00:00.000Z",
+        "endDateTime": "2025-09-23T10:50:00.000Z",
+        "room": "000",
+        "canceled": false,
+        "hasContent": false,
+        "subject": {
+          "id": "9c8f40cc-1ee4-4159-b93f-4965ddf80d67",
+          "label": "Religion",
+          "color": "#000000"
+        },
+        "teacher": [
+          {
+            "id": "5291_4145_0",
+            "title": "Abi Rached Lamia",
+            "name": "Abi Rached Lamia",
+            "photoUrl": "https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/initials_LA/plain/1/res/128"
+          }
+        ]
+      }
+    ]
+  }
+]

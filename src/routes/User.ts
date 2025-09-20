@@ -29,7 +29,7 @@ export const RegisterDevice = async (
     const body = {
         accessToken,
         deviceType,
-        deviceName,
+        "deviceTitle": deviceName,
         deviceId
     };
 
