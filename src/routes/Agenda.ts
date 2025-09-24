@@ -28,6 +28,8 @@ export const getTimetableForPeriods = async (url: string, userId: string, access
     }
 
     const result: Array<TimetableDay> = [];
+    const dates = new Map<string, number>(); // Maps date string to index in result array
+
     if (!Array.isArray(response)) {
         console.error("Response is not an array:", response);
         return [];
@@ -70,8 +72,7 @@ export const getTimetableForPeriods = async (url: string, userId: string, access
             });
         }
 
-        const lessons: Array<Lesson> = [];
-        lessons.push(new Lesson(
+        const lesson = new Lesson(
             rawLesson.id,
             new Date(rawLesson.period?.dateTimeFrom ?? ""),
             new Date(rawLesson.period?.dateTimeTo ?? ""),
@@ -84,12 +85,20 @@ export const getTimetableForPeriods = async (url: string, userId: string, access
                 color: rawLesson.courses?.[0]?.color ?? "#000000"
             },
             teachers
-        ));
-
-        result.push(new TimetableDay(
-            new Date(rawLesson.period?.dateTimeFrom ?? ""),
-            lessons,
-        ));
+        );
+        const date = new Date(rawLesson.period?.dateTimeFrom ?? "").toDateString();
+        
+        if (dates.has(date)){
+            const index = dates.get(date)!;
+            result[index].lessons.push(lesson);
+        }else{
+            const newTimetableDay = new TimetableDay(
+                new Date(rawLesson.period?.dateTimeFrom ?? ""),
+                [lesson]
+            );
+            result.push(newTimetableDay);
+            dates.set(date, result.length - 1);
+        }
     }
     return result;
 };
