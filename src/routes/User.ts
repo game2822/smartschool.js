@@ -131,9 +131,9 @@ export const GetUserInfo = async (
                 startingWithFirstName: string;
             };
             pictureUrl: string;
-            schoolName: string;
             userLT: number;
-        }
+        },
+        schoolName: string
     } // je bypass le BaseResponse prcq flm de refaire les types a 4h du mat
     const kind = determineAccountKind(userInfo.user.userLT);
     const lastName = userInfo.user.name.startingWithFirstName
@@ -184,7 +184,8 @@ export const GetUserInfo = async (
         new Date("2000-01-01"),
         kind,
         deviceId,
-        userInfo.user.pictureUrl
+        userInfo.user.pictureUrl,
+        userInfo.schoolName
         );
 
     return client;

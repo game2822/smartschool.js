@@ -33,6 +33,7 @@ export class SmartSchool {
         public kind: Kind,
         public SMSCMobileID: string,
         public pp?: string | null,
+        public SchoolName?: string,
         public kids?: Array<SmartSchool>
     ){}
 
