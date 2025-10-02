@@ -6,6 +6,8 @@ import { crypto } from '@noble/hashes/crypto';
 import {generateRandomCode} from '../src/util/Verifier';
 import { url } from 'inspector';
 import { LoginWithToken } from '../src';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const TOKEN_ENDPOINT_PATH = "/OAuth/mobile/token";
     function base64UrlEncode(buffer: ArrayBuffer): string {
@@ -15,9 +17,11 @@ const TOKEN_ENDPOINT_PATH = "/OAuth/mobile/token";
         .replace(/\//g, "_")
         .replace(/=+$/, "");
 }
+const baseURL = process.env.INSTANCE_URL;
+if (!baseURL) throw new Error("INSTANCE_URL environment variable is not set.");
 let auth: { access_token: string; refresh_token: string; } = { access_token: '', refresh_token: '', expires_in: 0, token_type: ''};
+let data: any = null;
 (async () => {
-    const baseURL = await input({ message: 'Enter your instance URL of your Smartschool (e.g., https://myschool.smartschool.be)' });
     console.log(`[DEBUG] Base URL: ${baseURL}`);
     console.log(await isValidInstance(baseURL) ? "\x1b[32m✓\x1b[0m Instance is valid." : "\x1b[31m✗\x1b[0m Instance is not valid.");
     const selectedMethod = await search({
@@ -56,7 +60,8 @@ let auth: { access_token: string; refresh_token: string; } = { access_token: '',
         auth = {
             access_token: loginResult.accessToken,
             refresh_token: loginResult.refreshToken,
-        };
+        },
+        data = loginResult;
         console.log(`\x1b[32m✓\x1b[0m Login successful!`);
         console.log(auth);
     } catch (error) {
@@ -67,7 +72,7 @@ let auth: { access_token: string; refresh_token: string; } = { access_token: '',
         try {
             console.log(`[DEBUG] Token endpoint: ${baseURL}`);
             console.log(`[DEBUG] Refreshing access token with refresh token: ${auth.refresh_token}`);
-            const newTokens = await LoginWithToken(baseURL + "/OAuth/mobile/token", auth.refresh_token, "android", "testpapillon", crypto.randomUUID());
+            const newTokens = await LoginWithToken(baseURL, auth.refresh_token, data.SMSCMobileID);
             console.log(`\x1b[32m✓\x1b[0m Token refresh successful!`);
             console.log(newTokens);
         } catch (error) {

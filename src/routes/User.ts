@@ -1,4 +1,4 @@
-import { BASE_URL, OIDC_TOKEN_PATH, REGISTER_DEVICE_PATH, USER_INFO } from "../rest/endpoints";
+import { OIDC_TOKEN_PATH, REGISTER_DEVICE_PATH, USER_INFO } from "../rest/endpoints";
 import { RestManager } from "../rest/RESTManager";
 import { SmartSchool } from "../structures/Smartschool";
 import { DecodePayload } from "../util/JWT";
@@ -95,6 +95,96 @@ export const RegisterDevice = async (
         kind,
         userInfo.identifier,
         userInfo.accountInfo.user.pictureUrl
+        );
+
+    return client;
+};
+export const GetUserInfo = async (
+    accessToken: string,
+    refreshToken: string,
+    url: string,
+    deviceId: string
+): Promise<SmartSchool> => {
+    const [base] = extractBaseUrl(url);
+    const manager = new RestManager(base);
+
+    const headers = {
+        Authorization: `Bearer ${accessToken}`,
+        SmscMobileId: deviceId
+        };
+
+    const response = await manager.get<BaseResponse>(
+        USER_INFO(),
+        undefined,
+        headers
+    );
+
+    if (Array.isArray(response)) {
+        throw new TypeError("Expected a single user object in response data.");
+    }
+    const refreshURL = url ;
+    const userInfo = response as unknown as {
+        user: {
+            id: string;
+            name: {
+                firstName: string;
+                startingWithFirstName: string;
+            };
+            pictureUrl: string;
+            schoolName: string;
+            userLT: number;
+        }
+    } // je bypass le BaseResponse prcq flm de refaire les types a 4h du mat
+    const kind = determineAccountKind(userInfo.user.userLT);
+    const lastName = userInfo.user.name.startingWithFirstName
+    .replace(userInfo.user.name.firstName, "")
+    .trim();
+
+//
+//      Parent accounts will be implemented later
+//
+    /* const kids: Array<KidData> = [];
+    if (kind === Kind.PARENT) {
+        const kidId = getMultipleRelations(userInfo.relationships.students);
+        if (kidId.length === 0) {
+            throw new Error("No kids found for this parent.");
+        }
+
+
+        for (const kid of kidId) {
+            const kidData = response.included.find(
+                item => item.id === kid.id && item.type === "student"
+            ) as studentIncluded;
+
+            if (!kidData) {
+                throw new Error(`Kid with ID ${kid.id} not found in response.`);
+            }
+
+            kids.push({
+                id:          kidData.id,
+                lastName:    kidData.attributes?.lastName ?? "",
+                firstName:   kidData.attributes?.firstName ?? "",
+                photoUrl:    kidData.attributes?.photoUrl ?? "",
+                className:   kidData.attributes?.className ?? "",
+                dateOfBirth: new Date(kidData.attributes?.dateOfBirth ?? ""),
+            });
+        }
+    }*/
+        
+        const client = new SmartSchool(
+        accessToken,
+        refreshToken,
+        refreshURL,
+        5,
+        userInfo.user.id,
+        userInfo.user.name.firstName,
+        lastName,
+        "Class TEMP",
+        "0600000000",
+        new Date("2000-01-01"),
+        kind,
+        deviceId,
+        userInfo.user.pictureUrl
         );
 
     return client;

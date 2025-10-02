@@ -16,7 +16,7 @@ export const getTimetableForPeriods = async (url: string, userId: string, access
     const response = await manager.get<BaseResponse>(USER_AGENDA(userId), {
         from:  formatDate(periodStart),
         to:    formatDate(periodEnd),
-        types: "planned-placeholders,planned-lessons"
+        types: "planned-placeholders,planned-lessons,planned-generics"
     }, {
         Authorization: `Bearer ${accessToken}`,
         SmscMobileId:  deviceId
@@ -37,6 +37,7 @@ export const getTimetableForPeriods = async (url: string, userId: string, access
     // Add a type for rawLesson to avoid unsafe any access
     interface RawLesson {
         id: string;
+        name?: string;
         period?: {
             dateTimeFrom?: string;
             dateTimeTo?: string;
@@ -80,8 +81,8 @@ export const getTimetableForPeriods = async (url: string, userId: string, access
             false, // idk if there is a way to know if a lesson is canceled via the API cause my instance doesnt use it
             false,
             {
-                id:    rawLesson.courses?.[0]?.id ?? "",
-                label: rawLesson.courses?.[0]?.name ?? "",
+                id:    rawLesson.courses?.[0]?.id ?? rawLesson.id,
+                label: rawLesson.courses?.[0]?.name ?? rawLesson.name ?? "",
                 color: rawLesson.courses?.[0]?.color ?? "#000000"
             },
             teachers

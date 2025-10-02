@@ -1,6 +1,6 @@
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
 import readline from "readline";
-import fs, { cpSync } from "fs";
+import fs from "fs";
 import { getTimetableForPeriods } from "../src/routes/Agenda";
 import { LoginWithToken } from "../src";
 import dotenv from "dotenv";
