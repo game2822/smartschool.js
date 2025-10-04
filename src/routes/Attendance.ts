@@ -3,7 +3,7 @@ import { RestManager } from "../rest/RESTManager";
 import { AttendanceItem } from "../structures/AttendanceItem";
 import { absenceFileStateIncluded, absenceReasonIncluded } from "../types/Attendance";
 import { BaseDataResponse, BaseResponse } from "../types/RequestHandler";
-import { AttendanceItemState, AttendanceItemType } from "../util/Constants";
+import { ATTENDANCE_CODE_MAP, ATTENDANCE_STATE_MAP, AttendanceItemState, AttendanceItemType } from "../util/Constants";
 import { getSingleRelation } from "../util/Relations";
 import { extractBaseUrl } from "../util/URL";
 
@@ -63,12 +63,12 @@ export const GetAttendanceItems = async (url:string, userId: string, accessToken
             const date = parseDate(attendanceData.formattedDate);
             
             attendanceItems.push(new AttendanceItem(
-                attendanceData.codeKey || "",
+                (attendanceItems.length + 1).toString(),
                 date,
-                new Date(date), // Start date
-                new Date(date), // End date
-                attendanceData.codeDescr || AttendanceItemType.ABSENCE,
-                AttendanceItemState.OPEN,
+                new Date(date),
+                new Date(date),
+                ATTENDANCE_CODE_MAP[attendanceData.codeKey] || AttendanceItemType.ABSENCE,
+                ATTENDANCE_STATE_MAP[attendanceData.codeKey] || AttendanceItemState.OPEN,
                 attendanceData.motivation || attendanceData.codeDescr || ""
             ));
         }

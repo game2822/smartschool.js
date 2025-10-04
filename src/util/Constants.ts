@@ -32,12 +32,33 @@ export enum AttendanceItemType {
     LATENESS = "LATENESS",
     ABSENCE = "ABSENCE"
 }
-
 export enum AttendanceItemState {
     LOCKED = "LOCKED",
     OPEN = "OPEN"
 }
 
+export const ATTENDANCE_CODE_MAP: Record<string, AttendanceItemType> = {
+    '215-50': AttendanceItemType.LATENESS, // Retards Justifiées
+    '215-52': AttendanceItemType.LATENESS, // Retards Non Justifiées
+    '223': AttendanceItemType.ABSENCE, // Certificat Médical
+    '219': AttendanceItemType.ABSENCE,  
+    '221': AttendanceItemType.ABSENCE,
+    '225': AttendanceItemType.ABSENCE,
+    '315': AttendanceItemType.ABSENCE,
+    '241': AttendanceItemType.ABSENCE
+};
+
+// Add a separate mapping for states
+export const ATTENDANCE_STATE_MAP: Record<string, AttendanceItemState> = {
+    '215-50': AttendanceItemState.LOCKED, // Retards Justifiées 
+    '215-52': AttendanceItemState.OPEN,   // Retards Non Justifiées
+    '223': AttendanceItemState.LOCKED,      // Default to locked for medical certificates
+    '219': AttendanceItemState.OPEN,        // Absence injustifiée
+    '221': AttendanceItemState.LOCKED,      // Justificatif des parents
+    '225': AttendanceItemState.LOCKED,      // Justifiée par le directeur
+    '315': AttendanceItemState.LOCKED,      // Autorisée par l'Administration
+    '241': AttendanceItemState.LOCKED       // Exclusion temporaire
+};
 export enum SkillLevels {
     NONE = "NONE",
     INSUFFICIENT_MASTERY = "INSUFFICIENT_MASTERY",
