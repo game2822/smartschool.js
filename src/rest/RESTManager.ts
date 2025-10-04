@@ -9,7 +9,7 @@ export class RestManager {
         this.baseURL = baseURL;
     }
 
-    private async sendRequest<T>(options: RequestOptions): Promise<T> {
+    private async sendRequest<T>(options: RequestOptions,textonly?: boolean): Promise<T> {
         const { method, path, body, headers } = options;
         const url = `${this.baseURL}/${path}`;
 
@@ -34,18 +34,19 @@ export class RestManager {
         });
 
         if (!response.ok) {
-            const responseData = await response.json();
+            const responseData = await response.text();
             console.error(`Error response from ${method} ${url}:`, responseData);
             console.error("Request Headers:", headers);
             console.error("Request Body:", body);
             throw new Error(`${response.status}: ${JSON.stringify(responseData)}`);
         }
-
-        const responseData = await response.json();
-       // console.log("Body:", body);
-       // console.log("Response Data:", responseData);
-       // console.log("headers:", headers);
-        return responseData as T;
+        if (textonly === undefined || textonly === false) {
+            const responseData = await response.json();
+            return responseData as T;
+        }else {
+            const responseData = await response.text();
+            return responseData as unknown as T;
+        }
     }
 
     async delete<T>(path: string, params?: Record<string, any>, options?: RequestOptions): Promise<T> {
@@ -69,7 +70,7 @@ export class RestManager {
         });
     }
 
-    async post<T>(path: string, body: any, params?: Record<string, any>, options?: RequestOptions): Promise<T> {
+    async post<T>(path: string, body: any, params?: Record<string, any>, options?: RequestOptions,textonly?: boolean): Promise<T> {
         const urlParams = new URLSearchParams(params).toString();
         const urlPath = urlParams ? `${path}?${urlParams}` : path;
         console.log("POST URL Params:", urlParams);
@@ -79,7 +80,7 @@ export class RestManager {
             path: urlPath,
             body,
             headers: options?.headers
-        });
+        }, textonly);
     }
 
     async put<T>(path: string, body: any, options?: RequestOptions): Promise<T> {

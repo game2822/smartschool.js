@@ -53,7 +53,7 @@ export class SmartSchool {
     }
     async GetAttendanceItems(): Promise<Array<AttendanceItem>> {
         await this.refreshAccessToken();
-        return GetAttendanceItems(this.userId, this.accessToken);
+        return GetAttendanceItems(this.refreshURL, this.userId, this.accessToken, this.SMSCMobileID);
     }
     async GetGradesForPeriod(period?: string): Promise<Array<Subject>> {
         await this.refreshAccessToken();

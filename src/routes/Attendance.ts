@@ -5,41 +5,73 @@ import { absenceFileStateIncluded, absenceReasonIncluded } from "../types/Attend
 import { BaseDataResponse, BaseResponse } from "../types/RequestHandler";
 import { AttendanceItemState, AttendanceItemType } from "../util/Constants";
 import { getSingleRelation } from "../util/Relations";
+import { extractBaseUrl } from "../util/URL";
 
-const manager = new RestManager(BASE_URL());
 
-export const GetAttendanceItems = async (userId: string, accessToken: string): Promise<Array<AttendanceItem>> => {
-    const response = await manager.get<BaseResponse>(ATTENDANCE_FILES(), {
-        "filter[student.id]":               userId,
-        "filter[currentState.absenceType]": "ABSENCE,CLATENESS",
-        "filter[absenceFile]":              "currentState",
-        "include":                          "currentState,currentState.absenceReason,currentState.absenceRecurrence",
-        "fields[absenceFileState]":         "creationDateTime,absenceStartDateTime,absenceEndDateTime,absenceType,absenceFileStatus,absenceReason,absenceRecurrence",
-        "fields[absenceReason]":            "code,longLabel"
-    }, {
-        Authorization: `Bearer ${accessToken}`
-    });
-
-    const includedMap = new Map<string, unknown>();
-    for (const item of response.included ?? []) {
-        includedMap.set(`${item.type}:${item.id}`, item);
+function parseDate(date: string): Date {
+    const clean = date.replace(/^\w+\.\s*/, "")
+    const months: Record<string, number> = {
+        "janvier":   0, "février":   1, "mars":      2,
+        "avril":     3, "mai":       4, "juin":      5,
+        "juillet":   6, "août":      7, "septembre": 8,
+        "octobre":   9, "novembre":  10, "décembre":  11
+    };
+    const match = clean.match(/^(\d{1,2}) (\w+) (\d{4})$/);
+    if (!match) {
+        throw new Error(`Invalid date format: ${date}`);
     }
+    const [, day, month, year] = match;
+    const monthIndex = months[month.toLowerCase()];
+    if (monthIndex === undefined) {
+        throw new Error(`Invalid month name: ${month}`);
+    }
+    return new Date(Number(year), monthIndex, Number(day));
+}
 
-    return (Array.isArray(response.data) ? response.data : [])
-        .filter((item): item is BaseDataResponse<"absenceFile"> => item.type === "absenceFile")
-        .map(absenceItem => {
-            const fileId = getSingleRelation(absenceItem.relationships.currentState)?.id;
-            const file = fileId ? includedMap.get("absenceFileState:" + fileId) as absenceFileStateIncluded : null;
-            const reasonId = getSingleRelation(file?.relationships?.absenceReason)?.id;
-            const reason = reasonId ? includedMap.get("absenceReason:" + reasonId) as absenceReasonIncluded : null;
-            return new AttendanceItem(
-                absenceItem.id,
-                new Date(file?.attributes?.creationDateTime ?? ""),
-                new Date(file?.attributes?.absenceStartDateTime ?? ""),
-                new Date(file?.attributes?.absenceEndDateTime ?? ""),
-                file?.attributes?.absenceType ?? AttendanceItemType.ABSENCE,
-                file?.attributes?.absenceFileStatus ?? AttendanceItemState.OPEN,
-                reason?.attributes?.longLabel ?? ""
-            );
-        });
+export const GetAttendanceItems = async (url:string, userId: string, accessToken: string, mobileId: string): Promise<Array<AttendanceItem>> => {
+    const [base] = extractBaseUrl(url);
+    const manager = new RestManager(base);
+
+    const body = new URLSearchParams(
+        { pupilID: userId.split("_")[1] }
+    );
+    const responsetext = await manager.post<any>(
+        ATTENDANCE_FILES(),
+        body,
+        undefined,
+        {
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Authorization": `Bearer ${accessToken}`,
+                "Accept-Language": "fr",
+                "SmscMobileId": mobileId
+            }
+    }, 
+    true
+);
+
+    const response = JSON.parse(responsetext);
+    const attendanceItems: Array<AttendanceItem> = [];
+
+    const currentYear = response.year_label;
+    const currentYearAttendance = response.presences?.[currentYear] || [];
+
+    for (const attendance of currentYearAttendance) {
+        const attendanceData = attendance.am || attendance.pm || attendance.full;
+        
+        if (attendanceData) {
+            const date = parseDate(attendanceData.formattedDate);
+            
+            attendanceItems.push(new AttendanceItem(
+                attendanceData.codeKey || "",
+                date,
+                new Date(date), // Start date
+                new Date(date), // End date
+                attendanceData.codeDescr || AttendanceItemType.ABSENCE,
+                AttendanceItemState.OPEN,
+                attendanceData.motivation || attendanceData.codeDescr || ""
+            ));
+        }
+    }
+    return attendanceItems;
 };
