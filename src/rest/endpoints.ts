@@ -2,7 +2,7 @@
 export const BASE_URL = () => "https://api.skolengo.com/api/v1/bff-sko-app";
 
 export const SEARCH_SCHOOLS = () => "schools";
-export const SCHOOL_NEWS = () => "schools-info";
+export const SCHOOL_NEWS = () => "Homepage/Pnsrpc/request?method=getPnsRecentNews";
 
 export const USER_INFO = () => "mobile/accountinfo";
 export const USER_ASSIGNMENT = (id: string, userId: string, completed: string) => "planner/api/v1/planned-assignments/"+ userId.split("_")[0] + "/" + id + "/" + completed;

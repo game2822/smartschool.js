@@ -86,7 +86,7 @@ export class SmartSchool {
     }
     async GetNews(): Promise<Array<News>> {
         await this.refreshAccessToken();
-        return GetSchoolNews(this.accessToken);
+        return GetSchoolNews(this.refreshURL, this.accessToken, this.SMSCMobileID);
     }
     async GetTimetable(periodStart?: Date, periodEnd?: Date): Promise<Array<TimetableDay>> {
         await this.refreshAccessToken();

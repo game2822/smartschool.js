@@ -6,57 +6,41 @@ import { NewsAttributes } from "../types/News";
 import { BaseDataResponse, BaseResponse, fileIncluded } from "../types/RequestHandler";
 import { schoolIncluded } from "../types/School";
 import { getSingleRelation } from "../util/Relations";
+import { extractBaseUrl } from "../util/URL";
 
-const manager = new RestManager(BASE_URL());
 
-export const GetSchoolNews = async (accessToken: string): Promise<Array<News>> => {
-    const response = await manager.get<BaseResponse>(SCHOOL_NEWS(), {
-        "include":                         "illustration,school,author,author.person,author.technicalUser",
-        "fields[schoolInfo]":              "illustration,school,author,publicationDateTime,title,shortContent,content,linkedWebSiteUrl",
-        "fields[announcement]":            "level",
-        "fields[schoolInfoFile]":          "url,alternativeText",
-        "fields[school]":                  "name",
-        "fields[schoolInfoAuthor]":        "person,technicalUser,additionalInfo",
-        "fields[person]":                  "firstName,lastName,title,photoUrl",
-        "fields[schoolInfoTechnicalUser]": "label,logoUrl",
-        "page[limit]":                     50
-    }, {
-        Authorization: `Bearer ${accessToken}`
-    });
+export const GetSchoolNews = async (url: string, accessToken: string, mobileId: string): Promise<Array<News>> => {
+    const [base] = extractBaseUrl(url);
+    const manager = new RestManager(base);
 
-    const includedMap = new Map<string, unknown>();
-    for (const item of response.included ?? []) {
-        includedMap.set(`${item.type}:${item.id}`, item);
-    }
+    const responsetext = await manager.post<any>(SCHOOL_NEWS(),
+    undefined,
+    undefined,
+     {
+        headers: {
+                "Authorization": `Bearer ${accessToken}`,
+                "Accept-Language": "fr",
+                "SmscMobileId": mobileId
+            }
+    },
+    true
+);
+    const response = JSON.parse(responsetext);
 
-    return (Array.isArray(response.data) ? response.data : [])
-        .filter((item): item is BaseDataResponse<"news", NewsAttributes> => item.type === "news")
+    return (Array.isArray(response) ? response : [])
         .map(news => {
-            const { relationships, attributes } = news;
-
-            const illustrationId = getSingleRelation(relationships.illustration)?.id;
-            const authorData = getSingleRelation(relationships.school);
-
-            const illustration = illustrationId
-                ? includedMap.get(`schoolInfoFile:${illustrationId}`) as fileIncluded
-                : null;
-
-            const author = authorData
-                ? includedMap.get(`${authorData.type}:${authorData.id}`) as schoolIncluded
-                : null;
-
             return new News(
-                news.id,
-                new Date(attributes?.publicationDateTime ?? ""),
-                attributes?.title ?? "",
-                attributes?.shortContent ?? "",
-                attributes?.content ?? "",
+                news.newsItem.newsID,
+                new Date(news.newsItem.date_published ?? ""),
+                news.newsItem.title ?? "",
+                news.newsItem.message ?? "",
+                news.newsItem.message ?? "",
                 {
-                    id:   authorData?.id ?? "",
-                    name: author?.attributes?.name ?? ""
+                    id:   news.newsItem.author ?? "",
+                    name: news.newsItem.name ?? ""
                 },
-                attributes?.linkedWebSiteUrl ?? "",
-                new Attachment(accessToken, illustration?.id ?? "", illustration?.attributes?.url ?? "")
+                "",
+                new Attachment(accessToken, news.icon ?? "", `${base}/smsc/svg/${news.icon}/${news.icon}_24x24.svg`)
             );
         });
 };
