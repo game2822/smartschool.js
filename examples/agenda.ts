@@ -19,18 +19,17 @@ const main = async () => {
     try {
         const url = process.env.INSTANCE_URL || await askQuestion("Enter the instance URL (e.g., https://example.com): ");
         const refreshToken = process.env.REFRESH_TOKEN || await askQuestion("Enter your refresh token: ");
-        const userId = process.env.USER_ID || await askQuestion("Enter your user ID: ");
+      const userId = process.env.USER_ID || await askQuestion("Enter your user ID: ");
+      const SMSCMobileID = process.env.SMSCMobileID || await askQuestion("Enter your SMSCMobileID: ")
 
-        const periodStart = new Date(); // Default to today
-        const periodEnd = new Date(new Date().setDate(periodStart.getDate() + 7)); // Default to 7 days from today
-        const data = await LoginWithToken(url, refreshToken, "android", "SmartSchool.js debug script", "1234567890");
+        const periodStart = new Date("2026-02-09");
+        const periodEnd = new Date("2026-02-15");
+        const data = await LoginWithToken(url, refreshToken, SMSCMobileID);
         const token = data.accessToken;
-        const deviceId = data.SMSCMobileID;
         console.log("\nFetching timetable...");
-        const timetable = await getTimetableForPeriods(url, userId, token, deviceId, periodStart, periodEnd);
+        const timetable = await getTimetableForPeriods(url, userId, token, SMSCMobileID, periodStart, periodEnd);
         fs.writeFileSync("timetable.json", JSON.stringify(timetable, null, 2));
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 2);
+        const tomorrow = new Date("2026-02-11");
         const tomorrowDateString = tomorrow.toISOString().split("T")[0];
 
        const lessonsForTomorrow = timetable

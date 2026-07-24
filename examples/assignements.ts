@@ -19,8 +19,8 @@ const main = async () => {
         const userId = await askQuestion("Enter the user ID: ");
         const deviceId = await askQuestion("Enter the device ID: ");
 
-        const periodStart = new Date(); // Default to today
-        const periodEnd = new Date(new Date().setDate(periodStart.getDate() + 7)); // Default to 7 days from today
+        const periodStart = new Date("2026-02-09");
+        const periodEnd = new Date("2026-02-15");
 
         console.log("\nFetching assignments...");
         const assignments = await GetAssignments(url, userId, token, deviceId, periodStart, periodEnd);

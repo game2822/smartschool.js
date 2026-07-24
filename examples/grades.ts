@@ -22,10 +22,11 @@ const main = async () => {
         const url = process.env.INSTANCE_URL ?? "";
         const refreshToken = process.env.REFRESH_TOKEN ?? "";
         const userId = process.env.USER_ID ?? "";
+        const SMSCMobileID = process.env.SMSCMobileID ?? "";
 
         // Refresh token and get device ID
         console.log("Refreshing token...");
-        const data = await LoginWithToken(url, refreshToken, "android", "SmartSchool.js debug script", "1234567890");
+        const data = await LoginWithToken(url, refreshToken, SMSCMobileID);
         const token = data.accessToken;
         const deviceId = data.SMSCMobileID;
         console.log("Token refreshed successfully.");
@@ -67,7 +68,7 @@ const main = async () => {
 
         fs.writeFileSync("grades.json", JSON.stringify(grades, null, 2));
         console.log("\nGrades fetched successfully:");
-        //console.log(JSON.stringify(grades, null, 2));
+        console.log(JSON.stringify(grades, null, 2));
     } catch (error) {
         console.error("\nAn error occurred:");
         console.error(error);
