@@ -1,10 +1,7 @@
 import { ATTENDANCE_FILES, BASE_URL } from "../rest/endpoints";
 import { RestManager } from "../rest/RESTManager";
 import { AttendanceItem } from "../structures/AttendanceItem";
-import { absenceFileStateIncluded, absenceReasonIncluded } from "../types/Attendance";
-import { BaseDataResponse, BaseResponse } from "../types/RequestHandler";
 import { ATTENDANCE_CODE_MAP, ATTENDANCE_STATE_MAP, AttendanceItemState, AttendanceItemType } from "../util/Constants";
-import { getSingleRelation } from "../util/Relations";
 import { extractBaseUrl } from "../util/URL";
 
 
@@ -16,7 +13,7 @@ function parseDate(date: string): Date {
         "juillet":   6, "août":      7, "septembre": 8,
         "octobre":   9, "novembre":  10, "décembre":  11
     };
-    const match = clean.match(/^(\d{1,2}) (\w+) (\d{4})$/);
+    const match = clean.match(/^(\d{1,2}) ([a-zA-ZÀ-ÿ]+) (\d{4})$/);
     if (!match) {
         throw new Error(`Invalid date format: ${date}`);
     }
@@ -46,7 +43,7 @@ export const GetAttendanceItems = async (url:string, userId: string, accessToken
                 "Accept-Language": "fr",
                 "SmscMobileId": mobileId
             }
-    }, 
+    },
     true
 );
 
@@ -58,10 +55,10 @@ export const GetAttendanceItems = async (url:string, userId: string, accessToken
 
     for (const attendance of currentYearAttendance) {
         const attendanceData = attendance.am || attendance.pm || attendance.full;
-        
+
         if (attendanceData) {
             const date = parseDate(attendanceData.formattedDate);
-            
+
             attendanceItems.push(new AttendanceItem(
                 (attendanceItems.length + 1).toString(),
                 date,
