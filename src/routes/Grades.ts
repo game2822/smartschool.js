@@ -48,7 +48,7 @@ export const GetGradesSettings = async (
 
     const periods: Array<Period> = (Array.isArray(response) ? response : []).map(period =>
         new Period(
-            period.id,
+            String(period.id),
             period.name ?? "",
             new Date(period.skoreWorkYear?.dateRange?.start ?? ""),
             new Date(period.skoreWorkYear?.dateRange?.end ?? "")
@@ -189,8 +189,8 @@ export const GetGradesForPeriod = async (
     const subjects = await GetSubjects(url, deviceId, accessToken);
 
     const response = await manager.get<BaseResponse>(
-        USER_SERVICES(period), 
-        undefined, 
+        USER_SERVICES(period),
+        undefined,
         {
             Authorization: `Bearer ${accessToken}`,
             "SmscMobileId":  deviceId
