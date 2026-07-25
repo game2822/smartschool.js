@@ -38,7 +38,7 @@ export interface SchoolNewsRequestMetrics {
     responseBytes: number;
     itemCount: number;
 }
-interface RawSchoolNewsItem {
+export interface RawSchoolNewsItem {
     icon?: string;
     newsItem?: {
         author?: string;
