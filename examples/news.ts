@@ -29,12 +29,20 @@ const main = async () => {
 
         // Fetch news
         console.log("\nFetching news...");
-        const news = await smartschool.GetNews();
+        const news = await smartschool.GetNews({
+            debug: true,
+            stripEmbeddedImages: false
+        });
 
         fs.writeFileSync("news.json", JSON.stringify(news, null, 2));
         console.log("\nNews fetched successfully:");
         console.log(`Found ${news.length} news items.`);
-        console.log(JSON.stringify(news, null, 2));
+        console.table(news.map(item => ({
+            id:            item.id,
+            date:          item.publicationDateTime.toISOString(),
+            title:         item.title,
+            contentLength: item.content.length
+        })));
     } catch (error) {
         console.error("\nAn error occurred:");
         console.error(error);

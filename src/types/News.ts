@@ -30,3 +30,23 @@ export interface NewsAttributes {
     content: string;
     linkedWebSiteUrl: string | null;
 }
+
+export interface SchoolNewsRequestMetrics {
+    httpMs: number;
+    parseMs: number;
+    mapMs: number;
+    responseBytes: number;
+    itemCount: number;
+}
+interface RawSchoolNewsItem {
+    icon?: string;
+    newsItem?: {
+        author?: string;
+        date_published?: string;
+        message?: string;
+        name?: string;
+        newsID?: string;
+        shortContent?: string;
+        title?: string;
+    };
+}

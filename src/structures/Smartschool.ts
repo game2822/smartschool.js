@@ -7,7 +7,7 @@ import { Subject } from "./Subject";
 import { MailFolder } from "./MailFolder";
 import { Mail } from "./Mail";
 import { Kind } from "../util/Constants";
-import { GetSchoolNews } from "../routes/School";
+import { GetSchoolNews, GetSchoolNewsOptions } from "../routes/School";
 import { GetAssignments } from "../routes/Assignments";
 import { GetAttendanceItems } from "../routes/Attendance";
 import { getTimetableForPeriods } from "../routes/Agenda";
@@ -68,10 +68,6 @@ export class SmartSchool {
         await this.refreshAccessToken();
         return GetGradesSettings(this.refreshURL, this.SMSCMobileID, this.accessToken);
     }
-    async GetSubjects(): Promise<Array<Subject>> {
-        await this.refreshAccessToken();
-        return GetSubjects(this.refreshURL, this.SMSCMobileID, this.accessToken);
-    }
     async GetLastGrades(limit?: number, offset?: number): Promise<Array<Grade>> {
         await this.refreshAccessToken();
         return GetLastGrades(this.userId, this.accessToken, limit, offset);
@@ -84,9 +80,13 @@ export class SmartSchool {
         await this.refreshAccessToken();
         return GetMailSettings(this.userId, this.accessToken);
     }
-    async GetNews(): Promise<Array<News>> {
+    async GetNews(options?: GetSchoolNewsOptions): Promise<Array<News>> {
         await this.refreshAccessToken();
-        return GetSchoolNews(this.refreshURL, this.accessToken, this.SMSCMobileID);
+        return GetSchoolNews(this.refreshURL, this.accessToken, this.SMSCMobileID, options);
+    }
+    async GetSubjects(): Promise<Array<Subject>> {
+        await this.refreshAccessToken();
+        return GetSubjects(this.refreshURL, this.SMSCMobileID, this.accessToken);
     }
     async GetTimetable(periodStart?: Date, periodEnd?: Date): Promise<Array<TimetableDay>> {
         await this.refreshAccessToken();
